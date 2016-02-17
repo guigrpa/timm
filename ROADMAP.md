@@ -1,0 +1,2 @@
+- [ ] Remove lodash dependency (or at least use only a few modules)
+- [ ] Tests
