@@ -10,7 +10,7 @@ $ npm install --save timm
 
 ## Usage
 
-See [here](docs/src).
+See [here](docs/src/index.html).
 
 
 ## License
