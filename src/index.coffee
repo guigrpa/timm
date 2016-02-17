@@ -43,7 +43,7 @@ setIn = (obj, path, val, idx = 0) ->
   if idx is path.length - 1
     newValue = val
   else
-    newValue = _solImmutableTimm.setIn obj[key], path, val, idx + 1
+    newValue = setIn obj[key], path, val, idx + 1
   return timm.set obj, key, newValue
 
 #-----------------------------------------------
