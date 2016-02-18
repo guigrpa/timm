@@ -1,4 +1,4 @@
-# timm
+# timm [![Build Status](https://travis-ci.org/guigrpa/timm.svg?branch=master)](https://travis-ci.org/guigrpa/timm)
 Immutability helpers with fast reads and acceptable writes
 
 
