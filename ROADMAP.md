@@ -1,3 +1,3 @@
-- [ ] Extract API automatically (MD), copy to README.md -- then re-publish the page
+- [ ] Complete docs, incl. benchmarks
 - [ ] Remove lodash dependency (or at least use only a few modules)
 - [ ] Tests
