@@ -13,7 +13,7 @@ $ npm install --save timm
 
 I know, I know... the world does not need yet another immutability library, especially with the likes of [ImmutableJS](http://facebook.github.io/immutable-js/) and [seamless-immutable](https://github.com/rtfeldman/seamless-immutable) around. 
 
-And yet... I felt the need, at least just to cover my limited needs. ImmutableJS is a solid, comprehensive and highly-performant solution, but this power comes at a price: mixing up ImmutableJS's Maps and Lists with your plain objects can cause some friction, and reading those objects (in my case, more often than writing them) is not that convenient.
+And yet... I felt the urge, at least just to cover my limited needs. ImmutableJS is a solid, comprehensive and highly-performant solution, but this power comes at a price: mixing up ImmutableJS's Maps and Lists with your plain objects can cause some friction, and reading those objects (in my case, more often than writing them) is not that convenient.
 
 On the other side, seamless-immutable solves the "friction" problem by using plain objects and arrays, but seems to have some performance issues (at least in my benchmarks, see below).
 
