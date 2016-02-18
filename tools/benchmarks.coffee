@@ -1,10 +1,8 @@
-process.env.DEBUG = '*'
 process.env.NODE_ENV = 'production'
 _                   = require 'lodash'
 chalk               = require 'chalk'
 Seamless            = require 'seamless-immutable'
 Immutable           = require 'immutable'
-debug               = require('debug') 'imm'
 timm                = require '../src/index'
 
 INITIAL_OBJECT = 
@@ -141,16 +139,16 @@ _verify = (solution) ->
   _addResult results, (getIn(obj, DEEP_PATH) is 1)
   _addResult results, (getIn(obj2, DEEP_PATH) is 3)
 
-  debug "  Verification: #{results.join ''}"
+  console.log "  Verification: #{results.join ''}"
 
 _test = (desc, cb) ->
   tic = new Date().getTime()
   cb()
   tac = new Date().getTime()
-  debug "  #{desc}: " + chalk.bold "#{tac - tic} ms"
+  console.log "  #{desc}: " + chalk.bold "#{tac - tic} ms"
 
 _allTests = (desc, solution) ->
-  debug chalk.bold desc
+  console.log chalk.bold desc
   _verify solution
   _test "Read (x#{N})", ->
     obj = solution.init()

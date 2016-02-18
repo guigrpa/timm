@@ -1,3 +1,3 @@
-- [ ] Complete docs, incl. benchmarks
+- [ ] Complete docs, incl. benchmarks and examples for merge() and co.
 - [ ] Remove lodash dependency (or at least use only a few modules)
 - [ ] Tests

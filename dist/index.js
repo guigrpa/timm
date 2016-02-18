@@ -16,8 +16,37 @@
     return array.slice(0, idx).concat(array.slice(idx + 1));
   };
 
-  replaceAt = function(array, idx, newVal) {
-    return array.slice(0, idx).concat([newVal]).concat(array.slice(idx + 1));
+  replaceAt = function(array, idx, newItem) {
+    if (array[idx] === newItem) {
+      return array;
+    }
+    return array.slice(0, idx).concat([newItem]).concat(array.slice(idx + 1));
+  };
+
+  set = function(obj, key, val) {
+    var obj3;
+    if (obj[key] === val) {
+      return obj;
+    }
+    return _.extend({}, obj, (
+      obj3 = {},
+      obj3["" + key] = val,
+      obj3
+    ));
+  };
+
+  setIn = function(obj, path, val, idx) {
+    var key, newValue;
+    if (idx == null) {
+      idx = 0;
+    }
+    key = path[idx];
+    if (idx === path.length - 1) {
+      newValue = val;
+    } else {
+      newValue = setIn(obj[key], path, val, idx + 1);
+    }
+    return set(obj, key, newValue);
   };
 
   merge = function(obj1, obj2) {
@@ -48,32 +77,6 @@
       return obj;
     }
     return _.defaults(_.clone(obj), defaults);
-  };
-
-  set = function(obj1, key, val) {
-    var obj3;
-    if (obj1[key] === val) {
-      return obj1;
-    }
-    return _.extend({}, obj1, (
-      obj3 = {},
-      obj3["" + key] = val,
-      obj3
-    ));
-  };
-
-  setIn = function(obj, path, val, idx) {
-    var key, newValue;
-    if (idx == null) {
-      idx = 0;
-    }
-    key = path[idx];
-    if (idx === path.length - 1) {
-      newValue = val;
-    } else {
-      newValue = _solImmutableTimm.setIn(obj[key], path, val, idx + 1);
-    }
-    return timm.set(obj, key, newValue);
   };
 
   module.exports = {
