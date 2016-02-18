@@ -1,5 +1,3 @@
-_ = require 'lodash'
-
 #-----------------------------------------------
 # ### Arrays
 #-----------------------------------------------
@@ -92,7 +90,7 @@ replaceAt = (array, idx, newItem) ->
 # ```
 set = (obj, key, val) -> 
   return obj if obj[key] is val
-  obj2 = _.clone obj
+  obj2 = _clone obj
   obj2[key] = val
   obj2
 ## TODO: add vararg support (in an efficient way)
@@ -147,26 +145,48 @@ setIn = (obj, path, val, idx = 0) ->
 # * All attributes of `obj2` are referentially equal to the
 #   corresponding attributes of `obj`
 merge = (obj1, obj2) -> 
+  if not obj1?
+    throw new Error "Trying to merge a null or undefined object"
   return obj1 if not obj2?
   keys2 = Object.keys obj2
   return obj1 if not keys2.length
-  fSomethingNew = false
+  out = null
   for key in keys2
     if obj1[key] isnt obj2[key]
-      fSomethingNew = true
-      break
-  return obj1 if not fSomethingNew
-  return _.extend _.clone(obj1), obj2
+      if not out then out = _clone obj1
+      out[key] = obj2[key]
+  if not out then out = obj1
+  out
 
 # #### addDefaults()
 # Returns a new object built as follows: undefined keys in the first one
 # are filled in with the corresponding values from the second one.
-# Similar to underscore's `defaults()` function, but immutable.
 #
 # Usage: `addDefaults(obj: Object, defaults: Object): Object`
 addDefaults = (obj, defaults) -> 
-  return obj if not defaults? or not Object.keys(defaults).length
-  return _.defaults _.clone(obj), defaults
+  if not obj?
+    throw new Error "Trying to merge a null or undefined object"
+  return obj if not defaults? 
+  keys = Object.keys defaults
+  return obj if not keys.length
+  out = null
+  for key in keys
+    if obj[key] is undefined
+      val = defaults[key]
+      continue if val is undefined
+      if not out then out = _clone obj
+      out[key] = val
+  if not out then out = obj
+  out
+
+#-----------------------------------------------
+#- ### Helpers
+#-----------------------------------------------
+_clone = (obj) ->
+  keys = Object.keys obj
+  out = {}
+  out[key] = obj[key] for key in keys
+  out
 
 #-----------------------------------------------
 #- ### Public API

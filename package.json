@@ -3,9 +3,7 @@
   "version": "0.1.5",
   "description": "Immutability helpers with fast reads and acceptable writes",
   "main": "index.js",
-  "dependencies": {
-    "lodash": "^4.4.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "chai": "^3.5.0",
     "chalk": "^1.1.1",

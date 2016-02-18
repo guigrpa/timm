@@ -142,9 +142,10 @@ describe 'Object operations', ->
       expect(obj2.d).to.equal obj.d
       expect(obj2.e).to.equal obj.e
 
-    it.skip 'with changes (null attribute)', ->
+    it 'with changes (null attribute)', ->
       obj2 = timm.addDefaults obj, {f: null}
-      expect(obj.f).to.be.null
+      expect(obj2).to.not.equal obj
+      expect(obj2.f).to.be.null
 
     it 'with undefined', ->
       obj2 = timm.addDefaults obj, undefined
@@ -158,6 +159,6 @@ describe 'Object operations', ->
       obj2 = timm.addDefaults obj, {}
       expect(obj2).to.equal obj
 
-    it.skip 'without changes', ->
+    it 'without changes', ->
       obj2 = timm.addDefaults obj, {b: 2, d: obj.d}
       expect(obj2).to.equal obj

@@ -1,5 +1,2 @@
 - [ ] Complete docs, incl. benchmarks and examples for merge() and co.
 - [ ] Add more benchmarks: arrays
-- [ ] Remove lodash dependency (or at least use only a few modules)
-- [ ] Tests
-- [ ] CI
