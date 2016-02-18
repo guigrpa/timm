@@ -1,0 +1,6 @@
+--compilers coffee:coffee-script
+--require coffee-script/register
+--recursive
+-R spec 
+--colors 
+--timeout 6000

@@ -92,7 +92,9 @@ replaceAt = (array, idx, newItem) ->
 # ```
 set = (obj, key, val) -> 
   return obj if obj[key] is val
-  return _.extend {}, obj, {"#{key}": val}
+  obj2 = _.clone obj
+  obj2[key] = val
+  obj2
 ## TODO: add vararg support (in an efficient way)
 
 # #### setIn()
@@ -161,7 +163,7 @@ merge = (obj1, obj2) ->
 # are filled in with the corresponding values from the second one.
 # Similar to underscore's `defaults()` function, but immutable.
 #
-# Usage: `merge(obj: Object, defaults: Object): Object`
+# Usage: `addDefaults(obj: Object, defaults: Object): Object`
 addDefaults = (obj, defaults) -> 
   return obj if not defaults? or not Object.keys(defaults).length
   return _.defaults _.clone(obj), defaults
