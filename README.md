@@ -1,4 +1,4 @@
-# timm [![Build Status](https://travis-ci.org/guigrpa/timm.svg)](https://travis-ci.org/guigrpa/timm)
+# timm [![Build Status](https://travis-ci.org/guigrpa/timm.svg)](https://travis-ci.org/guigrpa/timm) [![npm version](https://img.shields.io/npm/v/timm.svg)](https://www.npmjs.com/package/timm)
 Immutability helpers with fast reads and acceptable writes
 
 
