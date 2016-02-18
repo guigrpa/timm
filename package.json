@@ -1,6 +1,6 @@
 {
   "name": "timm",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Immutability helpers with fast reads and acceptable writes",
   "main": "index.js",
   "dependencies": {
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://www.github.com/guigrpa/timm"
+    "url": "http://guigrpa.github.io/timm/"
   },
   "keywords": [
     "immutability"
