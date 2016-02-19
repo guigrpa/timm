@@ -1,2 +1,1 @@
-- [ ] Complete docs, incl. benchmarks and examples for merge() and co.
-- [ ] Add more benchmarks: arrays
+- [ ] Add vararg support to set() and merge()

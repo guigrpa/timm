@@ -10,7 +10,7 @@
 # ```js
 # arr = ['a', 'b']
 # arr2 = addLast(arr, 'c')
-# // [ 'a', 'b', 'c' ]
+# // ['a', 'b', 'c']
 # arr2 === arr
 # // false
 # ```
@@ -24,7 +24,7 @@ addLast = (array, val) -> array.concat [val]
 # ```js
 # arr = ['a', 'b']
 # arr2 = addFirst(arr, 'c')
-# // [ 'c', 'a', 'b' ]
+# // ['c', 'a', 'b']
 # arr2 === arr
 # // false
 # ```
@@ -39,7 +39,7 @@ addFirst = (array, val) -> [val].concat array
 # ```js
 # arr = ['a', 'b', 'c']
 # arr2 = removeAt(arr, 1)
-# // [ 'a', 'c' ]
+# // ['a', 'c']
 # arr2 === arr
 # // false
 # ```
@@ -56,9 +56,11 @@ removeAt = (array, idx) -> array.slice(0, idx).concat array.slice(idx + 1)
 # ```js
 # arr = ['a', 'b', 'c']
 # arr2 = replaceAt(arr, 1, 'd')
-# // [ 'a', 'd', 'c' ]
+# // ['a', 'd', 'c']
 # arr2 === arr
 # // false
+#
+# // ... but the same object is returned if there are no changes:
 # replaceAt(arr, 1, 'b') === arr
 # // true
 # ```
@@ -82,9 +84,11 @@ replaceAt = (array, idx, newItem) ->
 # ```js
 # obj = {a: 1, b: 2, c: 3}
 # obj2 = set(obj, 'b', 5)
-# // { a: 1, b: 5, c: 3 }
+# // {a: 1, b: 5, c: 3}
 # obj2 === obj
 # // false
+#
+# // ... but the same object is returned if there are no changes:
 # set(obj, 'b', 2) === obj
 # // true
 # ```
@@ -105,15 +109,17 @@ set = (obj, key, val) ->
 # ```js
 # obj = {a: 1, b: 2, d: {d1: 3, d2: 4}, e: {e1: 'foo', e2: 'bar'}}
 # obj2 = setIn(obj, ['d', 'd1'], 4)
-# // { a: 1, b: 2, d: { d1: 4, d2: 4 }, e: { e1: 'foo', e2: 'bar' } }
+# // {a: 1, b: 2, d: {d1: 4, d2: 4}, e: {e1: 'foo', e2: 'bar'}}
 # obj2 === obj
 # // false
 # obj2.d === obj.d
 # // false
 # obj2.e === obj.e
 # // true
+#
+# // ... but the same object is returned if there are no changes:
 # obj3 = setIn(obj, ['d', 'd1'], 3)
-# // { a: 1, b: 2, d: { d1: 3, d2: 4 }, e: { e1: 'foo', e2: 'bar' } }
+# // {a: 1, b: 2, d: {d1: 3, d2: 4}, e: {e1: 'foo', e2: 'bar'}}
 # obj3 === obj
 # // true
 # obj3.d === obj.d
@@ -144,6 +150,19 @@ setIn = (obj, path, val, idx = 0) ->
 # * `obj2` is an object, but it is empty
 # * All attributes of `obj2` are referentially equal to the
 #   corresponding attributes of `obj`
+#
+# ```js
+# obj1 = {a: 1, b: 2, c: 3}
+# obj2 = {c: 4, d: 5}
+# obj3 = merge(obj1, obj2)
+# // {a: 1, b: 2, c: 4, d: 5}
+# obj3 === obj1
+# // false
+#
+# // ... but the same object is returned if there are no changes:
+# merge(obj1, {c: 3}) === obj1
+# // true
+# ```
 merge = (obj1, obj2) -> 
   if not obj1?
     throw new Error "Trying to merge a null or undefined object"
@@ -159,10 +178,24 @@ merge = (obj1, obj2) ->
   out
 
 # #### addDefaults()
-# Returns a new object built as follows: undefined keys in the first one
-# are filled in with the corresponding values from the second one.
+# Returns a new object built as follows: `undefined` keys in the first one
+# are filled in with the corresponding values from the second one
+# (even if they are `null`).
 #
 # Usage: `addDefaults(obj: Object, defaults: Object): Object`
+#
+# ```js
+# obj1 = {a: 1, b: 2, c: 3}
+# obj2 = {c: 4, d: 5, e: null}
+# obj3 = addDefaults(obj1, obj2)
+# // {a: 1, b: 2, c: 3, d: 5, e: null}
+# obj3 === obj1
+# // false
+#
+# // ... but the same object is returned if there are no changes:
+# addDefaults(obj1, {c: 4}) === obj1
+# // true
+# ```
 addDefaults = (obj, defaults) -> 
   if not obj?
     throw new Error "Trying to merge a null or undefined object"

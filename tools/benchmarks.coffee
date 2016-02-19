@@ -18,6 +18,10 @@ INITIAL_OBJECT =
     e1: 18
     e2: 'foo'
 DEEP_PATH = ['d', 'd9', 'b', 'b', 'b']
+ARRAY_LENGTH = 1000
+INITIAL_ARRAY = new Array(ARRAY_LENGTH)
+for n in [0...ARRAY_LENGTH]
+  INITIAL_ARRAY[n] = {a: 1, b: 2}
 N = 2e5
 
 _getIn = (obj, path) ->
@@ -38,6 +42,9 @@ _solMutable =
       ptr = ptr[path[idx]]
     ptr[path[path.length - 1]] = val
     obj
+  initArr: -> _.cloneDeep INITIAL_ARRAY
+  getAt: (arr, idx) -> arr[idx]
+  setAt: (arr, idx, val) -> arr[idx] = val; arr
 
 _solImmutableTimm =
   init: -> _.cloneDeep INITIAL_OBJECT
@@ -55,15 +62,21 @@ _solImmutableTimm =
     else
       newValue = _solImmutableTimm.setIn obj[key], path, val, idx + 1
     return timm.set obj, key, newValue
+  initArr: -> _.cloneDeep INITIAL_ARRAY
+  getAt: (arr, idx) -> arr[idx]
+  setAt: (arr, idx, val) -> timm.replaceAt arr, idx, val
 
 _solImmutableJs =
-  init: -> Immutable.fromJS INITIAL_OBJECT
+  init: -> Immutable.fromJS INITIAL_OBJECT   # deep
   get: (obj, key) -> obj.get key
   set: (obj, key, val) -> obj.set key, val
   getDeep: (obj, key1, key2) -> obj.getIn [key1, key2]
   setDeep: (obj, key1, key2, val) -> obj.setIn [key1, key2], val
   getIn: (obj, path) -> obj.getIn path
   setIn: (obj, path, val) -> obj.setIn path, val
+  initArr: -> Immutable.List INITIAL_ARRAY   # shallow
+  getAt: (arr, idx) -> arr.get idx
+  setAt: (arr, idx, val) -> arr.set idx, val
 
 _solImmutableSeamless =
   init: -> Seamless INITIAL_OBJECT
@@ -73,6 +86,9 @@ _solImmutableSeamless =
   setDeep: (obj, key1, key2, val) -> obj.setIn [key1, key2], val
   getIn: _getIn
   setIn: (obj, path, val) -> obj.setIn path, val
+  initArr: -> Seamless INITIAL_ARRAY
+  getAt: (arr, idx) -> arr[idx]
+  setAt: (arr, idx, val) -> arr.set idx, val
 
 _toggle = (solution, obj) ->
   return solution.set obj, 'toggle', not(solution.get obj, 'toggle')
@@ -81,7 +97,7 @@ _addResult = (results, condition) ->
   results.push if condition then chalk.green.bold('P') else chalk.green.red('F')
 _verify = (solution) ->
   results = []
-  {init, get, set, setDeep, getIn, setIn} = solution
+  {init, get, set, setDeep, getIn, setIn, initArr, getAt, setAt} = solution
 
   # Initial conditions
   obj = init()
@@ -129,15 +145,23 @@ _verify = (solution) ->
   _addResult results, (get(obj2, 'd') is get(obj, 'd'))
   results.push '-'
 
-  # Deep reads and writes
-  obj2 = obj
-  if setIn?
-    obj2 = setIn(obj, DEEP_PATH, 3)
+  # Deep writes
+  obj2 = setIn(obj, DEEP_PATH, 3)
   _addResult results, (obj2 isnt obj)
   _addResult results, (get(obj2, 'd') isnt get(obj, 'd'))
   _addResult results, (get(obj2, 'e') is get(obj, 'e'))
   _addResult results, (getIn(obj, DEEP_PATH) is 1)
   _addResult results, (getIn(obj2, DEEP_PATH) is 3)
+  results.push '-'
+
+  # Array writes
+  arr = initArr()
+  arr2 = setAt(arr, 1, {b: 3})
+  _addResult results, (arr2 isnt arr)
+  _addResult results, (getAt(arr, 1).b is 2)
+  _addResult results, (getAt(arr2, 1).b is 3)
+  arr2 = setAt(arr, 1, getAt(arr, 1))
+  _addResult results, (arr2 is arr)
 
   console.log "  Verification: #{results.join ''}"
 
@@ -150,36 +174,48 @@ _test = (desc, cb) ->
 _allTests = (desc, solution) ->
   console.log chalk.bold desc
   _verify solution
-  _test "Read (x#{N})", ->
-    obj = solution.init()
+  obj = solution.init()
+  _test "Object: read (x#{N})", -> 
     for n in [0...N]
-      val = solution.get obj, 'toggle'
-  _test "Write (x#{N})", ->
-    obj = solution.init()
-    cnt = 0
+      val = solution.get(obj, 'toggle')
+    return
+  obj = solution.init()
+  _test "Object: write (x#{N})", -> 
     for n in [0...N]
-      obj2 = solution.set obj, 'b', cnt++
-  _test "Deep read (x#{N})", ->
-    obj = solution.init()
+      obj2 = solution.set(obj, 'b', n)
+    return
+  obj = solution.init()
+  _test "Object: deep read (x#{N})", -> 
     for n in [0...N]
-      val = solution.getDeep obj, 'd', 'd1'
-  _test "Deep write (x#{N})", ->
-    obj = solution.init()
-    cnt = 0
+      val = solution.getDeep(obj, 'd', 'd1')
+    return
+  obj = solution.init()
+  _test "Object: deep write (x#{N})", -> 
     for n in [0...N]
-      obj2 = solution.setDeep obj, 'd', 'd1', cnt++
-  _test "Very deep read (x#{N})", ->
-    obj = solution.init()
+      obj2 = solution.setDeep(obj, 'd', 'd1', n)
+    return
+  obj = solution.init()
+  _test "Object: very deep read (x#{N})", -> 
     for n in [0...N]
-      val = solution.getIn obj, DEEP_PATH
-  _test "Very deep write (x#{N})", ->
-    obj = solution.init()
-    cnt = 0
-    return if not solution.setIn?
+      val = solution.getIn(obj, DEEP_PATH)
+    return
+  obj = solution.init()
+  _test "Object: very deep write (x#{N})", -> 
     for n in [0...N]
-      obj2 = solution.setIn obj, DEEP_PATH, cnt++
+      obj2 = solution.setIn(obj, DEEP_PATH, n)
+    return
+  arr = solution.initArr()
+  _test "Array: read (x#{N})", -> 
+    for n in [0...N]
+      val = solution.getAt(arr, 1)
+    return
+  arr = solution.initArr()
+  _test "Array: write (x#{N})", -> 
+    for n in [0...N]
+      arr2 = solution.setAt(arr, 1, n)
+    return
 
 _allTests "Mutable", _solMutable
-_allTests "Immutable (timm)", _solImmutableTimm
 _allTests "Immutable (ImmutableJS)", _solImmutableJs
+_allTests "Immutable (timm)", _solImmutableTimm
 _allTests "Immutable (seamless-immutable)", _solImmutableSeamless
