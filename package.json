@@ -15,9 +15,10 @@
     "seamless-immutable": "^5.0.1"
   },
   "scripts": {
-    "build": "rm -rf dist && coffee -o dist -c src",
-    "docs": "coffee tools/extractDocs.coffee > .extractedApi.md",
     "test": "mocha",
+    "compile": "rm -rf dist && coffee -o dist -c src",
+    "docs": "coffee tools/extractDocs.coffee",
+    "build": "npm test && npm run compile && npm run docs",
     "benchmarks": "coffee tools/benchmarks.coffee"
   },
   "repository": {
