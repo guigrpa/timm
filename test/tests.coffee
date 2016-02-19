@@ -1,5 +1,9 @@
 expect = require('chai').expect
-timm = require '../src/timm'
+if process.env.TEST_MINIFIED_LIB
+  console.log "Running tests on minified library"
+  timm = require '../dist/timm.min'
+else
+  timm = require '../src/timm'
 
 it 'sanity', ->
   expect(timm.set).to.exist

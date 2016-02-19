@@ -18,10 +18,11 @@
   },
   "scripts": {
     "test": "mocha",
+    "testMinified": "TEST_MINIFIED_LIB=1 mocha",
     "compile": "rm -rf dist && coffee -o dist -c src",
     "docs": "coffee tools/extractDocs.coffee",
     "uglify": "NODE_ENV=production envify dist/timm.js | uglifyjs - -o dist/timm.min.js --mangle --compress --comments '/\\|/'",
-    "build": "npm test && npm run compile && npm run uglify && npm run docs",
+    "build": "npm test && npm run compile && npm run uglify && npm run testMinified && npm run docs",
     "benchmarks": "coffee tools/benchmarks.coffee"
   },
   "repository": {
