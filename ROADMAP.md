@@ -1,1 +1,0 @@
-- [ ] Add vararg support to set() and merge()

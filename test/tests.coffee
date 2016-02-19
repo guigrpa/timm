@@ -130,6 +130,26 @@ describe 'Object operations', ->
       obj2 = timm.merge obj, {b: 2, d: obj.d}
       expect(obj2).to.equal obj
 
+  describe 'merge multiple', ->
+    it 'with changes', ->
+      obj2 = timm.merge obj, {b: 4}, {c: 3}, {b: 7}
+      expect(obj.b).to.equal 2
+      expect(obj.c).to.be.undefined
+      expect(obj2).to.not.equal obj
+      expect(obj2.a).to.equal obj.a
+      expect(obj2.b).to.equal 7
+      expect(obj2.c).to.equal 3
+      expect(obj2.d).to.equal obj.d
+      expect(obj2.e).to.equal obj.e
+
+    it 'with undefined, null and empty objects', ->
+      obj2 = timm.merge obj, undefined, null, {}, null, undefined
+      expect(obj2).to.equal obj
+
+    it 'without changes', ->
+      obj2 = timm.merge obj, {b: 2}, {d: obj.d}, {c: undefined}
+      expect(obj2).to.equal obj
+
   describe 'addDefaults', ->
     it 'with changes', ->
       obj2 = timm.addDefaults obj, {b: 4, c: 3}
@@ -161,4 +181,24 @@ describe 'Object operations', ->
 
     it 'without changes', ->
       obj2 = timm.addDefaults obj, {b: 2, d: obj.d}
+      expect(obj2).to.equal obj
+
+  describe 'addDefaults multiple', ->
+    it 'with changes', ->
+      obj2 = timm.addDefaults obj, {b: 4}, {c: 3}, {b: 7}, {c: 6}
+      expect(obj.b).to.equal 2
+      expect(obj.c).to.be.undefined
+      expect(obj2).to.not.equal obj
+      expect(obj2.a).to.equal obj.a
+      expect(obj2.b).to.equal obj.b
+      expect(obj2.c).to.equal 3
+      expect(obj2.d).to.equal obj.d
+      expect(obj2.e).to.equal obj.e
+
+    it 'with undefined, null and empty objects', ->
+      obj2 = timm.addDefaults obj, undefined, null, {}, null, undefined
+      expect(obj2).to.equal obj
+
+    it 'without changes', ->
+      obj2 = timm.addDefaults obj, {b: 2}, {d: obj.d}, {c: undefined}
       expect(obj2).to.equal obj

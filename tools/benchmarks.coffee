@@ -22,7 +22,7 @@ ARRAY_LENGTH = 1000
 INITIAL_ARRAY = new Array(ARRAY_LENGTH)
 for n in [0...ARRAY_LENGTH]
   INITIAL_ARRAY[n] = {a: 1, b: 2}
-N = 2e5
+N = 1e5
 
 _getIn = (obj, path) ->
   out = obj
@@ -42,6 +42,9 @@ _solMutable =
       ptr = ptr[path[idx]]
     ptr[path[path.length - 1]] = val
     obj
+  merge: (obj1, obj2) -> 
+    for key in Object.keys obj2
+      obj1[key] = obj2[key]
   initArr: -> _.cloneDeep INITIAL_ARRAY
   getAt: (arr, idx) -> arr[idx]
   setAt: (arr, idx, val) -> arr[idx] = val; arr
@@ -55,13 +58,8 @@ _solImmutableTimm =
     return timm.set obj, key1, \
       timm.set(obj[key1], key2, val)
   getIn: _getIn
-  setIn: (obj, path, val, idx = 0) ->
-    key = path[idx]
-    if idx is path.length - 1
-      newValue = val
-    else
-      newValue = _solImmutableTimm.setIn obj[key], path, val, idx + 1
-    return timm.set obj, key, newValue
+  setIn: (obj, path, val) -> timm.setIn obj, path, val
+  merge: (obj1, obj2) -> timm.merge obj1, obj2
   initArr: -> _.cloneDeep INITIAL_ARRAY
   getAt: (arr, idx) -> arr[idx]
   setAt: (arr, idx, val) -> timm.replaceAt arr, idx, val
@@ -74,6 +72,7 @@ _solImmutableJs =
   setDeep: (obj, key1, key2, val) -> obj.setIn [key1, key2], val
   getIn: (obj, path) -> obj.getIn path
   setIn: (obj, path, val) -> obj.setIn path, val
+  merge: (obj1, obj2) -> obj1.merge obj2
   initArr: -> Immutable.List INITIAL_ARRAY   # shallow
   getAt: (arr, idx) -> arr.get idx
   setAt: (arr, idx, val) -> arr.set idx, val
@@ -86,6 +85,7 @@ _solImmutableSeamless =
   setDeep: (obj, key1, key2, val) -> obj.setIn [key1, key2], val
   getIn: _getIn
   setIn: (obj, path, val) -> obj.setIn path, val
+  merge: (obj1, obj2) -> obj1.merge obj2
   initArr: -> Seamless INITIAL_ARRAY
   getAt: (arr, idx) -> arr[idx]
   setAt: (arr, idx, val) -> arr.set idx, val
@@ -97,7 +97,7 @@ _addResult = (results, condition) ->
   results.push if condition then chalk.green.bold('P') else chalk.green.red('F')
 _verify = (solution) ->
   results = []
-  {init, get, set, setDeep, getIn, setIn, initArr, getAt, setAt} = solution
+  {init, get, set, setDeep, getIn, setIn, merge, initArr, getAt, setAt} = solution
 
   # Initial conditions
   obj = init()
@@ -154,6 +154,14 @@ _verify = (solution) ->
   _addResult results, (getIn(obj2, DEEP_PATH) is 3)
   results.push '-'
 
+  # Merge
+  obj2 = merge obj, {c: 5, f: null}
+  _addResult results, (obj2 isnt obj)
+  _addResult results, (get(obj2, 'd') is get(obj, 'd'))
+  _addResult results, (get(obj2, 'c') is 5)
+  _addResult results, (get(obj2, 'f') is null)
+  results.push '-'
+
   # Array writes
   arr = initArr()
   arr2 = setAt(arr, 1, {b: 3})
@@ -203,6 +211,12 @@ _allTests = (desc, solution) ->
   _test "Object: very deep write (x#{N})", -> 
     for n in [0...N]
       obj2 = solution.setIn(obj, DEEP_PATH, n)
+    return
+  obj = solution.init()
+  MERGE_OBJ = {c: 5, f: null}
+  _test "Object: merge (x#{N})", -> 
+    for n in [0...N]
+      obj2 = solution.merge(obj, MERGE_OBJ)
     return
   arr = solution.initArr()
   _test "Array: read (x#{N})", -> 

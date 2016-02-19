@@ -1,4 +1,37 @@
 #-----------------------------------------------
+#- ### Helpers
+#-----------------------------------------------
+_throw = (msg) -> throw new Error msg
+
+_clone = (obj) ->
+  keys = Object.keys obj
+  out = {}
+  out[key] = obj[key] for key in keys
+  out
+
+MERGE_ERROR = 'MERGE_ERROR'
+_merge = (fAddDefaults) ->
+  args = arguments
+  len = args.length
+  not(len > 1) and _throw if process.env.NODE_ENV isnt 'production' then "At least one object should be provided to merge()" else MERGE_ERROR
+  out = args[1]
+  not(out?) and _throw if process.env.NODE_ENV isnt 'production' then "At least one object should be provided to merge()" else MERGE_ERROR
+  fChanged = false
+  for idx in [2...len] by 1
+    obj = args[idx]
+    continue if not obj?
+    keys = Object.keys obj
+    continue if not keys.length
+    for key in keys
+      continue if fAddDefaults and out[key] isnt undefined
+      continue if obj[key] is out[key]
+      if not fChanged
+        fChanged = true
+        out = _clone out
+      out[key] = obj[key]
+  out
+
+#-----------------------------------------------
 # ### Arrays
 #-----------------------------------------------
 
@@ -141,6 +174,7 @@ setIn = (obj, path, val, idx = 0) ->
 # Similar to `Object.assign()`, but immutable.
 #
 # Usage: `merge(obj1: Object, obj2: Object): Object`
+# Variadic: `merge(obj1: Object, ...objects: Object[]): Object`
 #
 # The unmodified `obj1` is returned if `obj2` does not *provide something
 # new to* `obj1`, i.e. if either of the following
@@ -163,19 +197,11 @@ setIn = (obj, path, val, idx = 0) ->
 # merge(obj1, {c: 3}) === obj1
 # // true
 # ```
-merge = (obj1, obj2) -> 
-  if not obj1?
-    throw new Error "Trying to merge a null or undefined object"
-  return obj1 if not obj2?
-  keys2 = Object.keys obj2
-  return obj1 if not keys2.length
-  out = null
-  for key in keys2
-    if obj1[key] isnt obj2[key]
-      if not out then out = _clone obj1
-      out[key] = obj2[key]
-  if not out then out = obj1
-  out
+merge = (a, b, c, d, e, f) -> 
+  if arguments.length <= 6
+    return _merge false, a, b, c, d, e, f
+  else
+    return _merge false, arguments...
 
 # #### addDefaults()
 # Returns a new object built as follows: `undefined` keys in the first one
@@ -183,6 +209,7 @@ merge = (obj1, obj2) ->
 # (even if they are `null`).
 #
 # Usage: `addDefaults(obj: Object, defaults: Object): Object`
+# Variadic: `addDefaults(obj: Object, ...defaultObjects: Object[]): Object`
 #
 # ```js
 # obj1 = {a: 1, b: 2, c: 3}
@@ -196,30 +223,11 @@ merge = (obj1, obj2) ->
 # addDefaults(obj1, {c: 4}) === obj1
 # // true
 # ```
-addDefaults = (obj, defaults) -> 
-  if not obj?
-    throw new Error "Trying to merge a null or undefined object"
-  return obj if not defaults? 
-  keys = Object.keys defaults
-  return obj if not keys.length
-  out = null
-  for key in keys
-    if obj[key] is undefined
-      val = defaults[key]
-      continue if val is undefined
-      if not out then out = _clone obj
-      out[key] = val
-  if not out then out = obj
-  out
-
-#-----------------------------------------------
-#- ### Helpers
-#-----------------------------------------------
-_clone = (obj) ->
-  keys = Object.keys obj
-  out = {}
-  out[key] = obj[key] for key in keys
-  out
+addDefaults = (a, b, c, d, e, f) ->
+  if arguments.length <= 6
+    return _merge true, a, b, c, d, e, f
+  else
+    return _merge true, arguments...
 
 #-----------------------------------------------
 #- ### Public API
@@ -228,7 +236,7 @@ module.exports = {
   addLast, addFirst,
   removeAt, replaceAt,
 
+  set, setIn,
   merge,
   addDefaults,
-  set, setIn,
 }
