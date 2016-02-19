@@ -1,5 +1,5 @@
 expect = require('chai').expect
-timm = require '../src'
+timm = require '../src/timm'
 
 it 'sanity', ->
   expect(timm.set).to.exist

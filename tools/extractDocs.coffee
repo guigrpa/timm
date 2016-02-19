@@ -1,7 +1,7 @@
 fs = require 'fs'
 chalk = require 'chalk'
 
-SRC_PATH = './src/index.coffee'
+SRC_PATH = './src/timm.coffee'
 README_TEMPLATE = './docs/README_TEMPLATE.md'
 API_PLACEHOLDER = '[[[API]]]'
 OUTPUT_PATH = './README.md'
