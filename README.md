@@ -170,6 +170,7 @@ second one overwrite the corresponding entries from the first one.
 Similar to `Object.assign()`, but immutable.
 
 Usage: `merge(obj1: Object, obj2: Object): Object`
+
 Variadic: `merge(obj1: Object, ...objects: Object[]): Object`
 
 The unmodified `obj1` is returned if `obj2` does not *provide something
@@ -200,6 +201,7 @@ are filled in with the corresponding values from the second one
 (even if they are `null`).
 
 Usage: `addDefaults(obj: Object, defaults: Object): Object`
+
 Variadic: `addDefaults(obj: Object, ...defaultObjects: Object[]): Object`
 
 ```js
