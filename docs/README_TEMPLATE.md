@@ -44,7 +44,7 @@ Some conclusions from these benchmarks:
 * Hence, what I recommend (from top to bottom):
 
     - If you don't need immutability, well... just **mutate in peace!** I mean, *in place*
-    - If you need a complete, well-tested, rock-solid library: use **ImmutableJS**
+    - If you need a complete, well-tested, rock-solid library and don't mind using a non-native API for reads: use **ImmutableJS**
     - If you value using plain arrays/objects above other considerations, use **timm**
     - If your typical use cases involve much more reading than writing, use **timm** as well
     - If you do a lot of writes, updating items in long arrays or attributes in fat objects, use **ImmutableJS** 
