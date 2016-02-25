@@ -7,7 +7,7 @@
  */
 
 (function() {
-  var MERGE_ERROR, _clone, _merge, _throw, addDefaults, addFirst, addLast, merge, removeAt, replaceAt, set, setIn,
+  var MERGE_ERROR, _clone, _merge, _throw, addDefaults, addFirst, addLast, insert, merge, removeAt, replaceAt, set, setIn,
     slice = [].slice;
 
   _throw = function(msg) {
@@ -76,6 +76,10 @@
     return [val].concat(array);
   };
 
+  insert = function(array, idx, val) {
+    return array.slice(0, idx).concat(Array.isArray(val) ? val : [val]).concat(array.slice(idx));
+  };
+
   removeAt = function(array, idx) {
     return array.slice(0, idx).concat(array.slice(idx + 1));
   };
@@ -130,6 +134,7 @@
   module.exports = {
     addLast: addLast,
     addFirst: addFirst,
+    insert: insert,
     removeAt: removeAt,
     replaceAt: replaceAt,
     set: set,

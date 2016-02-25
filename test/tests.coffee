@@ -44,6 +44,21 @@ describe 'Array operations', ->
       expect(arr2).to.have.length 5
       expect(arr2).to.deep.equal ['d', 'e', 'a', 'b', 'c']
 
+  describe 'insert', ->
+    it 'with a single value', ->
+      arr2 = timm.insert arr, 1, 'e'
+      expect(arr).to.have.length 3
+      expect(arr2).to.not.equal arr
+      expect(arr2).to.have.length 4
+      expect(arr2).to.deep.equal ['a', 'e', 'b', 'c']
+
+    it 'with multiple values', ->
+      arr2 = timm.insert arr, 1, ['e', 'f']
+      expect(arr).to.have.length 3
+      expect(arr2).to.not.equal arr
+      expect(arr2).to.have.length 5
+      expect(arr2).to.deep.equal ['a', 'e', 'f', 'b', 'c']
+
   it 'removeAt', ->
     arr2 = timm.removeAt arr, 1
     expect(arr).to.have.length 3

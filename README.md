@@ -84,6 +84,22 @@ arr3 = addFirst(arr, ['c', 'd'])
 // ['c', 'd', 'a', 'b']
 ```
 
+#### insert()
+Returns a new array obtained by inserting an item or items
+at a specified index.
+
+Usage: `insert(array: Array, idx: number, val: Array | any): Array`
+
+```js
+arr = ['a', 'b', 'c']
+arr2 = insert(arr, 1, 'd')
+// ['a', 'd', 'b', 'c']
+arr2 === arr
+// false
+insert(arr, 1, ['d', 'e'])
+// ['a', 'd', 'e', 'b', 'c']
+```
+
 #### removeAt()
 Returns a new array obtained by removing an item at
 a specified index.

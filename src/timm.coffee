@@ -78,6 +78,26 @@ addFirst = (array, val) ->
   if Array.isArray val then return val.concat array
   [val].concat array
 
+# #### insert()
+# Returns a new array obtained by inserting an item or items
+# at a specified index.
+#
+# Usage: `insert(array: Array, idx: number, val: Array | any): Array`
+# 
+# ```js
+# arr = ['a', 'b', 'c']
+# arr2 = insert(arr, 1, 'd')
+# // ['a', 'd', 'b', 'c']
+# arr2 === arr
+# // false
+# insert(arr, 1, ['d', 'e'])
+# // ['a', 'd', 'e', 'b', 'c']
+# ```
+insert = (array, idx, val) ->
+  return array.slice(0, idx)
+    .concat if Array.isArray val then val else [val]
+    .concat array.slice(idx)
+
 # #### removeAt()
 # Returns a new array obtained by removing an item at
 # a specified index.
@@ -145,7 +165,6 @@ set = (obj, key, val) ->
   obj2 = _clone obj
   obj2[key] = val
   obj2
-## TODO: add vararg support (in an efficient way)
 
 # #### setIn()
 # Returns a new object with a modified **nested** attribute.
@@ -251,6 +270,7 @@ addDefaults = (a, b, c, d, e, f) ->
 #-----------------------------------------------
 module.exports = {
   addLast, addFirst,
+  insert,
   removeAt, replaceAt,
 
   set, setIn,
