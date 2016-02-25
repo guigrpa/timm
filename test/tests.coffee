@@ -14,19 +14,35 @@ describe 'Array operations', ->
   beforeEach ->
     arr = ['a', 'b', 'c']
 
-  it 'addLast', ->
-    arr2 = timm.addLast arr, 'd'
-    expect(arr).to.have.length 3
-    expect(arr2).to.not.equal arr
-    expect(arr2).to.have.length 4
-    expect(arr2).to.deep.equal ['a', 'b', 'c', 'd']
+  describe 'addLast', ->
+    it 'with a single value', ->
+      arr2 = timm.addLast arr, 'd'
+      expect(arr).to.have.length 3
+      expect(arr2).to.not.equal arr
+      expect(arr2).to.have.length 4
+      expect(arr2).to.deep.equal ['a', 'b', 'c', 'd']
 
-  it 'addFirst', ->
-    arr2 = timm.addFirst arr, 'd'
-    expect(arr).to.have.length 3
-    expect(arr2).to.not.equal arr
-    expect(arr2).to.have.length 4
-    expect(arr2).to.deep.equal ['d', 'a', 'b', 'c']
+    it 'with multiple values', ->
+      arr2 = timm.addLast arr, ['d', 'e']
+      expect(arr).to.have.length 3
+      expect(arr2).to.not.equal arr
+      expect(arr2).to.have.length 5
+      expect(arr2).to.deep.equal ['a', 'b', 'c', 'd', 'e']
+
+  describe 'addFirst', ->
+    it 'with a single value', ->
+      arr2 = timm.addFirst arr, 'd'
+      expect(arr).to.have.length 3
+      expect(arr2).to.not.equal arr
+      expect(arr2).to.have.length 4
+      expect(arr2).to.deep.equal ['d', 'a', 'b', 'c']
+
+    it 'with multiple values', ->
+      arr2 = timm.addFirst arr, ['d', 'e']
+      expect(arr).to.have.length 3
+      expect(arr2).to.not.equal arr
+      expect(arr2).to.have.length 5
+      expect(arr2).to.deep.equal ['d', 'e', 'a', 'b', 'c']
 
   it 'removeAt', ->
     arr2 = timm.removeAt arr, 1

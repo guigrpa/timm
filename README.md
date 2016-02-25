@@ -55,9 +55,9 @@ Some conclusions from these benchmarks:
 ### Arrays
 
 #### addLast()
-Returns a new array with an appended item.
+Returns a new array with an appended item or items.
 
-Usage: `addLast(array: Array, val: any): Array`
+Usage: `addLast(array: Array, val: Array | any): Array`
 
 ```js
 arr = ['a', 'b']
@@ -65,12 +65,14 @@ arr2 = addLast(arr, 'c')
 // ['a', 'b', 'c']
 arr2 === arr
 // false
+arr3 = addLast(arr, ['c', 'd'])
+// ['a', 'b', 'c', 'd']
 ```
 
 #### addFirst()
-Returns a new array with a prepended item.
+Returns a new array with a prepended item or items.
 
-Usage: `addFirst(array: Array, val: any): Array`
+Usage: `addFirst(array: Array, val: Array | any): Array`
 
 ```js
 arr = ['a', 'b']
@@ -78,6 +80,8 @@ arr2 = addFirst(arr, 'c')
 // ['c', 'a', 'b']
 arr2 === arr
 // false
+arr3 = addFirst(arr, ['c', 'd'])
+// ['c', 'd', 'a', 'b']
 ```
 
 #### removeAt()

@@ -3,7 +3,7 @@ _                   = require 'lodash'
 chalk               = require 'chalk'
 Seamless            = require 'seamless-immutable'
 Immutable           = require 'immutable'
-timm                = require '../src/index'
+timm                = require '../src/timm'
 
 INITIAL_OBJECT = 
   toggle: false
@@ -22,7 +22,7 @@ ARRAY_LENGTH = 1000
 INITIAL_ARRAY = new Array(ARRAY_LENGTH)
 for n in [0...ARRAY_LENGTH]
   INITIAL_ARRAY[n] = {a: 1, b: 2}
-N = 1e5
+N = 2e5
 
 _getIn = (obj, path) ->
   out = obj

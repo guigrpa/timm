@@ -63,10 +63,16 @@
   };
 
   addLast = function(array, val) {
+    if (Array.isArray(val)) {
+      return array.concat(val);
+    }
     return array.concat([val]);
   };
 
   addFirst = function(array, val) {
+    if (Array.isArray(val)) {
+      return val.concat(array);
+    }
     return [val].concat(array);
   };
 

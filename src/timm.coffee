@@ -41,9 +41,9 @@ _merge = (fAddDefaults) ->
 #-----------------------------------------------
 
 # #### addLast()
-# Returns a new array with an appended item.
+# Returns a new array with an appended item or items.
 # 
-# Usage: `addLast(array: Array, val: any): Array`
+# Usage: `addLast(array: Array, val: Array | any): Array`
 # 
 # ```js
 # arr = ['a', 'b']
@@ -51,13 +51,19 @@ _merge = (fAddDefaults) ->
 # // ['a', 'b', 'c']
 # arr2 === arr
 # // false
+# arr3 = addLast(arr, ['c', 'd'])
+# // ['a', 'b', 'c', 'd']
 # ```
-addLast = (array, val) -> array.concat [val]
+## `array.concat(val)` also handles the array case,
+## but is apparently very slow
+addLast = (array, val) -> 
+  if Array.isArray val then return array.concat val
+  array.concat [val]
 
 # #### addFirst()
-# Returns a new array with a prepended item.
+# Returns a new array with a prepended item or items.
 # 
-# Usage: `addFirst(array: Array, val: any): Array`
+# Usage: `addFirst(array: Array, val: Array | any): Array`
 # 
 # ```js
 # arr = ['a', 'b']
@@ -65,8 +71,12 @@ addLast = (array, val) -> array.concat [val]
 # // ['c', 'a', 'b']
 # arr2 === arr
 # // false
+# arr3 = addFirst(arr, ['c', 'd'])
+# // ['c', 'd', 'a', 'b']
 # ```
-addFirst = (array, val) -> [val].concat array
+addFirst = (array, val) -> 
+  if Array.isArray val then return val.concat array
+  [val].concat array
 
 # #### removeAt()
 # Returns a new array obtained by removing an item at

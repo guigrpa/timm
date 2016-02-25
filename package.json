@@ -8,6 +8,7 @@
     "chai": "^3.5.0",
     "chalk": "^1.1.1",
     "coffee-script": "^1.10.0",
+    "cross-env": "^1.0.7",
     "debug": "^2.2.0",
     "envify": "^3.4.0",
     "immutable": "^3.7.6",
@@ -18,10 +19,10 @@
   },
   "scripts": {
     "test": "mocha",
-    "testMinified": "TEST_MINIFIED_LIB=1 mocha",
+    "testMinified": "cross-env TEST_MINIFIED_LIB=1 mocha",
     "compile": "rm -rf dist && coffee -o dist -c src",
     "docs": "coffee tools/extractDocs.coffee",
-    "uglify": "NODE_ENV=production envify dist/timm.js | uglifyjs - -o dist/timm.min.js --mangle --compress --comments '/\\|/'",
+    "uglify": "cross-env NODE_ENV=production envify dist/timm.js | uglifyjs - -o dist/timm.min.js --mangle --compress --comments \"/\\|/\"",
     "build": "npm test && npm run compile && npm run uglify && npm run testMinified && npm run docs",
     "benchmarks": "coffee tools/benchmarks.coffee"
   },
