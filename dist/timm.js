@@ -31,7 +31,6 @@
     var args, fChanged, i, idx, j, key, keys, len, len1, obj, out, ref;
     args = arguments;
     len = args.length;
-    !(len > 1) && _throw(process.env.NODE_ENV !== 'production' ? "At least one object should be provided to merge()" : MERGE_ERROR);
     out = args[1];
     !(out != null) && _throw(process.env.NODE_ENV !== 'production' ? "At least one object should be provided to merge()" : MERGE_ERROR);
     fChanged = false;

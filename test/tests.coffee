@@ -165,6 +165,12 @@ describe 'Object operations', ->
       obj2 = timm.merge obj, {b: 2, d: obj.d}
       expect(obj2).to.equal obj
 
+    it 'with more than 6 args', ->
+      obj2 = timm.merge {a: 1}, {b: 2}, {c: 3}, {d: 4}, {e: 5}, {f: 6}, {g: 7}
+      expect(obj2).to.deep.equal {a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7}
+
+    it 'should throw with no args', -> expect(timm.merge).to.throw(Error)
+
   describe 'merge multiple', ->
     it 'with changes', ->
       obj2 = timm.merge obj, {b: 4}, {c: 3}, {b: 7}
@@ -217,6 +223,10 @@ describe 'Object operations', ->
     it 'without changes', ->
       obj2 = timm.addDefaults obj, {b: 2, d: obj.d}
       expect(obj2).to.equal obj
+
+    it 'with more than 6 args', ->
+      obj2 = timm.addDefaults {a: 1}, {b: 2}, {c: 3}, {d: 4}, {e: 5}, {f: 6}, {g: 7}
+      expect(obj2).to.deep.equal {a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7}
 
   describe 'addDefaults multiple', ->
     it 'with changes', ->

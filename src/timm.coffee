@@ -18,7 +18,6 @@ MERGE_ERROR = 'MERGE_ERROR'
 _merge = (fAddDefaults) ->
   args = arguments
   len = args.length
-  not(len > 1) and _throw if process.env.NODE_ENV isnt 'production' then "At least one object should be provided to merge()" else MERGE_ERROR
   out = args[1]
   not(out?) and _throw if process.env.NODE_ENV isnt 'production' then "At least one object should be provided to merge()" else MERGE_ERROR
   fChanged = false

@@ -7,23 +7,31 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chalk": "^1.1.1",
+    "coffee-coverage": "^1.0.1",
     "coffee-script": "^1.10.0",
+    "coveralls": "^2.11.6",
     "cross-env": "^1.0.7",
     "debug": "^2.2.0",
     "envify": "^3.4.0",
     "immutable": "^3.7.6",
+    "istanbul": "^0.4.2",
     "lodash": "^4.5.0",
     "mocha": "^2.4.5",
     "seamless-immutable": "^5.0.1",
     "uglifyjs": "^2.4.10"
   },
   "scripts": {
-    "test": "mocha",
+    "t": "mocha",
+    "test": "npm run testCoverage",
+    "testCoverageDev": "cross-env TEST_COV=1 NODE_ENV=development mocha",
+    "testCoverageProd": "cross-env TEST_COV=1 NODE_ENV=production mocha",
+    "testCoverageMerge": "coffee tools/coffeeCoverageMerge.coffee",
+    "testCoverage": "npm run testCoverageDev && npm run testCoverageProd && npm run testCoverageMerge",
     "testMinified": "cross-env TEST_MINIFIED_LIB=1 mocha",
     "compile": "rm -rf dist && coffee -o dist -c src",
     "docs": "coffee tools/extractDocs.coffee",
     "uglify": "cross-env NODE_ENV=production envify dist/timm.js | uglifyjs - -o dist/timm.min.js --mangle --compress --comments \"/\\|/\"",
-    "build": "npm test && npm run compile && npm run uglify && npm run testMinified && npm run docs",
+    "build": "npm run testCoverage && npm run compile && npm run uglify && npm run testMinified && npm run docs",
     "benchmarks": "coffee tools/benchmarks.coffee"
   },
   "repository": {
