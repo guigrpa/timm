@@ -1,4 +1,4 @@
-# timm [![Build Status](https://travis-ci.org/guigrpa/timm.svg)](https://travis-ci.org/guigrpa/timm) [![npm version](https://img.shields.io/npm/v/timm.svg)](https://www.npmjs.com/package/timm)
+# timm [![Build Status](https://travis-ci.org/guigrpa/timm.svg)](https://travis-ci.org/guigrpa/timm) [![Coverage Status](https://coveralls.io/repos/guigrpa/timm/badge.svg?branch=master)](https://coveralls.io/r/<account>/<repository>?branch=master) [![npm version](https://img.shields.io/npm/v/timm.svg)](https://www.npmjs.com/package/timm) 
 Immutability helpers with fast reads and acceptable writes
 
 
