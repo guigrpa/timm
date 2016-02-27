@@ -134,7 +134,7 @@ replaceAt(arr, 1, 'b') === arr
 // true
 ```
 
-### Objects
+### Collections (objects and arrays)
 
 #### set()
 Returns a new object with a modified attribute.

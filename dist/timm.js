@@ -7,8 +7,10 @@
  */
 
 (function() {
-  var MERGE_ERROR, _clone, _merge, _throw, addDefaults, addFirst, addLast, insert, merge, removeAt, replaceAt, set, setIn,
+  var INVALID_ARGS, _clone, _isObject, _merge, _setIn, _throw, addDefaults, addFirst, addLast, getIn, insert, merge, mergeIn, removeAt, replaceAt, set, setIn, updateIn,
     slice = [].slice;
+
+  INVALID_ARGS = 'INVALID_ARGS';
 
   _throw = function(msg) {
     throw new Error(msg);
@@ -25,14 +27,12 @@
     return out;
   };
 
-  MERGE_ERROR = 'MERGE_ERROR';
-
   _merge = function(fAddDefaults) {
     var args, fChanged, i, idx, j, key, keys, len, len1, obj, out, ref;
     args = arguments;
     len = args.length;
     out = args[1];
-    !(out != null) && _throw(process.env.NODE_ENV !== 'production' ? "At least one object should be provided to merge()" : MERGE_ERROR);
+    !(out != null) && _throw(process.env.NODE_ENV !== 'production' ? "At least one object should be provided to merge()" : INVALID_ARGS);
     fChanged = false;
     for (idx = i = 2, ref = len; i < ref; idx = i += 1) {
       obj = args[idx];
@@ -59,6 +59,12 @@
       }
     }
     return out;
+  };
+
+  _isObject = function(o) {
+    var type;
+    type = typeof o;
+    return (o != null) && (type === 'object' || type === 'function');
   };
 
   addLast = function(array, val) {
@@ -90,8 +96,28 @@
     return array.slice(0, idx).concat([newItem]).concat(array.slice(idx + 1));
   };
 
+  getIn = function(obj, path) {
+    var i, len1, ptr, segment;
+    !(Array.isArray(path)) && _throw(process.env.NODE_ENV !== 'production' ? "A path array should be provided when calling getIn()" : INVALID_ARGS);
+    ptr = obj;
+    if (ptr == null) {
+      return void 0;
+    }
+    for (i = 0, len1 = path.length; i < len1; i++) {
+      segment = path[i];
+      ptr = ptr != null ? ptr[segment] : void 0;
+      if (ptr === void 0) {
+        return ptr;
+      }
+    }
+    return ptr;
+  };
+
   set = function(obj, key, val) {
     var obj2;
+    if (obj == null) {
+      obj = {};
+    }
     if (obj[key] === val) {
       return obj;
     }
@@ -100,18 +126,30 @@
     return obj2;
   };
 
-  setIn = function(obj, path, val, idx) {
-    var key, newValue;
-    if (idx == null) {
-      idx = 0;
+  setIn = function(obj, path, val) {
+    if (!path.length) {
+      return val;
     }
+    return _setIn(obj, path, val, 0);
+  };
+
+  _setIn = function(obj, path, val, idx) {
+    var key, nestedObj, newValue;
     key = path[idx];
     if (idx === path.length - 1) {
       newValue = val;
     } else {
-      newValue = setIn(obj[key], path, val, idx + 1);
+      nestedObj = _isObject(obj) ? obj[key] : {};
+      newValue = _setIn(nestedObj, path, val, idx + 1);
     }
     return set(obj, key, newValue);
+  };
+
+  updateIn = function(obj, path, fnUpdate) {
+    var nextVal, prevVal;
+    prevVal = getIn(obj, path);
+    nextVal = fnUpdate(prevVal);
+    return setIn(obj, path, nextVal);
   };
 
   merge = function(a, b, c, d, e, f) {
@@ -120,6 +158,21 @@
     } else {
       return _merge.apply(null, [false].concat(slice.call(arguments)));
     }
+  };
+
+  mergeIn = function(a, path, b, c, d, e, f) {
+    var mergeArgs, nextVal, prevVal;
+    prevVal = getIn(a, path);
+    if (prevVal == null) {
+      prevVal = {};
+    }
+    if (arguments.length <= 7) {
+      nextVal = _merge(false, prevVal, b, c, d, e, f);
+    } else {
+      mergeArgs = [false, prevVal].concat([].slice.call(arguments, 2));
+      nextVal = _merge.apply(null, mergeArgs);
+    }
+    return setIn(a, path, nextVal);
   };
 
   addDefaults = function(a, b, c, d, e, f) {
@@ -136,9 +189,12 @@
     insert: insert,
     removeAt: removeAt,
     replaceAt: replaceAt,
+    getIn: getIn,
     set: set,
     setIn: setIn,
+    updateIn: updateIn,
     merge: merge,
+    mergeIn: mergeIn,
     addDefaults: addDefaults
   };
 

@@ -3,6 +3,9 @@
 | (c) Guillermo Grau Panea 2016
 | License: MIT
 ###
+
+INVALID_ARGS = 'INVALID_ARGS'
+
 #-----------------------------------------------
 #- ### Helpers
 #-----------------------------------------------
@@ -14,12 +17,11 @@ _clone = (obj) ->
   out[key] = obj[key] for key in keys
   out
 
-MERGE_ERROR = 'MERGE_ERROR'
 _merge = (fAddDefaults) ->
   args = arguments
   len = args.length
   out = args[1]
-  not(out?) and _throw if process.env.NODE_ENV isnt 'production' then "At least one object should be provided to merge()" else MERGE_ERROR
+  not(out?) and _throw if process.env.NODE_ENV isnt 'production' then "At least one object should be provided to merge()" else INVALID_ARGS
   fChanged = false
   for idx in [2...len] by 1
     obj = args[idx]
@@ -34,6 +36,10 @@ _merge = (fAddDefaults) ->
         out = _clone out
       out[key] = obj[key]
   out
+
+_isObject = (o) ->
+  type = typeof o
+  return o? and (type is 'object' or type is 'function')
 
 #-----------------------------------------------
 # ### Arrays
@@ -138,8 +144,17 @@ replaceAt = (array, idx, newItem) ->
     .concat array.slice(idx + 1)
 
 #-----------------------------------------------
-# ### Objects
+# ### Collections (objects and arrays)
 #-----------------------------------------------
+
+getIn = (obj, path) ->
+  not(Array.isArray path) and _throw if process.env.NODE_ENV isnt 'production' then "A path array should be provided when calling getIn()" else INVALID_ARGS
+  ptr = obj
+  return undefined if not ptr?
+  for segment in path
+    ptr = ptr?[segment]
+    return ptr if ptr is undefined
+  ptr
 
 # #### set()
 # Returns a new object with a modified attribute. 
@@ -159,7 +174,8 @@ replaceAt = (array, idx, newItem) ->
 # set(obj, 'b', 2) === obj
 # // true
 # ```
-set = (obj, key, val) -> 
+set = (obj, key, val) ->
+  obj ?= {}
   return obj if obj[key] is val
   obj2 = _clone obj
   obj2[key] = val
@@ -193,13 +209,23 @@ set = (obj, key, val) ->
 # obj3.e === obj.e
 # // true
 # ```
-setIn = (obj, path, val, idx = 0) ->
+setIn = (obj, path, val) ->
+  return val if not path.length
+  return _setIn obj, path, val, 0
+
+_setIn = (obj, path, val, idx) ->
   key = path[idx]
   if idx is path.length - 1
     newValue = val
   else
-    newValue = setIn obj[key], path, val, idx + 1
+    nestedObj = if _isObject obj then obj[key] else {}
+    newValue = _setIn nestedObj, path, val, idx + 1
   return set obj, key, newValue
+
+updateIn = (obj, path, fnUpdate) ->
+  prevVal = getIn obj, path
+  nextVal = fnUpdate prevVal
+  return setIn obj, path, nextVal
 
 # #### merge()
 # Returns a new object built as follows: the overlapping keys from the 
@@ -237,6 +263,16 @@ merge = (a, b, c, d, e, f) ->
   else
     return _merge false, arguments...
 
+mergeIn = (a, path, b, c, d, e, f) ->
+  prevVal = getIn a, path
+  prevVal ?= {}
+  if arguments.length <= 7
+    nextVal = _merge false, prevVal, b, c, d, e, f
+  else
+    mergeArgs = [false, prevVal].concat [].slice.call(arguments, 2)
+    nextVal = _merge.apply null, mergeArgs
+  return setIn a, path, nextVal
+
 # #### addDefaults()
 # Returns a new object built as follows: `undefined` keys in the first one
 # are filled in with the corresponding values from the second one
@@ -272,7 +308,9 @@ module.exports = {
   insert,
   removeAt, replaceAt,
 
+  getIn,
   set, setIn,
-  merge,
+  updateIn,
+  merge, mergeIn,
   addDefaults,
 }
