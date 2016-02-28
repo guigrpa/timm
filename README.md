@@ -19,6 +19,8 @@ On the other side, seamless-immutable solves the "friction" problem by using pla
 
 Timm's approach: use plain objects and arrays and provide simple mutation functions that will probably not handle all edge cases. It is by no means a complete solution, but it covers 100% of my use cases and maybe 90% of yours, too. Suggestions are welcome!
 
+**Important notice:** Timm *does not* freeze the objects it provides. In other words, it doesn't protect you against inadvertently modifying them in your code. I considered deeply freezing all objects with `Object.freeze()`, but it is really slow. Then I considered doing this only in development, but then modifying frozen objects will silently fail in development (unless you `use strict` in your code), and –worse still– succeed in production. Not good. In conclusion, **be careful** (or send me any suggestion!).
+
 
 ## Benchmarks
 

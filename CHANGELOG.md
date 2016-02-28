@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.4.1 (Feb. 28, 2016)
+
 * Add `getIn()`, `updateIn()`, `mergeIn()`
 * `setIn()` now creates nested objects for unknown paths
 * Bugfix: internal `_clone()` converted arrays to objects
