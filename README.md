@@ -138,6 +138,21 @@ replaceAt(arr, 1, 'b') === arr
 
 ### Collections (objects and arrays)
 
+#### getIn()
+Returns a value from an object at a given path. Works with
+nested arrays and objects. If the path does not exist, it returns
+`undefined`.
+
+Usage: `getIn(obj: Object, path: Array<string>): any`
+
+```js
+obj = {a: 1, b: 2, d: {d1: 3, d2: 4}, e: ['a', 'b', 'c']}
+getIn(obj, ['d', 'd1'])
+// 3
+getIn(obj, ['e', 1])
+// 'b'
+```
+
 #### set()
 Returns a new object with a modified attribute.
 If the provided value is the same (*referentially equal to*)
@@ -160,9 +175,15 @@ set(obj, 'b', 2) === obj
 #### setIn()
 Returns a new object with a modified **nested** attribute.
 
-Usage: `setIn(obj: Object, path: Array<string>, val: any): Object`
-If the provided value is the same (*referentially equal to*)
+Notes:
+
+* If the provided value is the same (*referentially equal to*)
 the previous value, the original object is returned.
+
+* If the path does not exist, it will be created before setting
+the new value.
+
+Usage: `setIn(obj: Object, path: Array<string>, val: any): Object`
 
 ```js
 obj = {a: 1, b: 2, d: {d1: 3, d2: 4}, e: {e1: 'foo', e2: 'bar'}}
@@ -183,6 +204,32 @@ obj3 === obj
 obj3.d === obj.d
 // true
 obj3.e === obj.e
+// true
+
+// ... unknown paths create intermediate keys:
+setIn({a: 3}, ['unknown', 'path'], 4)
+// {a: 3, unknown: {path: 4}}
+```
+
+#### updateIn()
+Returns a new object with a modified **nested** attribute,
+calculated via a user-provided callback based on the current value.
+If the calculated value is the same (*referentially equal to*)
+the previous value, the original object is returned.
+
+Usage: `updateIn(obj: Object, path: Array<string>, fnUpdate: (prevValue: any) => any): Object`
+
+```js
+obj = {a: 1, d: {d1: 3, d2: 4}}
+obj2 = updateIn(obj, ['d', 'd1'], function(val){return val + 1})
+// {a: 1, d: {d1: 4, d2: 4}}
+obj2 === obj
+// false
+
+// ... but the same object is returned if there are no changes:
+obj3 = updateIn(obj, ['d', 'd1'], function(val){return val})
+// {a: 1, d: {d1: 3, d2: 4}}
+obj3 === obj
 // true
 ```
 
@@ -214,6 +261,26 @@ obj3 === obj1
 
 // ... but the same object is returned if there are no changes:
 merge(obj1, {c: 3}) === obj1
+// true
+```
+
+#### mergeIn()
+Similar to `merge()`, but merging the value at a given nested path.
+
+Usage: `mergeIn(obj1: Object, path: Array<string>, obj2: Object): Object`
+
+Variadic: `mergeIn(obj1: Object, path: Array<string>, ...objects: Object[]): Object`
+
+```js
+obj1 = {a: 1, d: {b: {d1: 3, d2: 4}}}
+obj2 = {d3: 5}
+obj2 = mergeIn(obj1, ['d', 'b'], obj2)
+// {a: 1, d: {b: {d1: 3, d2: 4, d3: 5}}}
+obj3 === obj1
+// false
+
+// ... but the same object is returned if there are no changes:
+mergeIn(obj1, ['d', 'b'], {d2: 4}) === obj1
 // true
 ```
 

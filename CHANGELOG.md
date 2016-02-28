@@ -1,5 +1,7 @@
 # Changelog
 
+* Update documentation for the new functions added in 0.4.1.
+
 ## 0.4.1 (Feb. 28, 2016)
 
 * Add `getIn()`, `updateIn()`, `mergeIn()`
