@@ -1,4 +1,4 @@
-timm = require '../src/timm'
+timm = require '../dist/timm.min'
 chalk = require 'chalk'
 
 N = 2e6
