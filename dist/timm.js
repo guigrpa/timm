@@ -18,6 +18,9 @@
 
   _clone = function(obj) {
     var i, key, keys, len1, out;
+    if (Array.isArray(obj)) {
+      return [].concat(obj);
+    }
     keys = Object.keys(obj);
     out = {};
     for (i = 0, len1 = keys.length; i < len1; i++) {

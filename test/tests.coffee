@@ -85,7 +85,7 @@ describe 'Object operations', ->
   obj = null
   arr = null
   beforeEach ->
-    obj = {a: 1, b: 2, d: {d1: 3, d2: 4, b: {b: {b: 4}}}, e: {e1: 'foo', e2: 'bar'}}
+    obj = {a: 1, b: 2, d: {d1: 3, d2: 4, b: {b: {b: 4}}}, e: {e1: 'foo', e2: 'bar'}, arr: ['c', 'd']}
     arr = [{a: 1}, {a: 2}, {a: 3, d: {d1: 4, d2: 5, d3: null}}]
 
   describe 'getIn', ->
@@ -149,6 +149,14 @@ describe 'Object operations', ->
         expect(obj2.d).to.equal obj.d
         expect(obj2.d.b).to.equal obj.d.b
         expect(obj2.e).to.equal obj.e
+
+      it 'should not convert arrays to objects', ->
+        obj2 = timm.setIn obj, ['arr', 2], 'e'
+        expect(obj.arr).to.have.length 2
+        expect(obj2).not.to.equal obj
+        expect(Array.isArray obj2.arr).to.be.true
+        expect(obj2.arr).to.have.length 3
+        expect(obj2.arr[2]).to.equal 'e'
 
     describe 'deeper', ->
       it 'with change', ->

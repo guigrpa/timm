@@ -12,6 +12,7 @@ INVALID_ARGS = 'INVALID_ARGS'
 _throw = (msg) -> throw new Error msg
 
 _clone = (obj) ->
+  if Array.isArray obj then return [].concat obj
   keys = Object.keys obj
   out = {}
   out[key] = obj[key] for key in keys
