@@ -4,6 +4,7 @@ if process.env.TEST_MINIFIED_LIB
   timm = require '../dist/timm.min'
 else
   timm = require '../src/timm'
+fProduction = (process.env.NODE_ENV is 'production') or process.env.TEST_MINIFIED_LIB
 
 it 'sanity', ->
   expect(timm.set).to.exist
@@ -29,6 +30,12 @@ describe 'Array operations', ->
       expect(arr2).to.have.length 5
       expect(arr2).to.deep.equal ['a', 'b', 'c', 'd', 'e']
 
+    it 'should return an immutable array in DEVELOPMENT', ->
+      @skip() if fProduction
+      arr2 = timm.addLast arr, 'd'
+      arr2[3] = 'j'
+      expect(arr2[3]).to.equal 'd'
+
   describe 'addFirst', ->
     it 'with a single value', ->
       arr2 = timm.addFirst arr, 'd'
@@ -43,6 +50,12 @@ describe 'Array operations', ->
       expect(arr2).to.not.equal arr
       expect(arr2).to.have.length 5
       expect(arr2).to.deep.equal ['d', 'e', 'a', 'b', 'c']
+
+    it 'should return an immutable array in DEVELOPMENT', ->
+      @skip() if fProduction
+      arr2 = timm.addFirst arr, 'd'
+      arr2[0] = 'j'
+      expect(arr2[0]).to.equal 'd'
 
   describe 'insert', ->
     it 'with a single value', ->
@@ -59,12 +72,25 @@ describe 'Array operations', ->
       expect(arr2).to.have.length 5
       expect(arr2).to.deep.equal ['a', 'e', 'f', 'b', 'c']
 
-  it 'removeAt', ->
-    arr2 = timm.removeAt arr, 1
-    expect(arr).to.have.length 3
-    expect(arr2).to.not.equal arr
-    expect(arr2).to.have.length 2
-    expect(arr2).to.deep.equal ['a', 'c']
+    it 'should return an immutable array in DEVELOPMENT', ->
+      @skip() if fProduction
+      arr2 = timm.insert arr, 1, 'e'
+      arr2[1] = 'j'
+      expect(arr2[1]).to.equal 'e'
+
+  describe 'removeAt', ->
+    it 'normal operation', ->
+      arr2 = timm.removeAt arr, 1
+      expect(arr).to.have.length 3
+      expect(arr2).to.not.equal arr
+      expect(arr2).to.have.length 2
+      expect(arr2).to.deep.equal ['a', 'c']
+
+    it 'should return an immutable array in DEVELOPMENT', ->
+      @skip() if fProduction
+      arr2 = timm.removeAt arr, 1
+      arr2.length = 0
+      expect(arr2.length).to.equal 2
 
   describe 'replaceAt', ->
     it 'with change', ->
@@ -78,6 +104,12 @@ describe 'Array operations', ->
       arr2 = timm.replaceAt arr, 1, 'b'
       expect(arr).to.have.length 3
       expect(arr2).to.equal arr
+
+    it 'should return an immutable array in DEVELOPMENT', ->
+      @skip() if fProduction
+      arr2 = timm.replaceAt arr, 1, 'd'
+      arr2[1] = 'j'
+      expect(arr2[1]).to.equal 'd'
 
 
 describe 'Object operations', ->

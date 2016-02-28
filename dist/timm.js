@@ -7,7 +7,7 @@
  */
 
 (function() {
-  var INVALID_ARGS, _clone, _isObject, _merge, _setIn, _throw, addDefaults, addFirst, addLast, getIn, insert, merge, mergeIn, removeAt, replaceAt, set, setIn, updateIn,
+  var INVALID_ARGS, _clone, _deepFreeze, _isObject, _merge, _setIn, _throw, addDefaults, addFirst, addLast, getIn, insert, merge, mergeIn, removeAt, replaceAt, set, setIn, updateIn,
     slice = [].slice;
 
   INVALID_ARGS = 'INVALID_ARGS';
@@ -70,33 +70,72 @@
     return (o != null) && (type === 'object' || type === 'function');
   };
 
+  _deepFreeze = function(obj) {
+    var i, key, len1, ref, val;
+    Object.freeze(obj);
+    ref = Object.getOwnPropertyNames(obj);
+    for (i = 0, len1 = ref.length; i < len1; i++) {
+      key = ref[i];
+      val = obj[key];
+      if (_isObject(val) && !Object.isFrozen(val)) {
+        _deepFreeze(val);
+      }
+    }
+    return obj;
+  };
+
   addLast = function(array, val) {
+    var out;
     if (Array.isArray(val)) {
       return array.concat(val);
     }
-    return array.concat([val]);
+    out = array.concat([val]);
+    if (process.env.NODE_ENV !== 'production') {
+      _deepFreeze(out);
+    }
+    return out;
   };
 
   addFirst = function(array, val) {
+    var out;
     if (Array.isArray(val)) {
       return val.concat(array);
     }
-    return [val].concat(array);
+    out = [val].concat(array);
+    if (process.env.NODE_ENV !== 'production') {
+      _deepFreeze(out);
+    }
+    return out;
   };
 
   insert = function(array, idx, val) {
-    return array.slice(0, idx).concat(Array.isArray(val) ? val : [val]).concat(array.slice(idx));
+    var out;
+    out = array.slice(0, idx).concat(Array.isArray(val) ? val : [val]).concat(array.slice(idx));
+    if (process.env.NODE_ENV !== 'production') {
+      _deepFreeze(out);
+    }
+    return out;
   };
 
   removeAt = function(array, idx) {
-    return array.slice(0, idx).concat(array.slice(idx + 1));
+    var out;
+    out = array.slice(0, idx).concat(array.slice(idx + 1));
+    if (process.env.NODE_ENV !== 'production') {
+      _deepFreeze(out);
+    }
+    return out;
   };
 
   replaceAt = function(array, idx, newItem) {
+    var out;
     if (array[idx] === newItem) {
       return array;
     }
-    return array.slice(0, idx).concat([newItem]).concat(array.slice(idx + 1));
+    out = array.slice(0, idx).concat([newItem]).concat(array.slice(idx + 1));
+    if (process.env.NODE_ENV !== 'production') {
+      _deepFreeze(out);
+    }
+    return out;
   };
 
   getIn = function(obj, path) {
@@ -117,23 +156,32 @@
   };
 
   set = function(obj, key, val) {
-    var obj2;
+    var out;
     if (obj == null) {
       obj = {};
     }
     if (obj[key] === val) {
       return obj;
     }
-    obj2 = _clone(obj);
-    obj2[key] = val;
-    return obj2;
+    out = _clone(obj);
+    out[key] = val;
+    if (process.env.NODE_ENV !== 'production') {
+      _deepFreeze(out);
+    }
+    return out;
   };
 
   setIn = function(obj, path, val) {
-    if (!path.length) {
-      return val;
+    var out;
+    if (path.length) {
+      out = _setIn(obj, path, val, 0);
+    } else {
+      out = val;
     }
-    return _setIn(obj, path, val, 0);
+    if (process.env.NODE_ENV !== 'production') {
+      _deepFreeze(out);
+    }
+    return out;
   };
 
   _setIn = function(obj, path, val, idx) {
@@ -156,11 +204,16 @@
   };
 
   merge = function(a, b, c, d, e, f) {
+    var out;
     if (arguments.length <= 6) {
-      return _merge(false, a, b, c, d, e, f);
+      out = _merge(false, a, b, c, d, e, f);
     } else {
-      return _merge.apply(null, [false].concat(slice.call(arguments)));
+      out = _merge.apply(null, [false].concat(slice.call(arguments)));
     }
+    if (process.env.NODE_ENV !== 'production') {
+      _deepFreeze(out);
+    }
+    return out;
   };
 
   mergeIn = function(a, path, b, c, d, e, f) {
@@ -179,11 +232,16 @@
   };
 
   addDefaults = function(a, b, c, d, e, f) {
+    var out;
     if (arguments.length <= 6) {
-      return _merge(true, a, b, c, d, e, f);
+      out = _merge(true, a, b, c, d, e, f);
     } else {
-      return _merge.apply(null, [true].concat(slice.call(arguments)));
+      out = _merge.apply(null, [true].concat(slice.call(arguments)));
     }
+    if (process.env.NODE_ENV !== 'production') {
+      _deepFreeze(out);
+    }
+    return out;
   };
 
   module.exports = {

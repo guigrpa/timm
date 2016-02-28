@@ -22,7 +22,10 @@ _merge = (fAddDefaults) ->
   args = arguments
   len = args.length
   out = args[1]
-  not(out?) and _throw if process.env.NODE_ENV isnt 'production' then "At least one object should be provided to merge()" else INVALID_ARGS
+  not(out?) and _throw \
+    if process.env.NODE_ENV isnt 'production' \
+    then "At least one object should be provided to merge()" \
+    else INVALID_ARGS
   fChanged = false
   for idx in [2...len] by 1
     obj = args[idx]
@@ -41,6 +44,14 @@ _merge = (fAddDefaults) ->
 _isObject = (o) ->
   type = typeof o
   return o? and (type is 'object' or type is 'function')
+
+_deepFreeze = (obj) ->
+  Object.freeze obj
+  for key in Object.getOwnPropertyNames obj
+    val = obj[key]
+    if _isObject(val) and not Object.isFrozen val
+      _deepFreeze val
+  obj
 
 #-----------------------------------------------
 # ### Arrays
@@ -64,7 +75,9 @@ _isObject = (o) ->
 ## but is apparently very slow
 addLast = (array, val) -> 
   if Array.isArray val then return array.concat val
-  array.concat [val]
+  out = array.concat [val]
+  _deepFreeze out if process.env.NODE_ENV isnt 'production'
+  out
 
 # #### addFirst()
 # Returns a new array with a prepended item or items.
@@ -82,7 +95,9 @@ addLast = (array, val) ->
 # ```
 addFirst = (array, val) -> 
   if Array.isArray val then return val.concat array
-  [val].concat array
+  out = [val].concat array
+  _deepFreeze out if process.env.NODE_ENV isnt 'production'
+  out
 
 # #### insert()
 # Returns a new array obtained by inserting an item or items
@@ -100,9 +115,11 @@ addFirst = (array, val) ->
 # // ['a', 'd', 'e', 'b', 'c']
 # ```
 insert = (array, idx, val) ->
-  return array.slice(0, idx)
+  out = array.slice(0, idx)
     .concat if Array.isArray val then val else [val]
     .concat array.slice(idx)
+  _deepFreeze out if process.env.NODE_ENV isnt 'production'
+  out
 
 # #### removeAt()
 # Returns a new array obtained by removing an item at
@@ -117,7 +134,10 @@ insert = (array, idx, val) ->
 # arr2 === arr
 # // false
 # ```
-removeAt = (array, idx) -> array.slice(0, idx).concat array.slice(idx + 1)
+removeAt = (array, idx) -> 
+  out = array.slice(0, idx).concat array.slice(idx + 1)
+  _deepFreeze out if process.env.NODE_ENV isnt 'production'
+  out
 
 # #### replaceAt()
 # Returns a new array obtained by replacing an item at
@@ -140,16 +160,21 @@ removeAt = (array, idx) -> array.slice(0, idx).concat array.slice(idx + 1)
 # ```
 replaceAt = (array, idx, newItem) ->
   return array if array[idx] is newItem
-  return array.slice(0, idx)
+  out = array.slice(0, idx)
     .concat [newItem]
     .concat array.slice(idx + 1)
+  _deepFreeze out if process.env.NODE_ENV isnt 'production'
+  out
 
 #-----------------------------------------------
 # ### Collections (objects and arrays)
 #-----------------------------------------------
 
 getIn = (obj, path) ->
-  not(Array.isArray path) and _throw if process.env.NODE_ENV isnt 'production' then "A path array should be provided when calling getIn()" else INVALID_ARGS
+  not(Array.isArray path) and _throw \
+    if process.env.NODE_ENV isnt 'production' \
+    then "A path array should be provided when calling getIn()" \
+    else INVALID_ARGS
   ptr = obj
   return undefined if not ptr?
   for segment in path
@@ -178,9 +203,10 @@ getIn = (obj, path) ->
 set = (obj, key, val) ->
   obj ?= {}
   return obj if obj[key] is val
-  obj2 = _clone obj
-  obj2[key] = val
-  obj2
+  out = _clone obj
+  out[key] = val
+  _deepFreeze out if process.env.NODE_ENV isnt 'production'
+  out
 
 # #### setIn()
 # Returns a new object with a modified **nested** attribute.
@@ -211,8 +237,12 @@ set = (obj, key, val) ->
 # // true
 # ```
 setIn = (obj, path, val) ->
-  return val if not path.length
-  return _setIn obj, path, val, 0
+  if path.length
+    out = _setIn obj, path, val, 0
+  else
+    out = val
+  _deepFreeze out if process.env.NODE_ENV isnt 'production'
+  out
 
 _setIn = (obj, path, val, idx) ->
   key = path[idx]
@@ -260,9 +290,11 @@ updateIn = (obj, path, fnUpdate) ->
 # ```
 merge = (a, b, c, d, e, f) -> 
   if arguments.length <= 6
-    return _merge false, a, b, c, d, e, f
+    out = _merge false, a, b, c, d, e, f
   else
-    return _merge false, arguments...
+    out = _merge false, arguments...
+  _deepFreeze out if process.env.NODE_ENV isnt 'production'
+  out
 
 mergeIn = (a, path, b, c, d, e, f) ->
   prevVal = getIn a, path
@@ -297,9 +329,11 @@ mergeIn = (a, path, b, c, d, e, f) ->
 # ```
 addDefaults = (a, b, c, d, e, f) ->
   if arguments.length <= 6
-    return _merge true, a, b, c, d, e, f
+    out = _merge true, a, b, c, d, e, f
   else
-    return _merge true, arguments...
+    out = _merge true, arguments...
+  _deepFreeze out if process.env.NODE_ENV isnt 'production'
+  out
 
 #-----------------------------------------------
 #- ### Public API

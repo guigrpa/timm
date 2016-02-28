@@ -1,5 +1,5 @@
 --compilers coffee:coffee-script/register
---require ./tools/coffeeCoverageLoader.js
+--require ./tools/coffeeCoverageLoader.coffee
 --recursive
 -R spec 
 --colors 
