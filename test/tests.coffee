@@ -223,6 +223,16 @@ describe 'Object operations', ->
       obj2 = timm.merge obj, undefined
       expect(obj2).to.equal obj
 
+    it 'should ignore undefined attributes in subsequent args', ->
+      obj2 = timm.merge obj, {a: undefined}
+      expect(obj2).to.equal obj
+      expect(obj.a).to.equal 1
+
+    it 'should NOT ignore null attributes in subsequent args', ->
+      obj2 = timm.merge obj, {g: null}
+      expect(obj2).not.to.equal obj
+      expect(obj2.g).to.be.null
+
     it 'should return the same object when merged with null', ->
       obj2 = timm.merge obj, null
       expect(obj2).to.equal obj

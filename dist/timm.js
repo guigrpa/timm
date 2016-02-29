@@ -31,7 +31,7 @@
   };
 
   _merge = function(fAddDefaults) {
-    var args, fChanged, i, idx, j, key, keys, len, len1, obj, out, ref;
+    var args, fChanged, i, idx, j, key, keys, len, len1, nextVal, obj, out, ref;
     args = arguments;
     len = args.length;
     out = args[1];
@@ -51,14 +51,18 @@
         if (fAddDefaults && out[key] !== void 0) {
           continue;
         }
-        if (obj[key] === out[key]) {
+        nextVal = obj[key];
+        if (nextVal === void 0) {
+          continue;
+        }
+        if (nextVal === out[key]) {
           continue;
         }
         if (!fChanged) {
           fChanged = true;
           out = _clone(out);
         }
-        out[key] = obj[key];
+        out[key] = nextVal;
       }
     }
     return out;

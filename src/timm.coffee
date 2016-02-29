@@ -34,11 +34,13 @@ _merge = (fAddDefaults) ->
     continue if not keys.length
     for key in keys
       continue if fAddDefaults and out[key] isnt undefined
-      continue if obj[key] is out[key]
+      nextVal = obj[key]
+      continue if nextVal is undefined
+      continue if nextVal is out[key]
       if not fChanged
         fChanged = true
         out = _clone out
-      out[key] = obj[key]
+      out[key] = nextVal
   out
 
 _isObject = (o) ->
