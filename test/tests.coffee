@@ -187,6 +187,11 @@ describe 'Object operations', ->
       obj2 = timm.setIn obj, [], {a: 3}
       expect(obj2).to.deep.equal {a: 3}
 
+    it 'should allow unsetting an attribute', ->
+      obj2 = timm.setIn obj, ['d', 'd1'], undefined
+      expect(obj2).not.to.equal obj
+      expect(obj2.d.d1).to.be.undefined
+
   describe 'updateIn', ->
     it 'with changes', ->
       obj2 = timm.updateIn obj, ['e', 'e1'], (val) -> val + 'x'
