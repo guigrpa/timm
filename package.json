@@ -5,35 +5,41 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
-    "chai": "3.5.0",
+    "ava": "0.13.0",
     "chalk": "1.1.1",
-    "coffee-coverage": "1.0.1",
     "coffee-script": "1.10.0",
     "coveralls": "2.11.6",
     "cross-env": "1.0.7",
-    "debug": "2.2.0",
-    "diveSync": "0.3.0",
     "envify": "3.4.0",
     "immutable": "3.7.6",
-    "istanbul": "0.4.2",
     "lodash": "4.5.0",
-    "mocha": "2.4.5",
+    "nyc": "6.1.1",
     "seamless-immutable": "5.0.1",
     "uglifyjs": "2.4.10"
   },
   "scripts": {
-    "t": "mocha",
-    "test": "npm run testCoverage",
-    "testCoverageDev": "cross-env TEST_COV=1 NODE_ENV=development mocha",
-    "testCoverageProd": "cross-env TEST_COV=1 NODE_ENV=production mocha",
-    "testCoverageMerge": "coffee tools/coffeeCoverageMerge.coffee",
-    "testCoverage": "rm -rf ./coverage && npm run testCoverageDev && npm run testCoverageProd && npm run testCoverageMerge",
-    "testMinified": "cross-env TEST_MINIFIED_LIB=1 mocha",
+    "ava": "ava --watch",
+    "test": "npm run testCovFull",
+    "testCovFast": "npm run testCovPrepare && npm run testCovDev && npm run testCovReport",
+    "testCovFull": "npm run testCovPrepare && npm run testCovDev && npm run testCovProd && npm run testCovMin && npm run testCovReport",
+    "testCovPrepare": "rm -rf ./coverage .nyc_output .nyc_tmp && mkdir .nyc_tmp",
+    "testCovDev": "cross-env NODE_ENV=development nyc ava && mv .nyc_output/* .nyc_tmp/",
+    "testCovProd": "cross-env NODE_ENV=production nyc ava && mv .nyc_output/* .nyc_tmp/",
+    "testCovMin": "cross-env TEST_MINIFIED_LIB=1 nyc ava && mv .nyc_output/* .nyc_tmp/",
+    "testCovReport": "cp .nyc_tmp/* .nyc_output/ && nyc report --reporter=html",
     "compile": "rm -rf ./dist && coffee -o dist -c src",
     "docs": "coffee tools/extractDocs.coffee",
     "uglify": "cross-env NODE_ENV=production envify dist/timm.js | uglifyjs - -o dist/timm.min.js --mangle --compress --comments \"/\\|/\"",
-    "build": "npm run testCoverage && npm run compile && npm run uglify && npm run testMinified && npm run docs",
+    "build": "npm run compile && npm run uglify && npm test && npm run docs",
     "benchmarks": "coffee tools/benchmarks.coffee"
+  },
+  "ava": {
+    "files": [
+      "test/*.js"
+    ],
+    "require": [
+      "coffee-script/register"
+    ]
   },
   "repository": {
     "type": "git",

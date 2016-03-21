@@ -1,3 +1,4 @@
+# UNUSED
 return if not process.env.TEST_COV
 
 chalk = require 'chalk'
