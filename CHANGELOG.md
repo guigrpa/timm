@@ -1,5 +1,7 @@
 # Changelog
 
+* Important internal changes (migrated to AVA, ES6), but usage remains unchanged
+
 ## 0.4.3 (Mar. 08, 2016)
 
 * Bugfix: internal `_merge()` incorrectly merged `{a: 3} + {a: undefined} => {a: undefined}`

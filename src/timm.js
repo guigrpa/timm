@@ -435,3 +435,20 @@ export function addDefaults(a, b, c, d, e, f) {
     return _merge.apply(null, [true, ...arguments]);
   }
 };
+
+//-----------------------------------------------
+//- ### Public API
+//-----------------------------------------------
+const timm = {
+  addLast, addFirst,
+  insert,
+  removeAt, replaceAt,
+
+  getIn,
+  set, setIn,
+  updateIn,
+  merge, mergeIn,
+  addDefaults,
+}
+
+export default timm;

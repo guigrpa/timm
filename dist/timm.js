@@ -447,3 +447,20 @@ function addDefaults(a, b, c, d, e, f) {
     return _merge.apply(null, [true].concat(Array.prototype.slice.call(arguments)));
   }
 };
+
+//-----------------------------------------------
+//- ### Public API
+//-----------------------------------------------
+var timm = {
+  addLast: addLast, addFirst: addFirst,
+  insert: insert,
+  removeAt: removeAt, replaceAt: replaceAt,
+
+  getIn: getIn,
+  set: set, setIn: setIn,
+  updateIn: updateIn,
+  merge: merge, mergeIn: mergeIn,
+  addDefaults: addDefaults
+};
+
+exports.default = timm;

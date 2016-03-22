@@ -19,7 +19,7 @@ node_modules
 *.sublime-project
 *.sublime-workspace
 
-# NPM
+# NPM extras
 /docs
 /src
 /tools
