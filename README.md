@@ -54,6 +54,10 @@ Some conclusions from these benchmarks:
 
 ## Usage
 
+Timm
+ (c) Guillermo Grau Panea 2016
+ License: MIT
+
 ### Arrays
 
 #### addLast()

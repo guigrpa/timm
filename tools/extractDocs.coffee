@@ -1,7 +1,7 @@
 fs = require 'fs'
 chalk = require 'chalk'
 
-SRC_PATH = './src/timm.coffee'
+SRC_PATH = './src/timm.js'
 README_TEMPLATE = './docs/README_TEMPLATE.md'
 API_PLACEHOLDER = '[[[API]]]'
 OUTPUT_PATH = './README.md'
@@ -16,14 +16,15 @@ for line in lines
 
   # Code lines
   if (not line.length) or
-     (line[0] isnt '#') or
-     (line.length >= 2 and line[1] in ['#', '-'])
+     (line.indexOf('//') isnt 0) or
+     (line.indexOf('//-') is 0) or
+     (line.indexOf('///') is 0)
     if not fCode then apiDescription += '\n'
     fCode = true
     continue
 
   fCode = false
-  line = line.slice 2
+  line = line.slice 3
 
   apiDescription += "#{line}\n"
 

@@ -1,28 +1,8 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-exports.addLast = addLast;
-exports.addFirst = addFirst;
-exports.insert = insert;
-exports.removeAt = removeAt;
-exports.replaceAt = replaceAt;
-exports.getIn = getIn;
-exports.set = set;
-exports.setIn = setIn;
-exports.updateIn = updateIn;
-exports.merge = merge;
-exports.mergeIn = mergeIn;
-exports.addDefaults = addDefaults;
 //| Timm
 //| (c) Guillermo Grau Panea 2016
 //| License: MIT
 
-var INVALID_ARGS = 'INVALID_ARGS';
+const INVALID_ARGS = 'INVALID_ARGS';
 
 //-----------------------------------------------
 //- ### Helpers
@@ -37,8 +17,8 @@ function _clone(obj) {
   }
   var keys = Object.keys(obj);
   var out = {};
-  for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
+  for (let i = 0; i < keys.length; i++) {
+    let key = keys[i];
     out[key] = obj[key];
   }
   return out;
@@ -46,25 +26,25 @@ function _clone(obj) {
 
 function _merge(fAddDefaults) {
   var args = arguments;
-  var len = args.length;
+  const len = args.length;
   var out = args[1];
   !(out != null) && _throw(process.env.NODE_ENV !== 'production' ? "At least one object should be provided to merge()" : INVALID_ARGS);
   var fChanged = false;
-  for (var idx = 2; idx < len; idx++) {
-    var obj = args[idx];
+  for (let idx = 2; idx < len; idx++) {
+    let obj = args[idx];
     if (obj == null) {
       continue;
     }
-    var keys = Object.keys(obj);
+    let keys = Object.keys(obj);
     if (!keys.length) {
       continue;
     }
-    for (var j = 0; j <= keys.length; j++) {
-      var key = keys[j];
+    for (let j = 0; j <= keys.length; j++) {
+      let key = keys[j];
       if (fAddDefaults && out[key] !== undefined) {
         continue;
       }
-      var nextVal = obj[key];
+      let nextVal = obj[key];
       if (nextVal === undefined || nextVal === out[key]) {
         continue;
       }
@@ -79,8 +59,8 @@ function _merge(fAddDefaults) {
 };
 
 function _isObject(o) {
-  var type = typeof o === 'undefined' ? 'undefined' : _typeof(o);
-  return o != null && (type === 'object' || type === 'function');
+  var type = typeof o;
+  return (o != null) && (type === 'object' || type === 'function');
 };
 
 /// _deepFreeze = (obj) ->
@@ -97,9 +77,9 @@ function _isObject(o) {
 
 // #### addLast()
 // Returns a new array with an appended item or items.
-//
+// 
 // Usage: `addLast(array: Array, val: Array | any): Array`
-//
+// 
 // ```js
 // arr = ['a', 'b']
 // arr2 = addLast(arr, 'c')
@@ -111,7 +91,7 @@ function _isObject(o) {
 // ```
 /// `array.concat(val)` also handles the array case,
 /// but is apparently very slow
-function addLast(array, val) {
+export function addLast(array, val) {
   if (Array.isArray(val)) {
     return array.concat(val);
   }
@@ -120,9 +100,9 @@ function addLast(array, val) {
 
 // #### addFirst()
 // Returns a new array with a prepended item or items.
-//
+// 
 // Usage: `addFirst(array: Array, val: Array | any): Array`
-//
+// 
 // ```js
 // arr = ['a', 'b']
 // arr2 = addFirst(arr, 'c')
@@ -132,7 +112,7 @@ function addLast(array, val) {
 // arr3 = addFirst(arr, ['c', 'd'])
 // // ['c', 'd', 'a', 'b']
 // ```
-function addFirst(array, val) {
+export function addFirst(array, val) {
   if (Array.isArray(val)) {
     return val.concat(array);
   }
@@ -144,7 +124,7 @@ function addFirst(array, val) {
 // at a specified index.
 //
 // Usage: `insert(array: Array, idx: number, val: Array | any): Array`
-//
+// 
 // ```js
 // arr = ['a', 'b', 'c']
 // arr2 = insert(arr, 1, 'd')
@@ -154,8 +134,11 @@ function addFirst(array, val) {
 // insert(arr, 1, ['d', 'e'])
 // // ['a', 'd', 'e', 'b', 'c']
 // ```
-function insert(array, idx, val) {
-  return array.slice(0, idx).concat(Array.isArray(val) ? val : [val]).concat(array.slice(idx));
+export function insert(array, idx, val) {
+  return array
+    .slice(0, idx)
+    .concat(Array.isArray(val) ? val : [val])
+    .concat(array.slice(idx));
 };
 
 // #### removeAt()
@@ -163,7 +146,7 @@ function insert(array, idx, val) {
 // a specified index.
 //
 // Usage: `removeAt(array: Array, idx: number): Array`
-//
+// 
 // ```js
 // arr = ['a', 'b', 'c']
 // arr2 = removeAt(arr, 1)
@@ -171,14 +154,16 @@ function insert(array, idx, val) {
 // arr2 === arr
 // // false
 // ```
-function removeAt(array, idx) {
-  return array.slice(0, idx).concat(array.slice(idx + 1));
+export function removeAt(array, idx) {
+  return array
+    .slice(0, idx)
+    .concat(array.slice(idx + 1));
 };
 
 // #### replaceAt()
 // Returns a new array obtained by replacing an item at
 // a specified index. If the provided item is the same
-// (*referentially equal to*) the previous item at that position,
+// (*referentially equal to*) the previous item at that position, 
 // the original array is returned.
 //
 // Usage: `replaceAt(array: Array, idx: number, newItem: any): Array`
@@ -194,11 +179,14 @@ function removeAt(array, idx) {
 // replaceAt(arr, 1, 'b') === arr
 // // true
 // ```
-function replaceAt(array, idx, newItem) {
+export function replaceAt(array, idx, newItem) {
   if (array[idx] === newItem) {
     return array;
   }
-  return array.slice(0, idx).concat([newItem]).concat(array.slice(idx + 1));
+  return array
+    .slice(0, idx)
+    .concat([newItem])
+    .concat(array.slice(idx + 1));
 };
 
 //-----------------------------------------------
@@ -219,14 +207,14 @@ function replaceAt(array, idx, newItem) {
 // getIn(obj, ['e', 1])
 // // 'b'
 // ```
-function getIn(obj, path) {
-  !Array.isArray(path) && _throw(process.env.NODE_ENV !== 'production' ? "A path array should be provided when calling getIn()" : INVALID_ARGS);
+export function getIn(obj, path) {
+  !(Array.isArray(path)) && _throw(process.env.NODE_ENV !== 'production' ? "A path array should be provided when calling getIn()" : INVALID_ARGS);
   if (obj == null) {
     return undefined;
   }
   var ptr = obj;
-  for (var i = 0; i < path.length; i++) {
-    var segment = path[i];
+  for (let i = 0; i < path.length; i++) {
+    let segment = path[i];
     ptr = ptr != null ? ptr[segment] : undefined;
     if (ptr === undefined) {
       return ptr;
@@ -236,7 +224,7 @@ function getIn(obj, path) {
 };
 
 // #### set()
-// Returns a new object with a modified attribute.
+// Returns a new object with a modified attribute. 
 // If the provided value is the same (*referentially equal to*)
 // the previous value, the original object is returned.
 //
@@ -253,7 +241,7 @@ function getIn(obj, path) {
 // set(obj, 'b', 2) === obj
 // // true
 // ```
-function set(obj, key, val) {
+export function set(obj, key, val) {
   if (obj == null) {
     obj = {};
   }
@@ -303,7 +291,7 @@ function set(obj, key, val) {
 // setIn({a: 3}, ['unknown', 'path'], 4)
 // // {a: 3, unknown: {path: 4}}
 // ```
-function setIn(obj, path, val) {
+export function setIn(obj, path, val) {
   if (!path.length) {
     return val;
   }
@@ -322,13 +310,13 @@ function _setIn(obj, path, val, idx) {
 };
 
 // #### updateIn()
-// Returns a new object with a modified **nested** attribute,
+// Returns a new object with a modified **nested** attribute, 
 // calculated via a user-provided callback based on the current value.
 // If the calculated value is the same (*referentially equal to*)
 // the previous value, the original object is returned.
-//
+// 
 // Usage: `updateIn(obj: Object, path: Array<string>, fnUpdate: (prevValue: any) => any): Object`
-//
+// 
 // ```js
 // obj = {a: 1, d: {d1: 3, d2: 4}}
 // obj2 = updateIn(obj, ['d', 'd1'], function(val){return val + 1})
@@ -342,14 +330,14 @@ function _setIn(obj, path, val, idx) {
 // obj3 === obj
 // // true
 // ```
-function updateIn(obj, path, fnUpdate) {
+export function updateIn(obj, path, fnUpdate) {
   var prevVal = getIn(obj, path);
   var nextVal = fnUpdate(prevVal);
   return setIn(obj, path, nextVal);
 };
 
 // #### merge()
-// Returns a new object built as follows: the overlapping keys from the
+// Returns a new object built as follows: the overlapping keys from the 
 // second one overwrite the corresponding entries from the first one.
 // Similar to `Object.assign()`, but immutable.
 //
@@ -378,11 +366,11 @@ function updateIn(obj, path, fnUpdate) {
 // merge(obj1, {c: 3}) === obj1
 // // true
 // ```
-function merge(a, b, c, d, e, f) {
+export function merge(a, b, c, d, e, f) {
   if (arguments.length <= 6) {
     return _merge(false, a, b, c, d, e, f);
   } else {
-    return _merge.apply(null, [false].concat(Array.prototype.slice.call(arguments)));
+    return _merge.apply(null, [false, ...arguments]);
   }
 };
 
@@ -405,7 +393,7 @@ function merge(a, b, c, d, e, f) {
 // mergeIn(obj1, ['d', 'b'], {d2: 4}) === obj1
 // // true
 // ```
-function mergeIn(a, path, b, c, d, e, f) {
+export function mergeIn(a, path, b, c, d, e, f) {
   var prevVal = getIn(a, path);
   if (prevVal == null) {
     prevVal = {};
@@ -440,10 +428,10 @@ function mergeIn(a, path, b, c, d, e, f) {
 // addDefaults(obj1, {c: 4}) === obj1
 // // true
 // ```
-function addDefaults(a, b, c, d, e, f) {
+export function addDefaults(a, b, c, d, e, f) {
   if (arguments.length <= 6) {
     return _merge(true, a, b, c, d, e, f);
   } else {
-    return _merge.apply(null, [true].concat(Array.prototype.slice.call(arguments)));
+    return _merge.apply(null, [true, ...arguments]);
   }
 };

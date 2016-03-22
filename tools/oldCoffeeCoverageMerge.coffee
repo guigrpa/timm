@@ -1,4 +1,3 @@
-# UNUSED
 istanbul = require 'istanbul'
 diveSync = require 'diveSync'
 fs       = require 'fs'
