@@ -16,15 +16,14 @@ for line in lines
 
   # Code lines
   if (not line.length) or
-     (line.indexOf('//') isnt 0) or
-     (line.indexOf('//-') is 0) or
-     (line.indexOf('///') is 0)
+     (line.indexOf('// --') isnt 0)
     if not fCode then apiDescription += '\n'
     fCode = true
     continue
 
+  # Comment lines
   fCode = false
-  line = line.slice 3
+  line = line.slice 6
 
   apiDescription += "#{line}\n"
 

@@ -54,10 +54,6 @@ Some conclusions from these benchmarks:
 
 ## Usage
 
-Timm
- (c) Guillermo Grau Panea 2016
- License: MIT
-
 ### Arrays
 
 #### addLast()
@@ -226,7 +222,8 @@ calculated via a user-provided callback based on the current value.
 If the calculated value is the same (*referentially equal to*)
 the previous value, the original object is returned.
 
-Usage: `updateIn(obj: ArrayOrObject, path: Array<Key>, fnUpdate: (prevValue: any) => any): ArrayOrObject`
+Usage: `updateIn(obj: ArrayOrObject, path: Array<Key>,
+fnUpdate: (prevValue: any) => any): ArrayOrObject`
 
 ```js
 obj = {a: 1, d: {d1: 3, d2: 4}}
@@ -280,7 +277,8 @@ Similar to `merge()`, but merging the value at a given nested path.
 Usage:
 
 * `mergeIn(obj1: ArrayOrObject, path: Array<Key>, obj2: ArrayOrObject): ArrayOrObject`
-* `mergeIn(obj1: ArrayOrObject, path: Array<Key>, ...objects: Array<?ArrayOrObject>): ArrayOrObject`
+* `mergeIn(obj1: ArrayOrObject, path: Array<Key>,
+...objects: Array<?ArrayOrObject>): ArrayOrObject`
 
 ```js
 obj1 = {a: 1, d: {b: {d1: 3, d2: 4}}}

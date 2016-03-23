@@ -1,0 +1,12 @@
+parser: babel-eslint
+extends: airbnb
+plugins:
+  - react
+  - flowtype
+rules:
+  eqeqeq:
+    - error
+    - allow-null
+  no-unused-expressions:
+    - error
+    - allowShortCircuit: true
