@@ -18,6 +18,8 @@ exports.updateIn = updateIn;
 exports.merge = merge;
 exports.mergeIn = mergeIn;
 exports.addDefaults = addDefaults;
+
+
 //| Timm
 //| (c) Guillermo Grau Panea 2016
 //| License: MIT
@@ -27,6 +29,8 @@ var INVALID_ARGS = 'INVALID_ARGS';
 //-----------------------------------------------
 //- ### Helpers
 //-----------------------------------------------
+
+
 function _throw(msg) {
   throw new Error(msg);
 }
@@ -38,8 +42,8 @@ function _clone(obj) {
   var keys = Object.keys(obj);
   var out = {};
   for (var i = 0; i < keys.length; i++) {
-    var key = keys[i];
-    out[key] = obj[key];
+    var _key = keys[i];
+    out[_key] = obj[_key];
   }
   return out;
 }
@@ -51,28 +55,28 @@ function _merge(fAddDefaults) {
   !(out != null) && _throw(process.env.NODE_ENV !== 'production' ? "At least one object should be provided to merge()" : INVALID_ARGS);
   var fChanged = false;
   for (var idx = 2; idx < len; idx++) {
-    var obj = args[idx];
-    if (obj == null) {
+    var _obj = args[idx];
+    if (_obj == null) {
       continue;
     }
-    var keys = Object.keys(obj);
+    var keys = Object.keys(_obj);
     if (!keys.length) {
       continue;
     }
     for (var j = 0; j <= keys.length; j++) {
-      var key = keys[j];
-      if (fAddDefaults && out[key] !== undefined) {
+      var _key2 = keys[j];
+      if (fAddDefaults && out[_key2] !== undefined) {
         continue;
       }
-      var nextVal = obj[key];
-      if (nextVal === undefined || nextVal === out[key]) {
+      var nextVal = _obj[_key2];
+      if (nextVal === undefined || nextVal === out[_key2]) {
         continue;
       }
       if (!fChanged) {
         fChanged = true;
         out = _clone(out);
       }
-      out[key] = nextVal;
+      out[_key2] = nextVal;
     }
   }
   return out;
@@ -98,7 +102,7 @@ function _isObject(o) {
 // #### addLast()
 // Returns a new array with an appended item or items.
 //
-// Usage: `addLast(array: Array, val: Array | any): Array`
+// Usage: `addLast(array: Array<any>, val: Array<any>|any): Array<any>`
 //
 // ```js
 // arr = ['a', 'b']
@@ -121,7 +125,7 @@ function addLast(array, val) {
 // #### addFirst()
 // Returns a new array with a prepended item or items.
 //
-// Usage: `addFirst(array: Array, val: Array | any): Array`
+// Usage: `addFirst(array: Array<any>, val: Array<any>|any): Array<any>`
 //
 // ```js
 // arr = ['a', 'b']
@@ -143,7 +147,7 @@ function addFirst(array, val) {
 // Returns a new array obtained by inserting an item or items
 // at a specified index.
 //
-// Usage: `insert(array: Array, idx: number, val: Array | any): Array`
+// Usage: `insert(array: Array<any>, idx: number, val: Array<any>|any): Array<any>`
 //
 // ```js
 // arr = ['a', 'b', 'c']
@@ -162,7 +166,7 @@ function insert(array, idx, val) {
 // Returns a new array obtained by removing an item at
 // a specified index.
 //
-// Usage: `removeAt(array: Array, idx: number): Array`
+// Usage: `removeAt(array: Array<any>, idx: number): Array<any>`
 //
 // ```js
 // arr = ['a', 'b', 'c']
@@ -181,7 +185,7 @@ function removeAt(array, idx) {
 // (*referentially equal to*) the previous item at that position,
 // the original array is returned.
 //
-// Usage: `replaceAt(array: Array, idx: number, newItem: any): Array`
+// Usage: `replaceAt(array: Array<any>, idx: number, newItem: any): Array<any>`
 //
 // ```js
 // arr = ['a', 'b', 'c']
@@ -204,13 +208,16 @@ function replaceAt(array, idx, newItem) {
 //-----------------------------------------------
 // ### Collections (objects and arrays)
 //-----------------------------------------------
+// The following types are used throughout this section
+// type ArrayOrObject = Array<any>|Object;
+// type Key = number|string;
 
 // #### getIn()
 // Returns a value from an object at a given path. Works with
 // nested arrays and objects. If the path does not exist, it returns
 // `undefined`.
 //
-// Usage: `getIn(obj: Object, path: Array<string>): any`
+// Usage: `getIn(obj: ?ArrayOrObject, path: Array<Key>): any`
 //
 // ```js
 // obj = {a: 1, b: 2, d: {d1: 3, d2: 4}, e: ['a', 'b', 'c']}
@@ -240,7 +247,7 @@ function getIn(obj, path) {
 // If the provided value is the same (*referentially equal to*)
 // the previous value, the original object is returned.
 //
-// Usage: `set(obj: Object, key: string, val: any): Object`
+// Usage: `set(obj: ?ArrayOrObject, key: Key, val: any): ArrayOrObject`
 //
 // ```js
 // obj = {a: 1, b: 2, c: 3}
@@ -276,7 +283,7 @@ function set(obj, key, val) {
 // * If the path does not exist, it will be created before setting
 // the new value.
 //
-// Usage: `setIn(obj: Object, path: Array<string>, val: any): Object`
+// Usage: `setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrObject`
 //
 // ```js
 // obj = {a: 1, b: 2, d: {d1: 3, d2: 4}, e: {e1: 'foo', e2: 'bar'}}
@@ -327,7 +334,7 @@ function _setIn(obj, path, val, idx) {
 // If the calculated value is the same (*referentially equal to*)
 // the previous value, the original object is returned.
 //
-// Usage: `updateIn(obj: Object, path: Array<string>, fnUpdate: (prevValue: any) => any): Object`
+// Usage: `updateIn(obj: ArrayOrObject, path: Array<Key>, fnUpdate: (prevValue: any) => any): ArrayOrObject`
 //
 // ```js
 // obj = {a: 1, d: {d1: 3, d2: 4}}
@@ -353,9 +360,10 @@ function updateIn(obj, path, fnUpdate) {
 // second one overwrite the corresponding entries from the first one.
 // Similar to `Object.assign()`, but immutable.
 //
-// Usage: `merge(obj1: Object, obj2: Object): Object`
+// Usage:
 //
-// Variadic: `merge(obj1: Object, ...objects: Object[]): Object`
+// * `merge(obj1: ArrayOrObject, obj2: ?ArrayOrObject): ArrayOrObject`
+// * `merge(obj1: ArrayOrObject, ...objects: Array<?ArrayOrObject>): ArrayOrObject`
 //
 // The unmodified `obj1` is returned if `obj2` does not *provide something
 // new to* `obj1`, i.e. if either of the following
@@ -389,9 +397,10 @@ function merge(a, b, c, d, e, f) {
 // #### mergeIn()
 // Similar to `merge()`, but merging the value at a given nested path.
 //
-// Usage: `mergeIn(obj1: Object, path: Array<string>, obj2: Object): Object`
+// Usage:
 //
-// Variadic: `mergeIn(obj1: Object, path: Array<string>, ...objects: Object[]): Object`
+// * `mergeIn(obj1: ArrayOrObject, path: Array<Key>, obj2: ArrayOrObject): ArrayOrObject`
+// * `mergeIn(obj1: ArrayOrObject, path: Array<Key>, ...objects: Array<?ArrayOrObject>): ArrayOrObject`
 //
 // ```js
 // obj1 = {a: 1, d: {b: {d1: 3, d2: 4}}}
@@ -424,9 +433,10 @@ function mergeIn(a, path, b, c, d, e, f) {
 // are filled in with the corresponding values from the second one
 // (even if they are `null`).
 //
-// Usage: `addDefaults(obj: Object, defaults: Object): Object`
+// Usage:
 //
-// Variadic: `addDefaults(obj: Object, ...defaultObjects: Object[]): Object`
+// * `addDefaults(obj: ArrayOrObject, defaults: ArrayOrObject): ArrayOrObject`
+// * `addDefaults(obj: ArrayOrObject, ...defaultObjects: Array<?ArrayOrObject>): ArrayOrObject`
 //
 // ```js
 // obj1 = {a: 1, b: 2, c: 3}
@@ -452,14 +462,18 @@ function addDefaults(a, b, c, d, e, f) {
 //- ### Public API
 //-----------------------------------------------
 var timm = {
-  addLast: addLast, addFirst: addFirst,
+  addLast: addLast,
+  addFirst: addFirst,
   insert: insert,
-  removeAt: removeAt, replaceAt: replaceAt,
+  removeAt: removeAt,
+  replaceAt: replaceAt,
 
   getIn: getIn,
-  set: set, setIn: setIn,
+  set: set, // so that flow doesn't complain
+  setIn: setIn,
   updateIn: updateIn,
-  merge: merge, mergeIn: mergeIn,
+  merge: merge,
+  mergeIn: mergeIn,
   addDefaults: addDefaults
 };
 

@@ -1,6 +1,6 @@
 # Changelog
 
-* Important internal changes (migrated to AVA, ES6), but usage remains unchanged
+* Important internal changes (migrated to AVA, ES6, Flow), but usage remains unchanged
 
 ## 0.4.3 (Mar. 08, 2016)
 

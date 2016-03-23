@@ -1,3 +1,5 @@
+// @flow
+
 //| Timm
 //| (c) Guillermo Grau Panea 2016
 //| License: MIT
@@ -7,10 +9,16 @@ const INVALID_ARGS = 'INVALID_ARGS';
 //-----------------------------------------------
 //- ### Helpers
 //-----------------------------------------------
-function _throw(msg) {
+type ArrayOrObject = Array<any>|Object;
+type Key = number|string;
+
+function _throw(msg: string) {
   throw new Error(msg);
 }
 
+declare var _clone: 
+  ((obj: Array<any>) => Array<any>) & 
+  ((obj: Object) => Object);
 function _clone(obj) {
   if (Array.isArray(obj)) {
     return [].concat(obj);
@@ -24,7 +32,7 @@ function _clone(obj) {
   return out;
 }
 
-function _merge(fAddDefaults) {
+function _merge(fAddDefaults: boolean): ArrayOrObject {
   var args = arguments;
   const len = args.length;
   var out = args[1];
@@ -58,7 +66,7 @@ function _merge(fAddDefaults) {
   return out;
 };
 
-function _isObject(o) {
+function _isObject(o: any): boolean {
   var type = typeof o;
   return (o != null) && (type === 'object' || type === 'function');
 };
@@ -78,7 +86,7 @@ function _isObject(o) {
 // #### addLast()
 // Returns a new array with an appended item or items.
 // 
-// Usage: `addLast(array: Array, val: Array | any): Array`
+// Usage: `addLast(array: Array<any>, val: Array<any>|any): Array<any>`
 // 
 // ```js
 // arr = ['a', 'b']
@@ -91,7 +99,7 @@ function _isObject(o) {
 // ```
 /// `array.concat(val)` also handles the array case,
 /// but is apparently very slow
-export function addLast(array, val) {
+export function addLast(array: Array<any>, val: Array<any>|any): Array<any> {
   if (Array.isArray(val)) {
     return array.concat(val);
   }
@@ -101,7 +109,7 @@ export function addLast(array, val) {
 // #### addFirst()
 // Returns a new array with a prepended item or items.
 // 
-// Usage: `addFirst(array: Array, val: Array | any): Array`
+// Usage: `addFirst(array: Array<any>, val: Array<any>|any): Array<any>`
 // 
 // ```js
 // arr = ['a', 'b']
@@ -112,7 +120,7 @@ export function addLast(array, val) {
 // arr3 = addFirst(arr, ['c', 'd'])
 // // ['c', 'd', 'a', 'b']
 // ```
-export function addFirst(array, val) {
+export function addFirst(array: Array<any>, val: Array<any>|any): Array<any> {
   if (Array.isArray(val)) {
     return val.concat(array);
   }
@@ -123,7 +131,7 @@ export function addFirst(array, val) {
 // Returns a new array obtained by inserting an item or items
 // at a specified index.
 //
-// Usage: `insert(array: Array, idx: number, val: Array | any): Array`
+// Usage: `insert(array: Array<any>, idx: number, val: Array<any>|any): Array<any>`
 // 
 // ```js
 // arr = ['a', 'b', 'c']
@@ -134,7 +142,7 @@ export function addFirst(array, val) {
 // insert(arr, 1, ['d', 'e'])
 // // ['a', 'd', 'e', 'b', 'c']
 // ```
-export function insert(array, idx, val) {
+export function insert(array: Array<any>, idx: number, val: Array<any>|any): Array<any> {
   return array
     .slice(0, idx)
     .concat(Array.isArray(val) ? val : [val])
@@ -145,7 +153,7 @@ export function insert(array, idx, val) {
 // Returns a new array obtained by removing an item at
 // a specified index.
 //
-// Usage: `removeAt(array: Array, idx: number): Array`
+// Usage: `removeAt(array: Array<any>, idx: number): Array<any>`
 // 
 // ```js
 // arr = ['a', 'b', 'c']
@@ -154,7 +162,7 @@ export function insert(array, idx, val) {
 // arr2 === arr
 // // false
 // ```
-export function removeAt(array, idx) {
+export function removeAt(array: Array<any>, idx: number): Array<any> {
   return array
     .slice(0, idx)
     .concat(array.slice(idx + 1));
@@ -166,7 +174,7 @@ export function removeAt(array, idx) {
 // (*referentially equal to*) the previous item at that position, 
 // the original array is returned.
 //
-// Usage: `replaceAt(array: Array, idx: number, newItem: any): Array`
+// Usage: `replaceAt(array: Array<any>, idx: number, newItem: any): Array<any>`
 //
 // ```js
 // arr = ['a', 'b', 'c']
@@ -179,7 +187,7 @@ export function removeAt(array, idx) {
 // replaceAt(arr, 1, 'b') === arr
 // // true
 // ```
-export function replaceAt(array, idx, newItem) {
+export function replaceAt(array: Array<any>, idx: number, newItem: any): Array<any> {
   if (array[idx] === newItem) {
     return array;
   }
@@ -192,13 +200,18 @@ export function replaceAt(array, idx, newItem) {
 //-----------------------------------------------
 // ### Collections (objects and arrays)
 //-----------------------------------------------
+// The following types are used throughout this section
+// ```js
+// type ArrayOrObject = Array<any>|Object;
+// type Key = number|string;
+// ```
 
 // #### getIn()
 // Returns a value from an object at a given path. Works with
 // nested arrays and objects. If the path does not exist, it returns
 // `undefined`.
 //
-// Usage: `getIn(obj: Object, path: Array<string>): any`
+// Usage: `getIn(obj: ?ArrayOrObject, path: Array<Key>): any`
 //
 // ```js
 // obj = {a: 1, b: 2, d: {d1: 3, d2: 4}, e: ['a', 'b', 'c']}
@@ -207,12 +220,13 @@ export function replaceAt(array, idx, newItem) {
 // getIn(obj, ['e', 1])
 // // 'b'
 // ```
-export function getIn(obj, path) {
+export function getIn(obj: ?ArrayOrObject, 
+                      path: Array<Key>): any {
   !(Array.isArray(path)) && _throw(process.env.NODE_ENV !== 'production' ? "A path array should be provided when calling getIn()" : INVALID_ARGS);
   if (obj == null) {
     return undefined;
   }
-  var ptr = obj;
+  var ptr: any = obj;
   for (let i = 0; i < path.length; i++) {
     let segment = path[i];
     ptr = ptr != null ? ptr[segment] : undefined;
@@ -228,7 +242,7 @@ export function getIn(obj, path) {
 // If the provided value is the same (*referentially equal to*)
 // the previous value, the original object is returned.
 //
-// Usage: `set(obj: Object, key: string, val: any): Object`
+// Usage: `set(obj: ?ArrayOrObject, key: Key, val: any): ArrayOrObject`
 //
 // ```js
 // obj = {a: 1, b: 2, c: 3}
@@ -241,6 +255,9 @@ export function getIn(obj, path) {
 // set(obj, 'b', 2) === obj
 // // true
 // ```
+declare var set:
+  ((obj: ?Array<any>, key: number, val: any) => Array<any>) & 
+  ((obj: ?Object, key: string, val: any) => Object)
 export function set(obj, key, val) {
   if (obj == null) {
     obj = {};
@@ -264,7 +281,7 @@ export function set(obj, key, val) {
 // * If the path does not exist, it will be created before setting
 // the new value.
 //
-// Usage: `setIn(obj: Object, path: Array<string>, val: any): Object`
+// Usage: `setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrObject`
 //
 // ```js
 // obj = {a: 1, b: 2, d: {d1: 3, d2: 4}, e: {e1: 'foo', e2: 'bar'}}
@@ -291,15 +308,15 @@ export function set(obj, key, val) {
 // setIn({a: 3}, ['unknown', 'path'], 4)
 // // {a: 3, unknown: {path: 4}}
 // ```
-export function setIn(obj, path, val) {
+export function setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrObject {
   if (!path.length) {
     return val;
   }
   return _setIn(obj, path, val, 0);
 };
 
-function _setIn(obj, path, val, idx) {
-  var key = path[idx];
+function _setIn(obj: ArrayOrObject, path: Array<Key>, val: any, idx: number): ArrayOrObject {
+  var key: any = path[idx];
   if (idx === path.length - 1) {
     var newValue = val;
   } else {
@@ -315,7 +332,7 @@ function _setIn(obj, path, val, idx) {
 // If the calculated value is the same (*referentially equal to*)
 // the previous value, the original object is returned.
 // 
-// Usage: `updateIn(obj: Object, path: Array<string>, fnUpdate: (prevValue: any) => any): Object`
+// Usage: `updateIn(obj: ArrayOrObject, path: Array<Key>, fnUpdate: (prevValue: any) => any): ArrayOrObject`
 // 
 // ```js
 // obj = {a: 1, d: {d1: 3, d2: 4}}
@@ -330,7 +347,8 @@ function _setIn(obj, path, val, idx) {
 // obj3 === obj
 // // true
 // ```
-export function updateIn(obj, path, fnUpdate) {
+export function updateIn(obj: ArrayOrObject, path: Array<Key>, 
+                         fnUpdate: (prevValue: any) => any): ArrayOrObject {
   var prevVal = getIn(obj, path);
   var nextVal = fnUpdate(prevVal);
   return setIn(obj, path, nextVal);
@@ -341,9 +359,10 @@ export function updateIn(obj, path, fnUpdate) {
 // second one overwrite the corresponding entries from the first one.
 // Similar to `Object.assign()`, but immutable.
 //
-// Usage: `merge(obj1: Object, obj2: Object): Object`
+// Usage: 
 //
-// Variadic: `merge(obj1: Object, ...objects: Object[]): Object`
+// * `merge(obj1: ArrayOrObject, obj2: ?ArrayOrObject): ArrayOrObject`
+// * `merge(obj1: ArrayOrObject, ...objects: Array<?ArrayOrObject>): ArrayOrObject`
 //
 // The unmodified `obj1` is returned if `obj2` does not *provide something
 // new to* `obj1`, i.e. if either of the following
@@ -366,7 +385,10 @@ export function updateIn(obj, path, fnUpdate) {
 // merge(obj1, {c: 3}) === obj1
 // // true
 // ```
-export function merge(a, b, c, d, e, f) {
+export function merge(a: ArrayOrObject, 
+                      b: ?ArrayOrObject, c: ?ArrayOrObject, 
+                      d: ?ArrayOrObject, e: ?ArrayOrObject, 
+                      f: ?ArrayOrObject): ArrayOrObject {
   if (arguments.length <= 6) {
     return _merge(false, a, b, c, d, e, f);
   } else {
@@ -377,9 +399,10 @@ export function merge(a, b, c, d, e, f) {
 // #### mergeIn()
 // Similar to `merge()`, but merging the value at a given nested path.
 //
-// Usage: `mergeIn(obj1: Object, path: Array<string>, obj2: Object): Object`
+// Usage: 
 //
-// Variadic: `mergeIn(obj1: Object, path: Array<string>, ...objects: Object[]): Object`
+// * `mergeIn(obj1: ArrayOrObject, path: Array<Key>, obj2: ArrayOrObject): ArrayOrObject`
+// * `mergeIn(obj1: ArrayOrObject, path: Array<Key>, ...objects: Array<?ArrayOrObject>): ArrayOrObject`
 //
 // ```js
 // obj1 = {a: 1, d: {b: {d1: 3, d2: 4}}}
@@ -393,7 +416,10 @@ export function merge(a, b, c, d, e, f) {
 // mergeIn(obj1, ['d', 'b'], {d2: 4}) === obj1
 // // true
 // ```
-export function mergeIn(a, path, b, c, d, e, f) {
+export function mergeIn(a: ArrayOrObject, path: Array<Key>, 
+                        b: ?ArrayOrObject, c: ?ArrayOrObject, 
+                        d: ?ArrayOrObject, e: ?ArrayOrObject, 
+                        f: ?ArrayOrObject): ArrayOrObject {
   var prevVal = getIn(a, path);
   if (prevVal == null) {
     prevVal = {};
@@ -401,7 +427,7 @@ export function mergeIn(a, path, b, c, d, e, f) {
   if (arguments.length <= 7) {
     var nextVal = _merge(false, prevVal, b, c, d, e, f);
   } else {
-    var mergeArgs = [false, prevVal].concat([].slice.call(arguments, 2));
+    var mergeArgs: Array<any> = [false, prevVal].concat([].slice.call(arguments, 2));
     var nextVal = _merge.apply(null, mergeArgs);
   }
   return setIn(a, path, nextVal);
@@ -412,9 +438,10 @@ export function mergeIn(a, path, b, c, d, e, f) {
 // are filled in with the corresponding values from the second one
 // (even if they are `null`).
 //
-// Usage: `addDefaults(obj: Object, defaults: Object): Object`
+// Usage: 
 //
-// Variadic: `addDefaults(obj: Object, ...defaultObjects: Object[]): Object`
+// * `addDefaults(obj: ArrayOrObject, defaults: ArrayOrObject): ArrayOrObject`
+// * `addDefaults(obj: ArrayOrObject, ...defaultObjects: Array<?ArrayOrObject>): ArrayOrObject`
 //
 // ```js
 // obj1 = {a: 1, b: 2, c: 3}
@@ -428,7 +455,10 @@ export function mergeIn(a, path, b, c, d, e, f) {
 // addDefaults(obj1, {c: 4}) === obj1
 // // true
 // ```
-export function addDefaults(a, b, c, d, e, f) {
+export function addDefaults(a: ArrayOrObject, 
+                            b: ?ArrayOrObject, c: ?ArrayOrObject, 
+                            d: ?ArrayOrObject, e: ?ArrayOrObject, 
+                            f: ?ArrayOrObject): ArrayOrObject {
   if (arguments.length <= 6) {
     return _merge(true, a, b, c, d, e, f);
   } else {
@@ -439,15 +469,19 @@ export function addDefaults(a, b, c, d, e, f) {
 //-----------------------------------------------
 //- ### Public API
 //-----------------------------------------------
-const timm = {
-  addLast, addFirst,
+var timm = {
+  addLast, 
+  addFirst,
   insert,
-  removeAt, replaceAt,
+  removeAt, 
+  replaceAt,
 
   getIn,
-  set, setIn,
+  set: set,  // so that flow doesn't complain
+  setIn,
   updateIn,
-  merge, mergeIn,
+  merge, 
+  mergeIn,
   addDefaults,
 }
 

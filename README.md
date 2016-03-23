@@ -54,7 +54,9 @@ Some conclusions from these benchmarks:
 
 ## Usage
 
-Timm
+@flow
+
+ Timm
  (c) Guillermo Grau Panea 2016
  License: MIT
 
@@ -63,7 +65,7 @@ Timm
 #### addLast()
 Returns a new array with an appended item or items.
 
-Usage: `addLast(array: Array, val: Array | any): Array`
+Usage: `addLast(array: Array<any>, val: Array<any>|any): Array<any>`
 
 ```js
 arr = ['a', 'b']
@@ -78,7 +80,7 @@ arr3 = addLast(arr, ['c', 'd'])
 #### addFirst()
 Returns a new array with a prepended item or items.
 
-Usage: `addFirst(array: Array, val: Array | any): Array`
+Usage: `addFirst(array: Array<any>, val: Array<any>|any): Array<any>`
 
 ```js
 arr = ['a', 'b']
@@ -94,7 +96,7 @@ arr3 = addFirst(arr, ['c', 'd'])
 Returns a new array obtained by inserting an item or items
 at a specified index.
 
-Usage: `insert(array: Array, idx: number, val: Array | any): Array`
+Usage: `insert(array: Array<any>, idx: number, val: Array<any>|any): Array<any>`
 
 ```js
 arr = ['a', 'b', 'c']
@@ -110,7 +112,7 @@ insert(arr, 1, ['d', 'e'])
 Returns a new array obtained by removing an item at
 a specified index.
 
-Usage: `removeAt(array: Array, idx: number): Array`
+Usage: `removeAt(array: Array<any>, idx: number): Array<any>`
 
 ```js
 arr = ['a', 'b', 'c']
@@ -126,7 +128,7 @@ a specified index. If the provided item is the same
 (*referentially equal to*) the previous item at that position,
 the original array is returned.
 
-Usage: `replaceAt(array: Array, idx: number, newItem: any): Array`
+Usage: `replaceAt(array: Array<any>, idx: number, newItem: any): Array<any>`
 
 ```js
 arr = ['a', 'b', 'c']
@@ -142,12 +144,16 @@ replaceAt(arr, 1, 'b') === arr
 
 ### Collections (objects and arrays)
 
+The following types are used throughout this section
+type ArrayOrObject = Array<any>|Object;
+type Key = number|string;
+
 #### getIn()
 Returns a value from an object at a given path. Works with
 nested arrays and objects. If the path does not exist, it returns
 `undefined`.
 
-Usage: `getIn(obj: Object, path: Array<string>): any`
+Usage: `getIn(obj: ?ArrayOrObject, path: Array<Key>): any`
 
 ```js
 obj = {a: 1, b: 2, d: {d1: 3, d2: 4}, e: ['a', 'b', 'c']}
@@ -162,7 +168,7 @@ Returns a new object with a modified attribute.
 If the provided value is the same (*referentially equal to*)
 the previous value, the original object is returned.
 
-Usage: `set(obj: Object, key: string, val: any): Object`
+Usage: `set(obj: ?ArrayOrObject, key: Key, val: any): ArrayOrObject`
 
 ```js
 obj = {a: 1, b: 2, c: 3}
@@ -187,7 +193,7 @@ the previous value, the original object is returned.
 * If the path does not exist, it will be created before setting
 the new value.
 
-Usage: `setIn(obj: Object, path: Array<string>, val: any): Object`
+Usage: `setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrObject`
 
 ```js
 obj = {a: 1, b: 2, d: {d1: 3, d2: 4}, e: {e1: 'foo', e2: 'bar'}}
@@ -221,7 +227,7 @@ calculated via a user-provided callback based on the current value.
 If the calculated value is the same (*referentially equal to*)
 the previous value, the original object is returned.
 
-Usage: `updateIn(obj: Object, path: Array<string>, fnUpdate: (prevValue: any) => any): Object`
+Usage: `updateIn(obj: ArrayOrObject, path: Array<Key>, fnUpdate: (prevValue: any) => any): ArrayOrObject`
 
 ```js
 obj = {a: 1, d: {d1: 3, d2: 4}}
@@ -242,9 +248,10 @@ Returns a new object built as follows: the overlapping keys from the
 second one overwrite the corresponding entries from the first one.
 Similar to `Object.assign()`, but immutable.
 
-Usage: `merge(obj1: Object, obj2: Object): Object`
+Usage:
 
-Variadic: `merge(obj1: Object, ...objects: Object[]): Object`
+* `merge(obj1: ArrayOrObject, obj2: ?ArrayOrObject): ArrayOrObject`
+* `merge(obj1: ArrayOrObject, ...objects: Array<?ArrayOrObject>): ArrayOrObject`
 
 The unmodified `obj1` is returned if `obj2` does not *provide something
 new to* `obj1`, i.e. if either of the following
@@ -271,9 +278,10 @@ merge(obj1, {c: 3}) === obj1
 #### mergeIn()
 Similar to `merge()`, but merging the value at a given nested path.
 
-Usage: `mergeIn(obj1: Object, path: Array<string>, obj2: Object): Object`
+Usage:
 
-Variadic: `mergeIn(obj1: Object, path: Array<string>, ...objects: Object[]): Object`
+* `mergeIn(obj1: ArrayOrObject, path: Array<Key>, obj2: ArrayOrObject): ArrayOrObject`
+* `mergeIn(obj1: ArrayOrObject, path: Array<Key>, ...objects: Array<?ArrayOrObject>): ArrayOrObject`
 
 ```js
 obj1 = {a: 1, d: {b: {d1: 3, d2: 4}}}
@@ -293,9 +301,10 @@ Returns a new object built as follows: `undefined` keys in the first one
 are filled in with the corresponding values from the second one
 (even if they are `null`).
 
-Usage: `addDefaults(obj: Object, defaults: Object): Object`
+Usage:
 
-Variadic: `addDefaults(obj: Object, ...defaultObjects: Object[]): Object`
+* `addDefaults(obj: ArrayOrObject, defaults: ArrayOrObject): ArrayOrObject`
+* `addDefaults(obj: ArrayOrObject, ...defaultObjects: Array<?ArrayOrObject>): ArrayOrObject`
 
 ```js
 obj1 = {a: 1, b: 2, c: 3}
