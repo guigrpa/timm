@@ -277,7 +277,6 @@ export function set(obj, key, val) {
 //
 // * If the provided value is the same (*referentially equal to*)
 // the previous value, the original object is returned.
-//
 // * If the path does not exist, it will be created before setting
 // the new value.
 //

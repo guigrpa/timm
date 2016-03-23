@@ -145,8 +145,10 @@ replaceAt(arr, 1, 'b') === arr
 ### Collections (objects and arrays)
 
 The following types are used throughout this section
+```js
 type ArrayOrObject = Array<any>|Object;
 type Key = number|string;
+```
 
 #### getIn()
 Returns a value from an object at a given path. Works with
@@ -189,7 +191,6 @@ Notes:
 
 * If the provided value is the same (*referentially equal to*)
 the previous value, the original object is returned.
-
 * If the path does not exist, it will be created before setting
 the new value.
 
