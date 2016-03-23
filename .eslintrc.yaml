@@ -1,7 +1,6 @@
 parser: babel-eslint
-extends: airbnb
+extends: airbnb/base
 plugins:
-  - react
   - flowtype
 rules:
   eqeqeq:
