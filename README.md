@@ -54,9 +54,7 @@ Some conclusions from these benchmarks:
 
 ## Usage
 
-@flow
-
- Timm
+Timm
  (c) Guillermo Grau Panea 2016
  License: MIT
 
