@@ -54,15 +54,6 @@
     ],
     "babel": "inherit"
   },
-  "babel": {
-    "presets": [
-      "es2015",
-      "stage-2"
-    ],
-    "plugins": [
-      "transform-flow-strip-types"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "http://guigrpa.github.io/timm/"

@@ -20,6 +20,7 @@ node_modules
 *.sublime-workspace
 
 # NPM extras
+/.babelrc
 /docs
 /src
 /tools
