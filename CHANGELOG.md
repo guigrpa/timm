@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.5.1 (Mar. 23, 2016)
+## 0.5.1, 0.5.2 (Mar. 23, 2016)
 
-* Include source ES6 module
+* Distribute 4 versions of Timm:
+    - ES5 (default): `timm.js` (just `require('timm')`)
+    - ES5 minimised: `timm.min.js`
+    - ES6: `timm_es6.js`
+    - ES6 with Flow type annotations: `timm_es6_flow.js`
 
 ## 0.5.0 (Mar. 23, 2016)
 
