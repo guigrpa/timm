@@ -35,7 +35,7 @@
     "testCovDev": "cross-env NODE_ENV=development nyc ava && mv .nyc_output/* .nyc_tmp/",
     "testCovProd": "cross-env NODE_ENV=production nyc ava && mv .nyc_output/* .nyc_tmp/",
     "testCovMin": "cross-env TEST_MINIFIED_LIB=1 nyc ava && mv .nyc_output/* .nyc_tmp/",
-    "testCovReport": "cp .nyc_tmp/* .nyc_output/ && nyc report --reporter=html",
+    "testCovReport": "cp .nyc_tmp/* .nyc_output/ && nyc report --reporter=html --reporter=lcov",
     "compile": "rm -rf ./dist && mkdir dist && babel -o dist/timm.js src/timm.js",
     "docs": "coffee tools/extractDocs.coffee",
     "uglify": "cross-env NODE_ENV=production envify dist/timm.js | uglifyjs - -o dist/timm.min.js --mangle --compress",
