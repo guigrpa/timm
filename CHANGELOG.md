@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.1 (Mar. 23, 2016)
+
+* Include source ES6 module
+
 ## 0.5.0 (Mar. 23, 2016)
 
 * Important internal changes (migrated to AVA, ES6, Flow), but usage remains unchanged

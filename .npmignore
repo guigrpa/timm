@@ -21,7 +21,6 @@ node_modules
 
 # NPM extras
 /docs
-/src
 /tools
 /test
 /ROADMAP.md
