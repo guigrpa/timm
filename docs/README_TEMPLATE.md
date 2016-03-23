@@ -54,6 +54,17 @@ Some conclusions from these benchmarks:
 
 ## Usage
 
+```js
+// ES5 (default)
+var timm = require('timm');
+var obj = timm.merge({a: 2}, {b: 3});
+// ES6
+import {merge} from 'timm/dist/timm_es6';
+const obj = merge({a: 2}, {b: 3});
+```
+
+*Note: you can use the ES6 module version with Webpack 2 and its tree-shaking feature to get **really** small bundles, including just the Timm functions you use. Make sure you disable `babel-plugin-transform-es2015-modules-commonjs` in your `babel-loader` configuration. [More details here](http://www.2ality.com/2015/12/webpack-tree-shaking.html).*
+
 [[[API]]]
 
 
