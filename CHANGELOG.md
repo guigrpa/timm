@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.6.0 (Mar. 24, 2016)
+
 * Renamed build directory to `lib`
 
 ## 0.5.3 (Mar. 23, 2016)
