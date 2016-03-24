@@ -1,5 +1,7 @@
 # Changelog
 
+* Renamed build directory to `lib`
+
 ## 0.5.3 (Mar. 23, 2016)
 
 * Removed Babel config (.babelrc) from the published package (npm). This simplifies consumption of the ES6 (or ES6 with Flow) versions.

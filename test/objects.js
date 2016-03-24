@@ -1,8 +1,8 @@
 import test from 'ava';
 if (process.env.TEST_MINIFIED_LIB) {
-  var timm = require('../dist/timm.min');
+  var timm = require('../lib/timm.min');
 } else {
-  var timm = require('../dist/timm');
+  var timm = require('../lib/timm');
 }
 
 var ARR0 = [{a: 1}, {a: 2}, {a: 3, d: {d1: 4, d2: 5, d3: null}}];

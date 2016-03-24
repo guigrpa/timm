@@ -3,7 +3,7 @@ _                   = require 'lodash'
 chalk               = require 'chalk'
 Seamless            = require 'seamless-immutable'
 Immutable           = require 'immutable'
-timm                = require '../dist/timm.min'
+timm                = require '../lib/timm.min'
 
 INITIAL_OBJECT = 
   toggle: false

@@ -20,4 +20,4 @@ node_modules
 *.sublime-workspace
 
 # GIT extras
-/dist
+/lib

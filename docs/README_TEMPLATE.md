@@ -60,7 +60,7 @@ import {merge} from 'timm';
 const obj = timm.merge({a: 2}, {b: 3});
 
 // Consume the native ES6 module (requires bundling)
-import {merge} from 'timm/dist/timm_es6';
+import {merge} from 'timm/lib/timm_es6';
 const obj = merge({a: 2}, {b: 3});
 ```
 

@@ -2,7 +2,7 @@
   "name": "timm",
   "version": "0.5.3",
   "description": "Immutability helpers with fast reads and acceptable writes",
-  "main": "dist/timm.js",
+  "main": "lib/timm.js",
   "dependencies": {},
   "devDependencies": {
     "ava": "^0.13.0",
@@ -41,9 +41,9 @@
     "testCovProd": "cross-env NODE_ENV=production nyc ava && mv .nyc_output/* .nyc_tmp/",
     "testCovMin": "cross-env TEST_MINIFIED_LIB=1 nyc ava && mv .nyc_output/* .nyc_tmp/",
     "testCovReport": "cp .nyc_tmp/* .nyc_output/ && nyc report --reporter=html --reporter=lcov",
-    "compile": "rm -rf ./dist && mkdir dist && babel -o dist/timm.js src/timm.js && babel --no-babelrc --plugins transform-flow-strip-types -o dist/timm_es6.js src/timm.js && cp src/timm.js dist/timm_es6_flow.js",
+    "compile": "rm -rf ./lib && mkdir lib && babel -o lib/timm.js src/timm.js && babel --no-babelrc --plugins transform-flow-strip-types -o lib/timm_es6.js src/timm.js && cp src/timm.js lib/timm_es6_flow.js",
     "docs": "coffee tools/extractDocs.coffee",
-    "uglify": "cross-env NODE_ENV=production envify dist/timm.js | uglifyjs - -o dist/timm.min.js --mangle --compress --comments \"/^\\s\\|/\"",
+    "uglify": "cross-env NODE_ENV=production envify lib/timm.js | uglifyjs - -o lib/timm.min.js --mangle --compress --comments \"/^\\s\\|/\"",
     "build": "npm run lint && npm run flow && npm run compile && npm run uglify && npm run testCovFull && npm run docs",
     "travis": "npm run compile && npm run testCovNoMin",
     "benchmarks": "coffee tools/benchmarks.coffee"
