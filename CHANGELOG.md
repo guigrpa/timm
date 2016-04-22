@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.1 (Apr. 22, 2016)
+
+* Add `omit()`
+
 ## 0.6.0 (Mar. 24, 2016)
 
 * Renamed build directory to `lib`
