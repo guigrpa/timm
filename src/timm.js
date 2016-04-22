@@ -16,7 +16,7 @@ function _throw(msg: string) {
   throw new Error(msg);
 }
 
-function _clone(obj: ArrayOrObject): ArrayOrObject {
+export function clone(obj: ArrayOrObject): ArrayOrObject {
   if (Array.isArray(obj)) {
     return [].concat(obj);
   }
@@ -54,7 +54,7 @@ function _merge(fAddDefaults: boolean, ...rest: any): ArrayOrObject {
       }
       if (!fChanged) {
         fChanged = true;
-        out = _clone(out);
+        out = clone(out);
       }
       out[key] = nextVal;
     }
@@ -179,7 +179,7 @@ export function removeAt(array: Array<any>, idx: number): Array<any> {
 // -- arr2 === arr
 // -- // false
 // --
-// -- // ... but the same object is returned if there are no changes:
+// -- // The same object is returned if there are no changes:
 // -- replaceAt(arr, 1, 'b') === arr
 // -- // true
 // -- ```
@@ -248,7 +248,7 @@ export function getIn(obj: ?ArrayOrObject,
 // -- obj2 === obj
 // -- // false
 // --
-// -- // ... but the same object is returned if there are no changes:
+// -- // The same object is returned if there are no changes:
 // -- set(obj, 'b', 2) === obj
 // -- // true
 // -- ```
@@ -257,7 +257,7 @@ export function set(obj: any, key: Key, val: any): ArrayOrObject {
   if (finalObj[key] === val) {
     return finalObj;
   }
-  const obj2: any = _clone(finalObj);
+  const obj2: any = clone(finalObj);
   obj2[key] = val;
   return obj2;
 }
@@ -285,7 +285,7 @@ export function set(obj: any, key: Key, val: any): ArrayOrObject {
 // -- obj2.e === obj.e
 // -- // true
 // --
-// -- // ... but the same object is returned if there are no changes:
+// -- // The same object is returned if there are no changes:
 // -- obj3 = setIn(obj, ['d', 'd1'], 3)
 // -- // {a: 1, b: 2, d: {d1: 3, d2: 4}, e: {e1: 'foo', e2: 'bar'}}
 // -- obj3 === obj
@@ -334,7 +334,7 @@ export function setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrOb
 // -- obj2 === obj
 // -- // false
 // --
-// -- // ... but the same object is returned if there are no changes:
+// -- // The same object is returned if there are no changes:
 // -- obj3 = updateIn(obj, ['d', 'd1'], function(val){return val})
 // -- // {a: 1, d: {d1: 3, d2: 4}}
 // -- obj3 === obj
@@ -374,7 +374,7 @@ export function updateIn(obj: ArrayOrObject, path: Array<Key>,
 // -- obj3 === obj1
 // -- // false
 // --
-// -- // ... but the same object is returned if there are no changes:
+// -- // The same object is returned if there are no changes:
 // -- merge(obj1, {c: 3}) === obj1
 // -- // true
 // -- ```
@@ -403,12 +403,12 @@ export function merge(a: ArrayOrObject,
 // -- ```js
 // -- obj1 = {a: 1, d: {b: {d1: 3, d2: 4}}}
 // -- obj2 = {d3: 5}
-// -- obj2 = mergeIn(obj1, ['d', 'b'], obj2)
+// -- obj3 = mergeIn(obj1, ['d', 'b'], obj2)
 // -- // {a: 1, d: {b: {d1: 3, d2: 4, d3: 5}}}
 // -- obj3 === obj1
 // -- // false
 // --
-// -- // ... but the same object is returned if there are no changes:
+// -- // The same object is returned if there are no changes:
 // -- mergeIn(obj1, ['d', 'b'], {d2: 4}) === obj1
 // -- // true
 // -- ```
@@ -429,6 +429,42 @@ export function mergeIn(a: ArrayOrObject, path: Array<Key>,
   return setIn(a, path, nextVal);
 }
 
+// -- #### omit()
+// -- Returns an object excluding one or several attributes.
+// --
+// -- Usage: `omit(obj: Object, attrs: Array<string>|string): Object`
+//
+// -- ```js
+// -- obj = {a: 1, b: 2, c: 3, d: 4}
+// -- omit(obj, 'a')
+// -- // {b: 2, c: 3, d: 4}
+// -- omit(obj, ['b', 'c'])
+// -- // {a: 1, d: 4}
+// --
+// -- // The same object is returned if there are no changes:
+// -- omit(obj, 'z') === obj1
+// -- // true
+// -- ```
+export function omit(obj: Object, attrs: Array<string>|string): Object {
+  const omitList = Array.isArray(attrs) ? attrs : [attrs];
+  let fDoSomething = false;
+  for (let i = 0; i < omitList.length; i++) {
+    if (obj.hasOwnProperty(omitList[i])) {
+      fDoSomething = true;
+      break;
+    }
+  }
+  if (!fDoSomething) return obj;
+  const out = {};
+  const keys = Object.keys(obj);
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    if (omitList.indexOf(key) >= 0) continue;
+    out[key] = obj[key];
+  }
+  return out;
+}
+
 // -- #### addDefaults()
 // -- Returns a new object built as follows: `undefined` keys in the first one
 // -- are filled in with the corresponding values from the second one
@@ -447,7 +483,7 @@ export function mergeIn(a: ArrayOrObject, path: Array<Key>,
 // -- obj3 === obj1
 // -- // false
 // --
-// -- // ... but the same object is returned if there are no changes:
+// -- // The same object is returned if there are no changes:
 // -- addDefaults(obj1, {c: 4}) === obj1
 // -- // true
 // -- ```

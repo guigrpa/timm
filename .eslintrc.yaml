@@ -9,3 +9,20 @@ rules:
   no-unused-expressions:
     - error
     - allowShortCircuit: true
+  no-use-before-define: off
+  no-multi-spaces:
+    - warn
+    - exceptions:
+        VariableDeclarator: true
+        ImportDeclaration: true
+  no-nested-ternary: off
+  no-cond-assign:
+    - error
+    - except-parens
+  key-spacing:
+    - warn
+    - 
+      beforeColon: false
+      afterColon: true
+      mode: 'minimum'
+  react/sort-comp: off

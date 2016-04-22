@@ -1,8 +1,9 @@
 import test from 'ava';
+let timm;
 if (process.env.TEST_MINIFIED_LIB) {
-  var timm = require('../lib/timm.min');
+  timm = require('../lib/timm.min');
 } else {
-  var timm = require('../lib/timm');
+  timm = require('../lib/timm');
 }
 
 test('sanity', t => {

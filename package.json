@@ -1,6 +1,6 @@
 {
   "name": "timm",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Immutability helpers with fast reads and acceptable writes",
   "main": "lib/timm.js",
   "dependencies": {},

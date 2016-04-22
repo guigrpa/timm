@@ -143,7 +143,7 @@ arr2 = replaceAt(arr, 1, 'd')
 arr2 === arr
 // false
 
-// ... but the same object is returned if there are no changes:
+// The same object is returned if there are no changes:
 replaceAt(arr, 1, 'b') === arr
 // true
 ```
@@ -185,7 +185,7 @@ obj2 = set(obj, 'b', 5)
 obj2 === obj
 // false
 
-// ... but the same object is returned if there are no changes:
+// The same object is returned if there are no changes:
 set(obj, 'b', 2) === obj
 // true
 ```
@@ -213,7 +213,7 @@ obj2.d === obj.d
 obj2.e === obj.e
 // true
 
-// ... but the same object is returned if there are no changes:
+// The same object is returned if there are no changes:
 obj3 = setIn(obj, ['d', 'd1'], 3)
 // {a: 1, b: 2, d: {d1: 3, d2: 4}, e: {e1: 'foo', e2: 'bar'}}
 obj3 === obj
@@ -244,7 +244,7 @@ obj2 = updateIn(obj, ['d', 'd1'], function(val){return val + 1})
 obj2 === obj
 // false
 
-// ... but the same object is returned if there are no changes:
+// The same object is returned if there are no changes:
 obj3 = updateIn(obj, ['d', 'd1'], function(val){return val})
 // {a: 1, d: {d1: 3, d2: 4}}
 obj3 === obj
@@ -278,7 +278,7 @@ obj3 = merge(obj1, obj2)
 obj3 === obj1
 // false
 
-// ... but the same object is returned if there are no changes:
+// The same object is returned if there are no changes:
 merge(obj1, {c: 3}) === obj1
 // true
 ```
@@ -295,13 +295,30 @@ Usage:
 ```js
 obj1 = {a: 1, d: {b: {d1: 3, d2: 4}}}
 obj2 = {d3: 5}
-obj2 = mergeIn(obj1, ['d', 'b'], obj2)
+obj3 = mergeIn(obj1, ['d', 'b'], obj2)
 // {a: 1, d: {b: {d1: 3, d2: 4, d3: 5}}}
 obj3 === obj1
 // false
 
-// ... but the same object is returned if there are no changes:
+// The same object is returned if there are no changes:
 mergeIn(obj1, ['d', 'b'], {d2: 4}) === obj1
+// true
+```
+
+#### omit()
+Returns an object excluding one or several attributes.
+
+Usage: `omit(obj: Object, attrs: Array<string>|string): Object`
+
+```js
+obj = {a: 1, b: 2, c: 3, d: 4}
+omit(obj, 'a')
+// {b: 2, c: 3, d: 4}
+omit(obj, ['b', 'c'])
+// {a: 1, d: 4}
+
+// The same object is returned if there are no changes:
+omit(obj, 'z') === obj1
 // true
 ```
 
@@ -323,7 +340,7 @@ obj3 = addDefaults(obj1, obj2)
 obj3 === obj1
 // false
 
-// ... but the same object is returned if there are no changes:
+// The same object is returned if there are no changes:
 addDefaults(obj1, {c: 4}) === obj1
 // true
 ```
