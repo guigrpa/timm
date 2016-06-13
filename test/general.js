@@ -7,5 +7,5 @@ if (process.env.TEST_MINIFIED_LIB) {
 }
 
 test('sanity', t => {
-  t.ok(timm.set);
+  t.truthy(timm.set);
 });

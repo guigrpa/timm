@@ -21,7 +21,7 @@ test('getIn: object root: deep', t => {
 });
 
 test('getIn: array root: shallow', t => {
-  t.same(timm.getIn(ARR, [1]), { a: 2 });
+  t.deepEqual(timm.getIn(ARR, [1]), { a: 2 });
 });
 
 test('getIn: array root: deep', t => {
@@ -125,7 +125,7 @@ test('setIn: should create nested objects for unknown paths', t => {
 
 test('setIn: should return the value if the path is empty', t => {
   const obj2 = timm.setIn(OBJ, [], { a: 3 });
-  t.same(obj2, { a: 3 });
+  t.deepEqual(obj2, { a: 3 });
 });
 
 test('setIn: should allow unsetting an attribute', t => {
@@ -172,7 +172,7 @@ test('merge: with changes', t => {
 
 test('merge: with more than 6 args', t => {
   const obj2 = timm.merge({ a: 1 }, { b: 2 }, { c: 3 }, { d: 4 }, { e: 5 }, { f: 6 }, { g: 7 });
-  t.same(obj2, { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7 });
+  t.deepEqual(obj2, { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7 });
 });
 
 test('merge: should return the same object when merged with undefined', t => {
@@ -238,20 +238,20 @@ test('merge: multiple: should return the same object when it hasn\'t changed', t
 //------------------------------------------------
 test('mergeIn: with changes', t => {
   const obj2 = timm.mergeIn(OBJ, ['d', 'b', 'b'], { a: 3, c: 5 });
-  t.same(OBJ.d.b.b, { b: 4 });
+  t.deepEqual(OBJ.d.b.b, { b: 4 });
   t.not(obj2, OBJ);
-  t.same(obj2.d.b.b, { a: 3, b: 4, c: 5 });
+  t.deepEqual(obj2.d.b.b, { a: 3, b: 4, c: 5 });
   t.is(obj2.e, OBJ.e);
 });
 
 test('mergeIn: should create nested objects for unknown paths', t => {
   const obj2 = timm.mergeIn(OBJ, ['unknown', 'path'], { d: 4 });
-  t.same(obj2.unknown.path, { d: 4 });
+  t.deepEqual(obj2.unknown.path, { d: 4 });
 });
 
 test('mergeIn: with more than 7 args', t => {
   const obj2 = timm.mergeIn({ a: 1 }, [], { b: 2 }, { c: 3 }, { d: 4 }, { e: 5 }, { f: 6 }, { g: 7 });
-  t.same(obj2, { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7 });
+  t.deepEqual(obj2, { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7 });
 });
 
 //------------------------------------------------
@@ -262,7 +262,7 @@ test('omit: with changes (single attribute)', t => {
   t.is(obj2.a, undefined);
   t.is(obj2.b, 2);
   t.not(obj2, OBJ);
-  t.same(obj2.d, OBJ.d);
+  t.deepEqual(obj2.d, OBJ.d);
 });
 
 test('omit: with changes (multiple attributes)', t => {
@@ -270,12 +270,12 @@ test('omit: with changes (multiple attributes)', t => {
   t.is(obj2.a, undefined);
   t.is(obj2.b, undefined);
   t.not(obj2, OBJ);
-  t.same(obj2.d, OBJ.d);
+  t.deepEqual(obj2.d, OBJ.d);
 });
 
 test('omit: should return the same object when it hasn\'t changed', t => {
   const obj2 = timm.omit(OBJ, 'z');
-  t.same(obj2, OBJ);
+  t.deepEqual(obj2, OBJ);
 });
 
 //------------------------------------------------
@@ -301,7 +301,7 @@ test('addDefaults: with changes (null attribute)', t => {
 
 test('addDefaults: with more than 6 args', t => {
   const obj2 = timm.addDefaults({ a: 1 }, { b: 2 }, { c: 3 }, { d: 4 }, { e: 5 }, { f: 6 }, { g: 7 });
-  t.same(obj2, { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7 });
+  t.deepEqual(obj2, { a: 1, b: 2, c: 3, d: 4, e: 5, f: 6, g: 7 });
 });
 
 test('addDefaults: should return the same object when combined with undefined', t => {

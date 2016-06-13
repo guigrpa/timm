@@ -1,8 +1,13 @@
 // @flow
 
-// | Timm
-// | (c) Guillermo Grau Panea 2016
-// | License: MIT
+/*!
+ * Timm
+ *
+ * Immutability helpers with fast reads and acceptable writes.
+ *
+ * @copyright Guillermo Grau Panea 2016
+ * @license MIT
+ */
 
 const INVALID_ARGS = 'INVALID_ARGS';
 
@@ -12,7 +17,7 @@ const INVALID_ARGS = 'INVALID_ARGS';
 type ArrayOrObject = Array<any>|Object;
 type Key = number|string;
 
-function _throw(msg: string) {
+function throwStr(msg: string) {
   throw new Error(msg);
 }
 
@@ -29,9 +34,9 @@ export function clone(obj: ArrayOrObject): ArrayOrObject {
   return out;
 }
 
-function _merge(fAddDefaults: boolean, ...rest: any): ArrayOrObject {
+function doMerge(fAddDefaults: boolean, ...rest: any): ArrayOrObject {
   let out = rest[0];
-  !(out != null) && _throw(process.env.NODE_ENV !== 'production' ?
+  !(out != null) && throwStr(process.env.NODE_ENV !== 'production' ?
     'At least one object should be provided to merge()' : INVALID_ARGS);
   let fChanged = false;
   for (let idx = 1; idx < rest.length; idx++) {
@@ -62,7 +67,7 @@ function _merge(fAddDefaults: boolean, ...rest: any): ArrayOrObject {
   return out;
 }
 
-function _isObject(o: any): boolean {
+function isObject(o: any): boolean {
   const type = typeof o;
   return (o != null) && (type === 'object' || type === 'function');
 }
@@ -71,7 +76,7 @@ function _isObject(o: any): boolean {
 //   Object.freeze obj
 //   for key in Object.getOwnPropertyNames obj
 //     val = obj[key]
-//     if _isObject(val) and not Object.isFrozen val
+//     if isObject(val) and not Object.isFrozen val
 //       _deepFreeze val
 //   obj
 
@@ -210,7 +215,7 @@ export function replaceAt(array: Array<any>, idx: number, newItem: any): Array<a
 // -- Usage: `getIn(obj: ?ArrayOrObject, path: Array<Key>): any`
 // --
 // -- ```js
-// -- obj = {a: 1, b: 2, d: {d1: 3, d2: 4}, e: ['a', 'b', 'c']}
+// -- obj = { a: 1, b: 2, d: { d1: 3, d2: 4 }, e: ['a', 'b', 'c'] }
 // -- getIn(obj, ['d', 'd1'])
 // -- // 3
 // -- getIn(obj, ['e', 1])
@@ -218,7 +223,7 @@ export function replaceAt(array: Array<any>, idx: number, newItem: any): Array<a
 // -- ```
 export function getIn(obj: ?ArrayOrObject,
                       path: Array<Key>): any {
-  !(Array.isArray(path)) && _throw(process.env.NODE_ENV !== 'production' ?
+  !(Array.isArray(path)) && throwStr(process.env.NODE_ENV !== 'production' ?
     'A path array should be provided when calling getIn()' : INVALID_ARGS);
   if (obj == null) {
     return undefined;
@@ -242,9 +247,9 @@ export function getIn(obj: ?ArrayOrObject,
 // -- Usage: `set(obj: ?ArrayOrObject, key: Key, val: any): ArrayOrObject`
 // --
 // -- ```js
-// -- obj = {a: 1, b: 2, c: 3}
+// -- obj = { a: 1, b: 2, c: 3 }
 // -- obj2 = set(obj, 'b', 5)
-// -- // {a: 1, b: 5, c: 3}
+// -- // { a: 1, b: 5, c: 3 }
 // -- obj2 === obj
 // -- // false
 // --
@@ -275,9 +280,9 @@ export function set(obj: any, key: Key, val: any): ArrayOrObject {
 // -- Usage: `setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrObject`
 // --
 // -- ```js
-// -- obj = {a: 1, b: 2, d: {d1: 3, d2: 4}, e: {e1: 'foo', e2: 'bar'}}
+// -- obj = { a: 1, b: 2, d: { d1: 3, d2: 4 }, e: { e1: 'foo', e2: 'bar' } }
 // -- obj2 = setIn(obj, ['d', 'd1'], 4)
-// -- // {a: 1, b: 2, d: {d1: 4, d2: 4}, e: {e1: 'foo', e2: 'bar'}}
+// -- // { a: 1, b: 2, d: { d1: 4, d2: 4 }, e: { e1: 'foo', e2: 'bar' } }
 // -- obj2 === obj
 // -- // false
 // -- obj2.d === obj.d
@@ -287,7 +292,7 @@ export function set(obj: any, key: Key, val: any): ArrayOrObject {
 // --
 // -- // The same object is returned if there are no changes:
 // -- obj3 = setIn(obj, ['d', 'd1'], 3)
-// -- // {a: 1, b: 2, d: {d1: 3, d2: 4}, e: {e1: 'foo', e2: 'bar'}}
+// -- // { a: 1, b: 2, d: { d1: 3, d2: 4 }, e: { e1: 'foo', e2: 'bar' } }
 // -- obj3 === obj
 // -- // true
 // -- obj3.d === obj.d
@@ -296,17 +301,17 @@ export function set(obj: any, key: Key, val: any): ArrayOrObject {
 // -- // true
 // --
 // -- // ... unknown paths create intermediate keys:
-// -- setIn({a: 3}, ['unknown', 'path'], 4)
-// -- // {a: 3, unknown: {path: 4}}
+// -- setIn({ a: 3 }, ['unknown', 'path'], 4)
+// -- // { a: 3, unknown: { path: 4 } }
 // -- ```
-function _setIn(obj: ArrayOrObject, path: Array<Key>, val: any, idx: number): ArrayOrObject {
+function doSetIn(obj: ArrayOrObject, path: Array<Key>, val: any, idx: number): ArrayOrObject {
   let newValue;
   const key: any = path[idx];
   if (idx === path.length - 1) {
     newValue = val;
   } else {
-    const nestedObj = _isObject(obj) ? obj[key] : {};
-    newValue = _setIn(nestedObj, path, val, idx + 1);
+    const nestedObj = isObject(obj) ? obj[key] : {};
+    newValue = doSetIn(nestedObj, path, val, idx + 1);
   }
   return set(obj, key, newValue);
 }
@@ -315,7 +320,7 @@ export function setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrOb
   if (!path.length) {
     return val;
   }
-  return _setIn(obj, path, val, 0);
+  return doSetIn(obj, path, val, 0);
 }
 
 // -- #### updateIn()
@@ -328,15 +333,15 @@ export function setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrOb
 // -- fnUpdate: (prevValue: any) => any): ArrayOrObject`
 // --
 // -- ```js
-// -- obj = {a: 1, d: {d1: 3, d2: 4}}
-// -- obj2 = updateIn(obj, ['d', 'd1'], function(val){return val + 1})
-// -- // {a: 1, d: {d1: 4, d2: 4}}
+// -- obj = { a: 1, d: { d1: 3, d2: 4 } }
+// -- obj2 = updateIn(obj, ['d', 'd1'], (val) => val + 1)
+// -- // { a: 1, d: { d1: 4, d2: 4 } }
 // -- obj2 === obj
 // -- // false
 // --
 // -- // The same object is returned if there are no changes:
-// -- obj3 = updateIn(obj, ['d', 'd1'], function(val){return val})
-// -- // {a: 1, d: {d1: 3, d2: 4}}
+// -- obj3 = updateIn(obj, ['d', 'd1'], (val) => val)
+// -- // { a: 1, d: { d1: 3, d2: 4 } }
 // -- obj3 === obj
 // -- // true
 // -- ```
@@ -367,15 +372,15 @@ export function updateIn(obj: ArrayOrObject, path: Array<Key>,
 // --   corresponding attributes of `obj`
 // --
 // -- ```js
-// -- obj1 = {a: 1, b: 2, c: 3}
-// -- obj2 = {c: 4, d: 5}
+// -- obj1 = { a: 1, b: 2, c: 3 }
+// -- obj2 = { c: 4, d: 5 }
 // -- obj3 = merge(obj1, obj2)
-// -- // {a: 1, b: 2, c: 4, d: 5}
+// -- // { a: 1, b: 2, c: 4, d: 5 }
 // -- obj3 === obj1
 // -- // false
 // --
 // -- // The same object is returned if there are no changes:
-// -- merge(obj1, {c: 3}) === obj1
+// -- merge(obj1, { c: 3 }) === obj1
 // -- // true
 // -- ```
 export function merge(a: ArrayOrObject,
@@ -384,9 +389,9 @@ export function merge(a: ArrayOrObject,
                       f: ?ArrayOrObject, ...rest: Array<?ArrayOrObject>): ArrayOrObject {
   let out;
   if (rest.length) {
-    out = _merge.call(null, false, a, b, c, d, e, f, ...rest);
+    out = doMerge.call(null, false, a, b, c, d, e, f, ...rest);
   } else {
-    out = _merge(false, a, b, c, d, e, f);
+    out = doMerge(false, a, b, c, d, e, f);
   }
   return out;
 }
@@ -401,15 +406,15 @@ export function merge(a: ArrayOrObject,
 // -- ...objects: Array<?ArrayOrObject>): ArrayOrObject`
 // --
 // -- ```js
-// -- obj1 = {a: 1, d: {b: {d1: 3, d2: 4}}}
-// -- obj2 = {d3: 5}
+// -- obj1 = { a: 1, d: { b: { d1: 3, d2: 4 } } }
+// -- obj2 = { d3: 5 }
 // -- obj3 = mergeIn(obj1, ['d', 'b'], obj2)
-// -- // {a: 1, d: {b: {d1: 3, d2: 4, d3: 5}}}
+// -- // { a: 1, d: { b: { d1: 3, d2: 4, d3: 5 } } }
 // -- obj3 === obj1
 // -- // false
 // --
 // -- // The same object is returned if there are no changes:
-// -- mergeIn(obj1, ['d', 'b'], {d2: 4}) === obj1
+// -- mergeIn(obj1, ['d', 'b'], { d2: 4 }) === obj1
 // -- // true
 // -- ```
 export function mergeIn(a: ArrayOrObject, path: Array<Key>,
@@ -422,9 +427,9 @@ export function mergeIn(a: ArrayOrObject, path: Array<Key>,
   }
   let nextVal;
   if (rest.length) {
-    nextVal = _merge.call(null, false, prevVal, b, c, d, e, f, ...rest);
+    nextVal = doMerge.call(null, false, prevVal, b, c, d, e, f, ...rest);
   } else {
-    nextVal = _merge(false, prevVal, b, c, d, e, f);
+    nextVal = doMerge(false, prevVal, b, c, d, e, f);
   }
   return setIn(a, path, nextVal);
 }
@@ -435,11 +440,11 @@ export function mergeIn(a: ArrayOrObject, path: Array<Key>,
 // -- Usage: `omit(obj: Object, attrs: Array<string>|string): Object`
 //
 // -- ```js
-// -- obj = {a: 1, b: 2, c: 3, d: 4}
+// -- obj = { a: 1, b: 2, c: 3, d: 4 }
 // -- omit(obj, 'a')
-// -- // {b: 2, c: 3, d: 4}
+// -- // { b: 2, c: 3, d: 4 }
 // -- omit(obj, ['b', 'c'])
-// -- // {a: 1, d: 4}
+// -- // { a: 1, d: 4 }
 // --
 // -- // The same object is returned if there are no changes:
 // -- omit(obj, 'z') === obj1
@@ -476,15 +481,15 @@ export function omit(obj: Object, attrs: Array<string>|string): Object {
 // -- * `addDefaults(obj: ArrayOrObject, ...defaultObjects: Array<?ArrayOrObject>): ArrayOrObject`
 // --
 // -- ```js
-// -- obj1 = {a: 1, b: 2, c: 3}
-// -- obj2 = {c: 4, d: 5, e: null}
+// -- obj1 = { a: 1, b: 2, c: 3 }
+// -- obj2 = { c: 4, d: 5, e: null }
 // -- obj3 = addDefaults(obj1, obj2)
-// -- // {a: 1, b: 2, c: 3, d: 5, e: null}
+// -- // { a: 1, b: 2, c: 3, d: 5, e: null }
 // -- obj3 === obj1
 // -- // false
 // --
 // -- // The same object is returned if there are no changes:
-// -- addDefaults(obj1, {c: 4}) === obj1
+// -- addDefaults(obj1, { c: 4 }) === obj1
 // -- // true
 // -- ```
 export function addDefaults(a: ArrayOrObject,
@@ -493,9 +498,9 @@ export function addDefaults(a: ArrayOrObject,
                             f: ?ArrayOrObject, ...rest: Array<?ArrayOrObject>): ArrayOrObject {
   let out;
   if (rest.length) {
-    out = _merge.call(null, true, a, b, c, d, e, f, ...rest);
+    out = doMerge.call(null, true, a, b, c, d, e, f, ...rest);
   } else {
-    out = _merge(true, a, b, c, d, e, f);
+    out = doMerge(true, a, b, c, d, e, f);
   }
   return out;
 }

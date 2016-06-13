@@ -14,16 +14,16 @@ const ARR  = ['a', 'b', 'c'];
 //------------------------------------------------
 test('addLast: single value', t => {
   const arr2 = timm.addLast(ARR, 'd');
-  t.same(ARR, ARR0);
+  t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
-  t.same(arr2, ['a', 'b', 'c', 'd']);
+  t.deepEqual(arr2, ['a', 'b', 'c', 'd']);
 });
 
 test('addLast: multiple values', t => {
   const arr2 = timm.addLast(ARR, ['d', 'e']);
-  t.same(ARR, ARR0);
+  t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
-  t.same(arr2, ['a', 'b', 'c', 'd', 'e']);
+  t.deepEqual(arr2, ['a', 'b', 'c', 'd', 'e']);
 });
 
 //------------------------------------------------
@@ -31,16 +31,16 @@ test('addLast: multiple values', t => {
 //------------------------------------------------
 test('addFirst: single value', t => {
   const arr2 = timm.addFirst(ARR, 'd');
-  t.same(ARR, ARR0);
+  t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
-  t.same(arr2, ['d', 'a', 'b', 'c']);
+  t.deepEqual(arr2, ['d', 'a', 'b', 'c']);
 });
 
 test('addFirst: multiple values', t => {
   const arr2 = timm.addFirst(ARR, ['d', 'e']);
-  t.same(ARR, ARR0);
+  t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
-  t.same(arr2, ['d', 'e', 'a', 'b', 'c']);
+  t.deepEqual(arr2, ['d', 'e', 'a', 'b', 'c']);
 });
 
 //------------------------------------------------
@@ -48,16 +48,16 @@ test('addFirst: multiple values', t => {
 //------------------------------------------------
 test('insert: single value', t => {
   const arr2 = timm.insert(ARR, 1, 'e');
-  t.same(ARR, ARR0);
+  t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
-  t.same(arr2, ['a', 'e', 'b', 'c']);
+  t.deepEqual(arr2, ['a', 'e', 'b', 'c']);
 });
 
 test('insert: multiple values', t => {
   const arr2 = timm.insert(ARR, 1, ['e', 'f']);
-  t.same(ARR, ARR0);
+  t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
-  t.same(arr2, ['a', 'e', 'f', 'b', 'c']);
+  t.deepEqual(arr2, ['a', 'e', 'f', 'b', 'c']);
 });
 
 //------------------------------------------------
@@ -65,9 +65,9 @@ test('insert: multiple values', t => {
 //------------------------------------------------
 test('removeAt', t => {
   const arr2 = timm.removeAt(ARR, 1);
-  t.same(ARR, ARR0);
+  t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
-  t.same(arr2, ['a', 'c']);
+  t.deepEqual(arr2, ['a', 'c']);
 });
 
 //------------------------------------------------
@@ -75,9 +75,9 @@ test('removeAt', t => {
 //------------------------------------------------
 test('replaceAt: changing', t => {
   const arr2 = timm.replaceAt(ARR, 1, 'd');
-  t.same(ARR, ARR0);
+  t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
-  t.same(arr2, ['a', 'd', 'c']);
+  t.deepEqual(arr2, ['a', 'd', 'c']);
 });
 
 test('replaceAt: should return the same object when it hasn\'t changed', t => {
