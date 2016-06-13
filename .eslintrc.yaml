@@ -10,11 +10,7 @@ rules:
     - error
     - allowShortCircuit: true
   no-use-before-define: off
-  no-multi-spaces:
-    - warn
-    - exceptions:
-        VariableDeclarator: true
-        ImportDeclaration: true
+  no-multi-spaces: off
   no-nested-ternary: off
   no-cond-assign:
     - error
