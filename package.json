@@ -1,6 +1,6 @@
 {
   "name": "timm",
-  "version": "0.6.1",
+  "version": "1.0.0",
   "description": "Immutability helpers with fast reads and acceptable writes",
   "main": "lib/timm.js",
   "dependencies": {},
@@ -29,7 +29,8 @@
     "lodash": "4.13.1",
     "nyc": "6.4.4",
     "seamless-immutable": "6.1.0",
-    "uglifyjs": "2.4.10"
+    "uglifyjs": "2.4.10",
+    "xxl": "0.1.1"
   },
   "scripts": {
     "ava": "ava --watch",
@@ -48,8 +49,9 @@
     "compile": "rm -rf ./lib && mkdir lib && babel -o lib/timm.js src/timm.js && babel --no-babelrc --plugins transform-flow-strip-types -o lib/timm_es6.js src/timm.js && cp src/timm.js lib/timm_es6_flow.js",
     "docs": "extract-docs --template docs/README_TEMPLATE.md --output README.md",
     "uglify": "cross-env NODE_ENV=production envify lib/timm.js | uglifyjs - -o lib/timm.min.js --mangle --compress --comments \"/^!/\"",
-    "build": "npm run lint && npm run flow && npm run compile && npm run uglify && npm run testCovFull && npm run docs",
+    "build": "npm run lint && npm run flow && npm run compile && npm run uglify && npm run testCovFull && npm run docs && npm run xxl",
     "travis": "npm run compile && npm run testCovNoMin",
+    "xxl": "xxl --src \"[\\\"src\\\"]\"",
     "benchmarks": "coffee tools/benchmarks.coffee"
   },
   "ava": {

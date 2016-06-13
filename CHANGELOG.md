@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0 (June 13, 2016)
+
+* **Use semantic versioning**
+* [minor] Bump development dependencies
+
 ## 0.6.1 (Apr. 22, 2016)
 
 * Add `omit()`

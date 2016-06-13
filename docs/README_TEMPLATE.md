@@ -1,4 +1,5 @@
-# timm [![Build Status](https://travis-ci.org/guigrpa/timm.svg)](https://travis-ci.org/guigrpa/timm) [![Coverage Status](https://coveralls.io/repos/github/guigrpa/timm/badge.svg?branch=master)](https://coveralls.io/github/guigrpa/timm?branch=master) [![npm version](https://img.shields.io/npm/v/timm.svg)](https://www.npmjs.com/package/timm) 
+# timm [![Build Status](https://travis-ci.org/guigrpa/timm.svg)](https://travis-ci.org/guigrpa/timm) [![Coverage Status](https://coveralls.io/repos/github/guigrpa/timm/badge.svg?branch=master)](https://coveralls.io/github/guigrpa/timm?branch=master) [![npm version](https://img.shields.io/npm/v/timm.svg)](https://www.npmjs.com/package/timm)
+
 Immutability helpers with fast reads and acceptable writes
 
 
@@ -21,6 +22,7 @@ On the other side, *seamless-immutable* solves the "friction" problem by using p
 
 **Important notice:** *timm* does *not* freeze the objects it provides. In other words, it doesn't protect you against inadvertently modifying them in your code. I considered deeply freezing all objects with `Object.freeze()`, but it is really slow. Then I considered doing this only in development (like [*seamless-immutable*](https://github.com/rtfeldman/seamless-immutable#performance)), but then modifying frozen objects will silently fail in development (unless you `use strict` in your code), and –worse still– succeed in production. Not good. In conclusion, **be careful** (or send me a suggestion to work around this!).
 
+...Oh, I almost forgot! It's **tiny: just ~200 LOC and ~1.5 kB minified & compressed!**
 
 ## Benchmarks
 
