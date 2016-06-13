@@ -1,0 +1,2 @@
+- Export clone()?
+- Add note explaining what happens when we merge a nested object
