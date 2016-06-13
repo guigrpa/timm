@@ -1,7 +1,8 @@
 process.env.NODE_ENV = 'production'
 _                   = require 'lodash'
 chalk               = require 'chalk'
-Seamless            = require 'seamless-immutable'
+# Seamless            = require 'seamless-immutable'
+Seamless            = require 'seamless-immutable/seamless-immutable.production.min'
 Immutable           = require 'immutable'
 timm                = require '../lib/timm.min'
 
