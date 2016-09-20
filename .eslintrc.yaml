@@ -15,9 +15,13 @@ rules:
   no-cond-assign:
     - error
     - except-parens
+  no-plusplus:
+    - error
+    - allowForLoopAfterthoughts: true
+  no-continue: off
   key-spacing:
     - warn
-    - 
+    -
       beforeColon: false
       afterColon: true
       mode: 'minimum'
