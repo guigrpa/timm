@@ -492,6 +492,7 @@ export function addDefaults(
 // ### Public API
 // ===============================================
 const timm = {
+  clone,
   addLast,
   addFirst,
   insert,
@@ -505,6 +506,7 @@ const timm = {
   updateIn,
   merge,
   mergeIn,
+  omit,
   addDefaults,
 };
 
