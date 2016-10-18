@@ -1,13 +1,17 @@
 # Changelog
 
+## 1.1.1 (October 18, 2016)
+
+* Fix Flow type definitions for object-related function outputs, making them more flexible.
+
 ## 1.1.0 (October 10, 2016)
 
-* Expose **Flow** type definitions
+* Expose **Flow** type definitions.
 
 ## 1.0.0 (June 13, 2016)
 
 * **Use semantic versioning**
-* [minor] Bump development dependencies
+* [minor] Bump development dependencies.
 
 ## 0.6.1 (Apr. 22, 2016)
 
@@ -15,7 +19,7 @@
 
 ## 0.6.0 (Mar. 24, 2016)
 
-* Renamed build directory to `lib`
+* Renamed build directory to `lib`.
 
 ## 0.5.3 (Mar. 23, 2016)
 
