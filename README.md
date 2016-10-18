@@ -178,7 +178,7 @@ Returns a new object with a modified attribute.
 If the provided value is the same (*referentially equal to*)
 the previous value, the original object is returned.
 
-Usage: `set(obj: ?ArrayOrObject, key: Key, val: any): ArrayOrObject`
+Usage: `set(obj: any, key: Key, val: any): Object`
 
 ```js
 obj = { a: 1, b: 2, c: 3 }
@@ -237,7 +237,7 @@ If the calculated value is the same (*referentially equal to*)
 the previous value, the original object is returned.
 
 Usage: `updateIn(obj: ArrayOrObject, path: Array<Key>,
-fnUpdate: (prevValue: any) => any): ArrayOrObject`
+fnUpdate: (prevValue: any) => any): Object`
 
 ```js
 obj = { a: 1, d: { d1: 3, d2: 4 } }
@@ -261,7 +261,7 @@ Similar to `Object.assign()`, but immutable.
 Usage:
 
 * `merge(obj1: ArrayOrObject, obj2: ?ArrayOrObject): ArrayOrObject`
-* `merge(obj1: ArrayOrObject, ...objects: Array<?ArrayOrObject>): ArrayOrObject`
+* `merge(obj1: ArrayOrObject, ...objects: Array<?ArrayOrObject>): Object`
 
 The unmodified `obj1` is returned if `obj2` does not *provide something
 new to* `obj1`, i.e. if either of the following
@@ -292,7 +292,7 @@ Usage:
 
 * `mergeIn(obj1: ArrayOrObject, path: Array<Key>, obj2: ArrayOrObject): ArrayOrObject`
 * `mergeIn(obj1: ArrayOrObject, path: Array<Key>,
-...objects: Array<?ArrayOrObject>): ArrayOrObject`
+...objects: Array<?ArrayOrObject>): Object`
 
 ```js
 obj1 = { a: 1, d: { b: { d1: 3, d2: 4 } } }
@@ -331,8 +331,8 @@ are filled in with the corresponding values from the second one
 
 Usage:
 
-* `addDefaults(obj: ArrayOrObject, defaults: ArrayOrObject): ArrayOrObject`
-* `addDefaults(obj: ArrayOrObject, ...defaultObjects: Array<?ArrayOrObject>): ArrayOrObject`
+* `addDefaults(obj: ArrayOrObject, defaults: ArrayOrObject): Object`
+* `addDefaults(obj: ArrayOrObject, ...defaultObjects: Array<?ArrayOrObject>): Object`
 
 ```js
 obj1 = { a: 1, b: 2, c: 3 }

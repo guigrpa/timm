@@ -3,7 +3,7 @@ declare module 'timm' {
   declare type Key = number|string;
 
   declare module.exports: {
-    clone(obj: ArrayOrObject): ArrayOrObject;
+    clone(obj: ArrayOrObject): Object;
     addLast(array: Array<any>, val: Array<any>|any): Array<any>;
     addFirst(array: Array<any>, val: Array<any>|any): Array<any>;
     insert(array: Array<any>, idx: number, val: Array<any>|any): Array<any>;
@@ -13,30 +13,30 @@ declare module 'timm' {
       obj: ?ArrayOrObject,
       path: Array<Key>
     ): any;
-    set(obj: any, key: Key, val: any): ArrayOrObject;
-    setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrObject;
+    set(obj: any, key: Key, val: any): Object;
+    setIn(obj: ArrayOrObject, path: Array<Key>, val: any): Object;
     updateIn(
       obj: ArrayOrObject, path: Array<Key>,
       fnUpdate: (prevValue: any) => any
-    ): ArrayOrObject;
+    ): Object;
     merge(
       a: ArrayOrObject,
       b: ?ArrayOrObject, c: ?ArrayOrObject,
       d: ?ArrayOrObject, e: ?ArrayOrObject,
       f: ?ArrayOrObject, ...rest: Array<?ArrayOrObject>
-    ): ArrayOrObject;
+    ): Object;
     mergeIn(
       a: ArrayOrObject, path: Array<Key>,
       b: ?ArrayOrObject, c: ?ArrayOrObject,
       d: ?ArrayOrObject, e: ?ArrayOrObject,
       f: ?ArrayOrObject, ...rest: Array<?ArrayOrObject>
-    ): ArrayOrObject;
+    ): Object;
     omit(obj: Object, attrs: Array<string>|string): Object;
     addDefaults(
       a: ArrayOrObject,
       b: ?ArrayOrObject, c: ?ArrayOrObject,
       d: ?ArrayOrObject, e: ?ArrayOrObject,
       f: ?ArrayOrObject, ...rest: Array<?ArrayOrObject>
-    ): ArrayOrObject;
+    ): Object;
   }
 }

@@ -23,7 +23,7 @@ function throwStr(msg: string) {
 
 const hasOwnProperty = {}.hasOwnProperty;
 
-export function clone(obj: ArrayOrObject): ArrayOrObject {
+export function clone(obj: ArrayOrObject): any {
   if (Array.isArray(obj)) return [].concat(obj);
   const keys = Object.keys(obj);
   const out = {};
@@ -34,7 +34,7 @@ export function clone(obj: ArrayOrObject): ArrayOrObject {
   return out;
 }
 
-function doMerge(fAddDefaults: boolean, ...rest: any): ArrayOrObject {
+function doMerge(fAddDefaults: boolean, ...rest: any): Object {
   let out = rest[0];
   !(out != null) && throwStr(process.env.NODE_ENV !== 'production' ?
     'At least one object should be provided to merge()' : INVALID_ARGS);
@@ -228,7 +228,7 @@ export function getIn(
 // -- If the provided value is the same (*referentially equal to*)
 // -- the previous value, the original object is returned.
 // --
-// -- Usage: `set(obj: ?ArrayOrObject, key: Key, val: any): ArrayOrObject`
+// -- Usage: `set(obj: any, key: Key, val: any): Object`
 // --
 // -- ```js
 // -- obj = { a: 1, b: 2, c: 3 }
@@ -241,7 +241,7 @@ export function getIn(
 // -- set(obj, 'b', 2) === obj
 // -- // true
 // -- ```
-export function set(obj: any, key: Key, val: any): ArrayOrObject {
+export function set(obj: any, key: Key, val: any): Object {
   const finalObj = obj == null ? {} : obj;
   if (finalObj[key] === val) return finalObj;
   const obj2: any = clone(finalObj);
@@ -291,7 +291,7 @@ function doSetIn(
   path: Array<Key>,
   val: any,
   idx: number
-): ArrayOrObject {
+): Object {
   let newValue;
   const key: any = path[idx];
   if (idx === path.length - 1) {
@@ -303,7 +303,7 @@ function doSetIn(
   return set(obj, key, newValue);
 }
 
-export function setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrObject {
+export function setIn(obj: ArrayOrObject, path: Array<Key>, val: any): Object {
   if (!path.length) return val;
   return doSetIn(obj, path, val, 0);
 }
@@ -315,7 +315,7 @@ export function setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrOb
 // -- the previous value, the original object is returned.
 // --
 // -- Usage: `updateIn(obj: ArrayOrObject, path: Array<Key>,
-// -- fnUpdate: (prevValue: any) => any): ArrayOrObject`
+// -- fnUpdate: (prevValue: any) => any): Object`
 // --
 // -- ```js
 // -- obj = { a: 1, d: { d1: 3, d2: 4 } }
@@ -331,9 +331,10 @@ export function setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrOb
 // -- // true
 // -- ```
 export function updateIn(
-  obj: ArrayOrObject, path: Array<Key>,
+  obj: ArrayOrObject,
+  path: Array<Key>,
   fnUpdate: (prevValue: any) => any
-): ArrayOrObject {
+): Object {
   const prevVal = getIn(obj, path);
   const nextVal = fnUpdate(prevVal);
   return setIn(obj, path, nextVal);
@@ -347,7 +348,7 @@ export function updateIn(
 // -- Usage:
 // --
 // -- * `merge(obj1: ArrayOrObject, obj2: ?ArrayOrObject): ArrayOrObject`
-// -- * `merge(obj1: ArrayOrObject, ...objects: Array<?ArrayOrObject>): ArrayOrObject`
+// -- * `merge(obj1: ArrayOrObject, ...objects: Array<?ArrayOrObject>): Object`
 // --
 // -- The unmodified `obj1` is returned if `obj2` does not *provide something
 // -- new to* `obj1`, i.e. if either of the following
@@ -375,7 +376,7 @@ export function merge(
   b: ?ArrayOrObject, c: ?ArrayOrObject,
   d: ?ArrayOrObject, e: ?ArrayOrObject,
   f: ?ArrayOrObject, ...rest: Array<?ArrayOrObject>
-): ArrayOrObject {
+): Object {
   return rest.length ?
     doMerge.call(null, false, a, b, c, d, e, f, ...rest) :
     doMerge(false, a, b, c, d, e, f);
@@ -388,7 +389,7 @@ export function merge(
 // --
 // -- * `mergeIn(obj1: ArrayOrObject, path: Array<Key>, obj2: ArrayOrObject): ArrayOrObject`
 // -- * `mergeIn(obj1: ArrayOrObject, path: Array<Key>,
-// -- ...objects: Array<?ArrayOrObject>): ArrayOrObject`
+// -- ...objects: Array<?ArrayOrObject>): Object`
 // --
 // -- ```js
 // -- obj1 = { a: 1, d: { b: { d1: 3, d2: 4 } } }
@@ -407,7 +408,7 @@ export function mergeIn(
   b: ?ArrayOrObject, c: ?ArrayOrObject,
   d: ?ArrayOrObject, e: ?ArrayOrObject,
   f: ?ArrayOrObject, ...rest: Array<?ArrayOrObject>
-): ArrayOrObject {
+): Object {
   let prevVal = getIn(a, path);
   if (prevVal == null) prevVal = {};
   let nextVal;
@@ -462,8 +463,8 @@ export function omit(obj: Object, attrs: Array<string>|string): Object {
 // --
 // -- Usage:
 // --
-// -- * `addDefaults(obj: ArrayOrObject, defaults: ArrayOrObject): ArrayOrObject`
-// -- * `addDefaults(obj: ArrayOrObject, ...defaultObjects: Array<?ArrayOrObject>): ArrayOrObject`
+// -- * `addDefaults(obj: ArrayOrObject, defaults: ArrayOrObject): Object`
+// -- * `addDefaults(obj: ArrayOrObject, ...defaultObjects: Array<?ArrayOrObject>): Object`
 // --
 // -- ```js
 // -- obj1 = { a: 1, b: 2, c: 3 }
@@ -482,7 +483,7 @@ export function addDefaults(
   b: ?ArrayOrObject, c: ?ArrayOrObject,
   d: ?ArrayOrObject, e: ?ArrayOrObject,
   f: ?ArrayOrObject, ...rest: Array<?ArrayOrObject>
-): ArrayOrObject {
+): Object {
   return rest.length ?
     doMerge.call(null, true, a, b, c, d, e, f, ...rest) :
     doMerge(true, a, b, c, d, e, f);
