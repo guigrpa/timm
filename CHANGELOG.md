@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2 (October 19, 2016)
+
+* Change how Flow type definitions are exposed so they can be used with zero config.
+
 ## 1.1.1 (October 18, 2016)
 
 * Fix Flow type definitions for object-related function outputs, making them more flexible.
