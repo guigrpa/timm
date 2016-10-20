@@ -1,0 +1,35 @@
+// @flow
+
+import typeof {
+  default as Timm,
+  clone as Clone,
+  addLast as AddLast,
+  addFirst as AddFirst,
+  insert as Insert,
+  removeAt as RemoveAt,
+  replaceAt as ReplaceAt,
+  getIn as GetIn,
+  set as SetT,
+  setIn as SetIn,
+  updateIn as UpdateIn,
+  merge as Merge,
+  mergeIn as MergeIn,
+  omit as Omit,
+  addDefaults as AddDefaults,
+} from '../src/timm';  // this file will be used from <PROJECT>/lib
+
+declare export default Timm;
+declare export var clone: Clone;
+declare export var addLast: AddLast;
+declare export var addFirst: AddFirst;
+declare export var insert: Insert;
+declare export var removeAt: RemoveAt;
+declare export var replaceAt: ReplaceAt;
+declare export var getIn: GetIn;
+declare export var set: SetT;
+declare export var setIn: SetIn;
+declare export var updateIn: UpdateIn;
+declare export var merge: Merge;
+declare export var mergeIn: MergeIn;
+declare export var omit: Omit;
+declare export var addDefaults: AddDefaults;

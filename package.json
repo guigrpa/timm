@@ -46,7 +46,7 @@
     "testCovProd": "cross-env NODE_ENV=production nyc ava && mv .nyc_output/* .nyc_tmp/",
     "testCovMin": "cross-env TEST_MINIFIED_LIB=1 nyc ava && mv .nyc_output/* .nyc_tmp/",
     "testCovReport": "cp .nyc_tmp/* .nyc_output/ && nyc report --reporter=html --reporter=lcov",
-    "compile": "rm -rf ./lib && mkdir lib && babel -o lib/timm.js src/timm.js && cp src/timm.js.flow lib/timm.js.flow",
+    "compile": "rm -rf ./lib && mkdir lib && babel -o lib/timm.js src/timm.js && cp src/api.js.flow lib/timm.js.flow",
     "docs": "extract-docs --template docs/README_TEMPLATE.md --output README.md",
     "uglify": "cross-env NODE_ENV=production envify lib/timm.js | uglifyjs - -o lib/timm.min.js --mangle --compress --comments \"/^!/\"",
     "build": "npm run lint && npm run flow && npm run compile && npm run uglify && npm run testCovFull && npm run docs && npm run xxl",

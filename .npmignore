@@ -22,7 +22,6 @@ node_modules
 # NPM extras
 /.babelrc
 /docs
-/src
 /tools
 /test
 /ROADMAP.md
