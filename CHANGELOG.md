@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.3 (October 19, 2016)
+
+* Make user-facing Flow type definitions inherit from internal ones (to avoid divergence).
+
 ## 1.1.2 (October 19, 2016)
 
 * Change how Flow type definitions are exposed so they can be used with zero config.
