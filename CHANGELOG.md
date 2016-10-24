@@ -1,5 +1,7 @@
 # Changelog
 
+## 1.2.0 (October 24, 2016)
+
 * Add **removeFirst(), removeLast()**
 
 ## 1.1.3 (October 19, 2016)
