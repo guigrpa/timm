@@ -1,4 +1,7 @@
+/* eslint-disable global-require, import/no-extraneous-dependencies, import/no-unresolved */
+
 import test from 'ava';
+
 let timm;
 if (process.env.TEST_MINIFIED_LIB) {
   timm = require('../lib/timm.min');
@@ -6,6 +9,6 @@ if (process.env.TEST_MINIFIED_LIB) {
   timm = require('../lib/timm');
 }
 
-test('sanity', t => {
+test('sanity', (t) => {
   t.truthy(timm.set);
 });

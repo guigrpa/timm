@@ -23,10 +23,10 @@ function throwStr(msg: string) {
 
 const hasOwnProperty = {}.hasOwnProperty;
 
-export function clone(obj: ArrayOrObject): any {
-  if (Array.isArray(obj)) return [].concat(obj);
+export function clone<T: ArrayOrObject>(obj: T): T {
+  if (Array.isArray(obj)) return obj.slice();
   const keys = Object.keys(obj);
-  const out = {};
+  const out: any = {};
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
     out[key] = obj[key];
@@ -34,12 +34,12 @@ export function clone(obj: ArrayOrObject): any {
   return out;
 }
 
-function doMerge(fAddDefaults: boolean, ...rest: any): Object {
-  let out = rest[0];
+function doMerge(fAddDefaults: boolean, first: ArrayOrObject, ...rest: any): any {
+  let out = first;
   !(out != null) && throwStr(process.env.NODE_ENV !== 'production' ?
     'At least one object should be provided to merge()' : INVALID_ARGS);
   let fChanged = false;
-  for (let idx = 1; idx < rest.length; idx++) {
+  for (let idx = 0; idx < rest.length; idx++) {
     const obj = rest[idx];
     if (obj == null) continue;
     const keys = Object.keys(obj);
@@ -79,7 +79,7 @@ function isObject(o: any): boolean {
 // -- #### addLast()
 // -- Returns a new array with an appended item or items.
 // --
-// -- Usage: `addLast(array: Array<any>, val: Array<any>|any): Array<any>`
+// -- Usage: `addLast<T>(array: Array<T>, val: Array<T>|T): Array<T>`
 // --
 // -- ```js
 // -- arr = ['a', 'b']
@@ -90,9 +90,9 @@ function isObject(o: any): boolean {
 // -- arr3 = addLast(arr, ['c', 'd'])
 // -- // ['a', 'b', 'c', 'd']
 // -- ```
-// `array.concat(val)` also handles the array case,
+// `array.concat(val)` also handles the scalar case,
 // but is apparently very slow
-export function addLast(array: Array<any>, val: Array<any>|any): Array<any> {
+export function addLast<T>(array: Array<T>, val: Array<T>|T): Array<T> {
   if (Array.isArray(val)) return array.concat(val);
   return array.concat([val]);
 }
@@ -100,7 +100,7 @@ export function addLast(array: Array<any>, val: Array<any>|any): Array<any> {
 // -- #### addFirst()
 // -- Returns a new array with a prepended item or items.
 // --
-// -- Usage: `addFirst(array: Array<any>, val: Array<any>|any): Array<any>`
+// -- Usage: `addFirst<T>(array: Array<T>, val: Array<T>|T): Array<T>`
 // --
 // -- ```js
 // -- arr = ['a', 'b']
@@ -111,16 +111,60 @@ export function addLast(array: Array<any>, val: Array<any>|any): Array<any> {
 // -- arr3 = addFirst(arr, ['c', 'd'])
 // -- // ['c', 'd', 'a', 'b']
 // -- ```
-export function addFirst(array: Array<any>, val: Array<any>|any): Array<any> {
+export function addFirst<T>(array: Array<T>, val: Array<T>|T): Array<T> {
   if (Array.isArray(val)) return val.concat(array);
   return [val].concat(array);
+}
+
+// -- #### removeLast()
+// -- Returns a new array removing the last item.
+// --
+// -- Usage: `removeLast<T>(array: Array<T>): Array<T>`
+// --
+// -- ```js
+// -- arr = ['a', 'b']
+// -- arr2 = removeLast(arr)
+// -- // ['a']
+// -- arr2 === arr
+// -- // false
+// --
+// -- // The same array is returned if there are no changes:
+// -- arr3 = []
+// -- removeLast(arr3) === arr3
+// -- // true
+// -- ```
+export function removeLast<T>(array: Array<T>): Array<T> {
+  if (!array.length) return array;
+  return array.slice(0, array.length - 1);
+}
+
+// -- #### removeFirst()
+// -- Returns a new array removing the first item.
+// --
+// -- Usage: `removeFirst<T>(array: Array<T>): Array<T>`
+// --
+// -- ```js
+// -- arr = ['a', 'b']
+// -- arr2 = removeFirst(arr)
+// -- // ['b']
+// -- arr2 === arr
+// -- // false
+// --
+// -- // The same array is returned if there are no changes:
+// -- arr3 = []
+// -- removeFirst(arr3) === arr3
+// -- // true
+// -- ```
+export function removeFirst<T>(array: Array<T>): Array<T> {
+  if (!array.length) return array;
+  return array.slice(1);
 }
 
 // -- #### insert()
 // -- Returns a new array obtained by inserting an item or items
 // -- at a specified index.
 // --
-// -- Usage: `insert(array: Array<any>, idx: number, val: Array<any>|any): Array<any>`
+// -- Usage: `insert<T>(array: Array<T>, idx: number, val: Array<T>|T): Array<T>`
 // --
 // -- ```js
 // -- arr = ['a', 'b', 'c']
@@ -131,7 +175,7 @@ export function addFirst(array: Array<any>, val: Array<any>|any): Array<any> {
 // -- insert(arr, 1, ['d', 'e'])
 // -- // ['a', 'd', 'e', 'b', 'c']
 // -- ```
-export function insert(array: Array<any>, idx: number, val: Array<any>|any): Array<any> {
+export function insert<T>(array: Array<T>, idx: number, val: Array<T>|T): Array<T> {
   return array
     .slice(0, idx)
     .concat(Array.isArray(val) ? val : [val])
@@ -142,7 +186,7 @@ export function insert(array: Array<any>, idx: number, val: Array<any>|any): Arr
 // -- Returns a new array obtained by removing an item at
 // -- a specified index.
 // --
-// -- Usage: `removeAt(array: Array<any>, idx: number): Array<any>`
+// -- Usage: `removeAt<T>(array: Array<T>, idx: number): Array<T>`
 // --
 // -- ```js
 // -- arr = ['a', 'b', 'c']
@@ -150,8 +194,13 @@ export function insert(array: Array<any>, idx: number, val: Array<any>|any): Arr
 // -- // ['a', 'c']
 // -- arr2 === arr
 // -- // false
+// --
+// -- // The same array is returned if there are no changes:
+// -- removeAt(arr, 4) === arr
+// -- // true
 // -- ```
-export function removeAt(array: Array<any>, idx: number): Array<any> {
+export function removeAt<T>(array: Array<T>, idx: number): Array<T> {
+  if (idx >= array.length || idx < 0) return array;
   return array
     .slice(0, idx)
     .concat(array.slice(idx + 1));
@@ -163,7 +212,7 @@ export function removeAt(array: Array<any>, idx: number): Array<any> {
 // -- (*referentially equal to*) the previous item at that position,
 // -- the original array is returned.
 // --
-// -- Usage: `replaceAt(array: Array<any>, idx: number, newItem: any): Array<any>`
+// -- Usage: `replaceAt<T>(array: Array<T>, idx: number, newItem: T): Array<T>`
 // --
 // -- ```js
 // -- arr = ['a', 'b', 'c']
@@ -176,7 +225,7 @@ export function removeAt(array: Array<any>, idx: number): Array<any> {
 // -- replaceAt(arr, 1, 'b') === arr
 // -- // true
 // -- ```
-export function replaceAt(array: Array<any>, idx: number, newItem: any): Array<any> {
+export function replaceAt<T>(array: Array<T>, idx: number, newItem: T): Array<T> {
   if (array[idx] === newItem) return array;
   return array
     .slice(0, idx)
@@ -228,7 +277,7 @@ export function getIn(
 // -- If the provided value is the same (*referentially equal to*)
 // -- the previous value, the original object is returned.
 // --
-// -- Usage: `set(obj: any, key: Key, val: any): Object`
+// -- Usage: `set<T>(obj: ?T, key: Key, val: any): T`
 // --
 // -- ```js
 // -- obj = { a: 1, b: 2, c: 3 }
@@ -241,10 +290,10 @@ export function getIn(
 // -- set(obj, 'b', 2) === obj
 // -- // true
 // -- ```
-export function set(obj: any, key: Key, val: any): Object {
-  const finalObj = obj == null ? {} : obj;
+export function set<T>(obj: ?T, key: Key, val: any): T {
+  const finalObj: any = obj == null ? {} : obj;
   if (finalObj[key] === val) return finalObj;
-  const obj2: any = clone(finalObj);
+  const obj2 = clone(finalObj);
   obj2[key] = val;
   return obj2;
 }
@@ -259,7 +308,7 @@ export function set(obj: any, key: Key, val: any): Object {
 // -- * If the path does not exist, it will be created before setting
 // -- the new value.
 // --
-// -- Usage: `setIn(obj: ArrayOrObject, path: Array<Key>, val: any): ArrayOrObject`
+// -- Usage: `setIn<T: ArrayOrObject>(obj: T, path: Array<Key>, val: any): T`
 // --
 // -- ```js
 // -- obj = { a: 1, b: 2, d: { d1: 3, d2: 4 }, e: { e1: 'foo', e2: 'bar' } }
@@ -286,12 +335,12 @@ export function set(obj: any, key: Key, val: any): Object {
 // -- setIn({ a: 3 }, ['unknown', 'path'], 4)
 // -- // { a: 3, unknown: { path: 4 } }
 // -- ```
-function doSetIn(
-  obj: ArrayOrObject,
+function doSetIn<T: ArrayOrObject>(
+  obj: T,
   path: Array<Key>,
   val: any,
   idx: number
-): Object {
+): T {
   let newValue;
   const key: any = path[idx];
   if (idx === path.length - 1) {
@@ -303,7 +352,7 @@ function doSetIn(
   return set(obj, key, newValue);
 }
 
-export function setIn(obj: ArrayOrObject, path: Array<Key>, val: any): Object {
+export function setIn<T: ArrayOrObject>(obj: T, path: Array<Key>, val: any): T {
   if (!path.length) return val;
   return doSetIn(obj, path, val, 0);
 }
@@ -314,8 +363,8 @@ export function setIn(obj: ArrayOrObject, path: Array<Key>, val: any): Object {
 // -- If the calculated value is the same (*referentially equal to*)
 // -- the previous value, the original object is returned.
 // --
-// -- Usage: `updateIn(obj: ArrayOrObject, path: Array<Key>,
-// -- fnUpdate: (prevValue: any) => any): Object`
+// -- Usage: `updateIn<T: ArrayOrObject>(obj: T, path: Array<Key>,
+// -- fnUpdate: (prevValue: any) => any): T`
 // --
 // -- ```js
 // -- obj = { a: 1, d: { d1: 3, d2: 4 } }
@@ -330,11 +379,11 @@ export function setIn(obj: ArrayOrObject, path: Array<Key>, val: any): Object {
 // -- obj3 === obj
 // -- // true
 // -- ```
-export function updateIn(
-  obj: ArrayOrObject,
+export function updateIn<T: ArrayOrObject>(
+  obj: T,
   path: Array<Key>,
   fnUpdate: (prevValue: any) => any
-): Object {
+): T {
   const prevVal = getIn(obj, path);
   const nextVal = fnUpdate(prevVal);
   return setIn(obj, path, nextVal);
@@ -347,8 +396,8 @@ export function updateIn(
 // --
 // -- Usage:
 // --
-// -- * `merge(obj1: ArrayOrObject, obj2: ?ArrayOrObject): ArrayOrObject`
-// -- * `merge(obj1: ArrayOrObject, ...objects: Array<?ArrayOrObject>): Object`
+// -- * `merge(obj1: Object, obj2: ?Object): Object`
+// -- * `merge(obj1: Object, ...objects: Array<?Object>): Object`
 // --
 // -- The unmodified `obj1` is returned if `obj2` does not *provide something
 // -- new to* `obj1`, i.e. if either of the following
@@ -372,10 +421,10 @@ export function updateIn(
 // -- // true
 // -- ```
 export function merge(
-  a: ArrayOrObject,
-  b: ?ArrayOrObject, c: ?ArrayOrObject,
-  d: ?ArrayOrObject, e: ?ArrayOrObject,
-  f: ?ArrayOrObject, ...rest: Array<?ArrayOrObject>
+  a: Object,
+  b: ?Object, c: ?Object,
+  d: ?Object, e: ?Object,
+  f: ?Object, ...rest: Array<?Object>
 ): Object {
   return rest.length ?
     doMerge.call(null, false, a, b, c, d, e, f, ...rest) :
@@ -384,12 +433,13 @@ export function merge(
 
 // -- #### mergeIn()
 // -- Similar to `merge()`, but merging the value at a given nested path.
+// -- Note that the returned type is the same as that of the first argument.
 // --
 // -- Usage:
 // --
-// -- * `mergeIn(obj1: ArrayOrObject, path: Array<Key>, obj2: ArrayOrObject): ArrayOrObject`
-// -- * `mergeIn(obj1: ArrayOrObject, path: Array<Key>,
-// -- ...objects: Array<?ArrayOrObject>): Object`
+// -- * `mergeIn<T: ArrayOrObject>(obj1: T, path: Array<Key>, obj2: ?Object): T`
+// -- * `mergeIn<T: ArrayOrObject>(obj1: T, path: Array<Key>,
+// -- ...objects: Array<?Object>): T`
 // --
 // -- ```js
 // -- obj1 = { a: 1, d: { b: { d1: 3, d2: 4 } } }
@@ -403,12 +453,12 @@ export function merge(
 // -- mergeIn(obj1, ['d', 'b'], { d2: 4 }) === obj1
 // -- // true
 // -- ```
-export function mergeIn(
-  a: ArrayOrObject, path: Array<Key>,
-  b: ?ArrayOrObject, c: ?ArrayOrObject,
-  d: ?ArrayOrObject, e: ?ArrayOrObject,
-  f: ?ArrayOrObject, ...rest: Array<?ArrayOrObject>
-): Object {
+export function mergeIn<T: ArrayOrObject>(
+  a: T, path: Array<Key>,
+  b: ?Object, c: ?Object,
+  d: ?Object, e: ?Object,
+  f: ?Object, ...rest: Array<?Object>
+): T {
   let prevVal = getIn(a, path);
   if (prevVal == null) prevVal = {};
   let nextVal;
@@ -463,8 +513,8 @@ export function omit(obj: Object, attrs: Array<string>|string): Object {
 // --
 // -- Usage:
 // --
-// -- * `addDefaults(obj: ArrayOrObject, defaults: ArrayOrObject): Object`
-// -- * `addDefaults(obj: ArrayOrObject, ...defaultObjects: Array<?ArrayOrObject>): Object`
+// -- * `addDefaults(obj: Object, defaults: Object): Object`
+// -- * `addDefaults(obj: Object, ...defaultObjects: Array<?Object>): Object`
 // --
 // -- ```js
 // -- obj1 = { a: 1, b: 2, c: 3 }
@@ -479,10 +529,10 @@ export function omit(obj: Object, attrs: Array<string>|string): Object {
 // -- // true
 // -- ```
 export function addDefaults(
-  a: ArrayOrObject,
-  b: ?ArrayOrObject, c: ?ArrayOrObject,
-  d: ?ArrayOrObject, e: ?ArrayOrObject,
-  f: ?ArrayOrObject, ...rest: Array<?ArrayOrObject>
+  a: Object,
+  b: ?Object, c: ?Object,
+  d: ?Object, e: ?Object,
+  f: ?Object, ...rest: Array<?Object>
 ): Object {
   return rest.length ?
     doMerge.call(null, true, a, b, c, d, e, f, ...rest) :
@@ -496,6 +546,8 @@ const timm = {
   clone,
   addLast,
   addFirst,
+  removeLast,
+  removeFirst,
   insert,
   removeAt,
   replaceAt,

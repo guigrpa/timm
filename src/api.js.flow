@@ -1,35 +1,39 @@
 // @flow
 
-import typeof {
-  default as Timm,
-  clone as Clone,
-  addLast as AddLast,
-  addFirst as AddFirst,
-  insert as Insert,
-  removeAt as RemoveAt,
-  replaceAt as ReplaceAt,
-  getIn as GetIn,
-  set as SetT,
-  setIn as SetIn,
-  updateIn as UpdateIn,
-  merge as Merge,
-  mergeIn as MergeIn,
-  omit as Omit,
-  addDefaults as AddDefaults,
+import {
+  clone,
+  addLast,
+  addFirst,
+  removeLast,
+  removeFirst,
+  insert,
+  removeAt,
+  replaceAt,
+  getIn,
+  set,
+  setIn,
+  updateIn,
+  merge,
+  mergeIn,
+  omit,
+  addDefaults,
 } from '../src/timm';  // this file will be used from <PROJECT>/lib
+import timm from '../src/timm';  // this file will be used from <PROJECT>/lib
 
-declare export default Timm;
-declare export var clone: Clone;
-declare export var addLast: AddLast;
-declare export var addFirst: AddFirst;
-declare export var insert: Insert;
-declare export var removeAt: RemoveAt;
-declare export var replaceAt: ReplaceAt;
-declare export var getIn: GetIn;
-declare export var set: SetT;
-declare export var setIn: SetIn;
-declare export var updateIn: UpdateIn;
-declare export var merge: Merge;
-declare export var mergeIn: MergeIn;
-declare export var omit: Omit;
-declare export var addDefaults: AddDefaults;
+declare export default typeof(timm);
+declare export var clone: typeof(clone);
+declare export var addLast: typeof(addLast);
+declare export var addFirst: typeof(addFirst);
+declare export var removeLast: typeof(removeLast);
+declare export var removeFirst: typeof(removeFirst);
+declare export var insert: typeof(insert);
+declare export var removeAt: typeof(removeAt);
+declare export var replaceAt: typeof(replaceAt);
+declare export var getIn: typeof(getIn);
+declare export var set: typeof(set);
+declare export var setIn: typeof(setIn);
+declare export var updateIn: typeof(updateIn);
+declare export var merge: typeof(merge);
+declare export var mergeIn: typeof(mergeIn);
+declare export var omit: typeof(omit);
+declare export var addDefaults: typeof(addDefaults);
