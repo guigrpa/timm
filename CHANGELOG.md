@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1 (November 15, 2016)
+
+* Update external Flow type definitions to support Flex 0.35.
+
 ## 1.2.0 (October 24, 2016)
 
 * Add **removeFirst(), removeLast()**
