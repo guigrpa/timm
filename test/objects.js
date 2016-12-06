@@ -126,6 +126,13 @@ test('setIn: should create nested objects for unknown paths', (t) => {
   t.is(obj2.unknown.long.path, 3);
 });
 
+test('setIn: should create nested arrays for unknown paths with integer segments', (t) => {
+  const obj2 = timm.setIn(OBJ, ['unknown', 0, 'long', 1, 'path'], 'value');
+  t.truthy(Array.isArray(obj2.unknown));
+  t.truthy(Array.isArray(obj2.unknown[0].long));
+  t.is(obj2.unknown[0].long[1].path, 'value');
+});
+
 test('setIn: should return the value if the path is empty', (t) => {
   const obj2 = timm.setIn(OBJ, [], { a: 3 });
   t.deepEqual(obj2, { a: 3 });
