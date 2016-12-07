@@ -69,6 +69,16 @@ test('set: should return the same object when it hasn\'t changed', (t) => {
   t.is(obj2, OBJ);
 });
 
+test('set: should return a new object when the first parameter is null or undefined and the key is a string', (t) => {
+  t.deepEqual(timm.set(null, 'b', 2), {b: 2});
+  t.deepEqual(timm.set(undefined, 'b', 2), {b: 2});
+});
+
+test('set: should return a new array when the first parameter is null or undefined the key is a number', (t) => {
+  t.deepEqual(timm.set(null, 5, 2), [,,,,,2]);
+  t.deepEqual(timm.set(undefined, 0, 'value'), ['value']);
+});
+
 //------------------------------------------------
 // setIn()
 //------------------------------------------------
@@ -126,11 +136,24 @@ test('setIn: should create nested objects for unknown paths', (t) => {
   t.is(obj2.unknown.long.path, 3);
 });
 
-test('setIn: should create nested arrays for unknown paths with integer segments', (t) => {
+test('setIn: should create nested arrays for unknown paths with positive integer segments', (t) => {
   const obj2 = timm.setIn(OBJ, ['unknown', 0, 'long', 1, 'path'], 'value');
   t.truthy(Array.isArray(obj2.unknown));
   t.truthy(Array.isArray(obj2.unknown[0].long));
   t.is(obj2.unknown[0].long[1].path, 'value');
+});
+
+test('setIn: should create nested arrays for unknown paths with negative segments', (t) => {
+  const obj2 = timm.setIn(OBJ, ['unknown', -17, 'path'], 3);
+  t.truthy(Array.isArray(obj2.unknown));
+  t.is(obj2.unknown['-17'].path, 3);
+});
+
+test('setIn: should create nested arrays for unknown paths with decimal segments', (t) => {
+  const obj2 = timm.setIn(OBJ, ['unknown', 2.2, 'another', -5.3], 'foo');
+  t.truthy(Array.isArray(obj2.unknown));
+  t.truthy(Array.isArray(obj2.unknown['2.2'].another));
+  t.is(obj2.unknown['2.2'].another['-5.3'], 'foo');
 });
 
 test('setIn: should return the value if the path is empty', (t) => {
