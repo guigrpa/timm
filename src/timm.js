@@ -291,7 +291,8 @@ export function getIn(
 // -- // true
 // -- ```
 export function set<T>(obj: ?T, key: Key, val: any): T {
-  const finalObj: any = obj == null ? {} : obj;
+  const fallback = Number.isInteger(key) ? [] : {};
+  const finalObj: any = obj == null ? fallback : obj;
   if (finalObj[key] === val) return finalObj;
   const obj2 = clone(finalObj);
   obj2[key] = val;
