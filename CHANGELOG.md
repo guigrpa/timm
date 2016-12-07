@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.2 (December 7, 2016)
+
+* Bugfix: Allow `setIn` to automatically create arrays [#3, @YellowKirby]
+
 ## 1.2.1 (November 15, 2016)
 
 * Update external Flow type definitions to support Flex 0.35.
