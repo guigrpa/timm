@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.2.3 (December 8, 2016)
+
+* Bugfix: Allow `set`/`setIn` to automatically create arrays, handling correctly negative and decimal numbers [#4, @YellowKirby]
+
 ## 1.2.2 (December 7, 2016)
 
-* Bugfix: Allow `setIn` to automatically create arrays [#3, @YellowKirby]
+* Bugfix: Allow `set`/`setIn` to automatically create arrays [#3, @YellowKirby]
 
 ## 1.2.1 (November 15, 2016)
 
