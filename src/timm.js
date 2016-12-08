@@ -332,9 +332,9 @@ export function set<T>(obj: ?T, key: Key, val: any): T {
 // -- obj3.e === obj.e
 // -- // true
 // --
-// -- // ... unknown paths create intermediate keys:
-// -- setIn({ a: 3 }, ['unknown', 'path'], 4)
-// -- // { a: 3, unknown: { path: 4 } }
+// -- // ... unknown paths create intermediate keys. Numeric segments are treated as array indices:
+// -- setIn({ a: 3 }, ['unknown', 0, 'path'], 4)
+// -- // { a: 3, unknown: [{ path: 4 }] }
 // -- ```
 function doSetIn<T: ArrayOrObject>(
   obj: T,
