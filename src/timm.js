@@ -347,7 +347,7 @@ function doSetIn<T: ArrayOrObject>(
   if (idx === path.length - 1) {
     newValue = val;
   } else {
-    const nestedObj = isObject(obj) ? obj[key] : {};
+    const nestedObj = isObject(obj) ? obj[key] : typeof path[idx + 1] === 'number' ? [] : {};
     newValue = doSetIn(nestedObj, path, val, idx + 1);
   }
   return set(obj, key, newValue);
