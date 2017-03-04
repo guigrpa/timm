@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.4 (March 4, 2017)
+
+* Bugfix: Fix `setIn` object creation for arrays in some edge cases [#8, @adierkens]
+
 ## 1.2.3 (December 8, 2016)
 
 * Bugfix: Allow `set`/`setIn` to automatically create arrays, handling correctly negative and decimal numbers [#4, @YellowKirby]

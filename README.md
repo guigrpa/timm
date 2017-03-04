@@ -12,7 +12,7 @@ $ npm install --save timm
 
 ## Motivation
 
-I know, I know... the world doesn't need yet another immutability library, especially with the likes of [ImmutableJS](http://facebook.github.io/immutable-js/) and [seamless-immutable](https://github.com/rtfeldman/seamless-immutable) around. 
+I know, I know... the world doesn't need yet another immutability library, especially with the likes of [ImmutableJS](http://facebook.github.io/immutable-js/) and [seamless-immutable](https://github.com/rtfeldman/seamless-immutable) around.
 
 And yet... I felt the urge, at least just to cover my limited needs. ImmutableJS is a solid, comprehensive and highly-performant solution, but this power comes at a price: mixing up ImmutableJS's Maps and Lists with your plain objects can cause some friction, and reading those objects (in my case, more often than writing them) isn't that convenient.
 
@@ -51,7 +51,7 @@ Some conclusions from these benchmarks:
     - If you need a complete, well-tested, rock-solid library and don't mind using a non-native API for reads: use **ImmutableJS**
     - If you value using plain arrays/objects above other considerations, use **timm**
     - If your typical use cases involve much more reading than writing, use **timm** as well
-    - If you do a lot of writes, updating items in long arrays or attributes in fat objects, use **ImmutableJS** 
+    - If you do a lot of writes, updating items in long arrays or attributes in fat objects, use **ImmutableJS**
 
 
 ## Usage
@@ -391,7 +391,7 @@ addDefaults(obj1, { c: 4 }) === obj1
 
 ## MIT license
 
-Copyright (c) [Guillermo Grau Panea](https://github.com/guigrpa) 2016
+Copyright (c) [Guillermo Grau Panea](https://github.com/guigrpa) 2016-present
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
