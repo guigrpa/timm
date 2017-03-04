@@ -143,6 +143,25 @@ test('setIn: should create nested arrays for unknown paths with positive integer
   t.is(obj2.unknown[0].long[1].path, 'value');
 });
 
+test('setIn: should create nested arrays for undefined objects', (t) => {
+  const obj2 = timm.setIn(undefined, ['unknown', 0, 'path'], 'value');
+  t.truthy(Array.isArray(obj2.unknown));
+  t.is(obj2.unknown[0].path, 'value');
+});
+
+test('setIn: should create nested arrays for unknown paths', (t) => {
+  const obj2 = timm.setIn(OBJ, ['unknown', 0, 1, 'path'], 'value');
+  t.truthy(Array.isArray(obj2.unknown));
+  t.truthy(Array.isArray(obj2.unknown[0]));
+  t.is(obj2.unknown[0][1].path, 'value');
+});
+
+test('setIn: should create nested object in arrays for unknown paths', (t) => {
+  const obj2 = timm.setIn(undefined, ['x', 0, 'y', 'z'], 'value');
+  t.truthy(Array.isArray(obj2.x));
+  t.is(obj2.x[0].y.z, 'value');
+});
+
 test('setIn: should create nested arrays for unknown paths with negative segments', (t) => {
   const obj2 = timm.setIn(OBJ, ['unknown', -17, 'path'], 3);
   t.truthy(Array.isArray(obj2.unknown));
