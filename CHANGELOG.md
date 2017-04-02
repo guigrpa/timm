@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.5 (April 2, 2017)
+
+* Improve `replaceAt` performance [#9, @gamtiq]
+
 ## 1.2.4 (March 4, 2017)
 
 * Bugfix: Fix `setIn` object creation for arrays in some edge cases [#8, @adierkens]
