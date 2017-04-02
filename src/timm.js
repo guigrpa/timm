@@ -227,10 +227,14 @@ export function removeAt<T>(array: Array<T>, idx: number): Array<T> {
 // -- ```
 export function replaceAt<T>(array: Array<T>, idx: number, newItem: T): Array<T> {
   if (array[idx] === newItem) return array;
-  return array
-    .slice(0, idx)
-    .concat([newItem])
-    .concat(array.slice(idx + 1));
+
+  const len: number = array.length;
+  const result: Array<T> = Array(len);
+  for (let i = 0; i < len; i++) {
+    result[i] = array[i];
+  }
+  result[idx] = newItem;
+  return result;
 }
 
 // ===============================================
