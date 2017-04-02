@@ -227,9 +227,8 @@ export function removeAt<T>(array: Array<T>, idx: number): Array<T> {
 // -- ```
 export function replaceAt<T>(array: Array<T>, idx: number, newItem: T): Array<T> {
   if (array[idx] === newItem) return array;
-
-  const len: number = array.length;
-  const result: Array<T> = Array(len);
+  const len = array.length;
+  const result = Array(len);
   for (let i = 0; i < len; i++) {
     result[i] = array[i];
   }
