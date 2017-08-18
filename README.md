@@ -1,6 +1,6 @@
 # timm [![Build Status](https://travis-ci.org/guigrpa/timm.svg)](https://travis-ci.org/guigrpa/timm) [![Coverage Status](https://coveralls.io/repos/github/guigrpa/timm/badge.svg?branch=master)](https://coveralls.io/github/guigrpa/timm?branch=master) [![npm version](https://img.shields.io/npm/v/timm.svg)](https://www.npmjs.com/package/timm)
 
-Immutability helpers with fast reads and acceptable writes
+Immutability helpers with fast reads and acceptable writes ([blog post](http://guigrpa.github.io/2016/06/16/painless-immutability/))
 
 
 ## Installation
