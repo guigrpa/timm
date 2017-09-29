@@ -74,7 +74,7 @@ test('set: should return a new object when the first parameter is null or undefi
   t.deepEqual(timm.set(undefined, 'b', 2), {b: 2});
 });
 
-test('set: should return a new array when the first parameter is null or undefined the key is a number', (t) => {
+test('set: should return a new array when the first parameter is null or undefined and the key is a number', (t) => {
   t.deepEqual(timm.set(null, 5, 2), [,,,,,2]);
   t.deepEqual(timm.set(undefined, 0, 'value'), ['value']);
 });
@@ -184,6 +184,31 @@ test('setIn: should allow unsetting an attribute', (t) => {
   const obj2 = timm.setIn(OBJ, ['d', 'd1'], undefined);
   t.not(obj2, OBJ);
   t.is(obj2.d.d1, undefined);
+});
+
+//------------------------------------------------
+// update()
+//------------------------------------------------
+test('update: with changes', (t) => {
+  const obj2 = timm.update(OBJ, 'b', val => val + 1);
+  t.is(OBJ.b, 2);
+  t.not(obj2, OBJ);
+  t.is(obj2.b, 3);
+});
+
+test('update: should return the same object when it hasn\'t changed', (t) => {
+  const obj2 = timm.update(OBJ, 'b', val => val);
+  t.is(obj2, OBJ);
+});
+
+test('update: should return a new object when the first parameter is null or undefined and the key is a string', (t) => {
+  t.deepEqual(timm.update(null, 'b', () => 2), {b: 2});
+  t.deepEqual(timm.update(undefined, 'b', () => 2), {b: 2});
+});
+
+test('update: should return a new array when the first parameter is null or undefined and the key is a number', (t) => {
+  t.deepEqual(timm.update(null, 5, () => 2), [,,,,,2]);
+  t.deepEqual(timm.update(undefined, 0, () => 'value'), ['value']);
 });
 
 //------------------------------------------------

@@ -270,6 +270,27 @@ setIn({ a: 3 }, ['unknown', 0, 'path'], 4)
 // { a: 3, unknown: [{ path: 4 }] }
 ```
 
+#### update()
+Returns a new object with a modified attribute,
+calculated via a user-provided callback based on the current value.
+If the calculated value is the same (*referentially equal to*)
+the previous value, the original object is returned.
+
+Usage: `update<T: ArrayOrObject>(obj: T, key: Key,
+fnUpdate: (prevValue: any) => any): T`
+
+```js
+obj = { a: 1, b: 2, c: 3 }
+obj2 = update(obj, 'b', (val) => val + 1)
+// { a: 1, b: 3, c: 3 }
+obj2 === obj
+// false
+
+// The same object is returned if there are no changes:
+update(obj, 'b', (val) => val) === obj
+// true
+```
+
 #### updateIn()
 Returns a new object with a modified **nested** attribute,
 calculated via a user-provided callback based on the current value.
