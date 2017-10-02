@@ -208,7 +208,7 @@ export function removeAt<T>(array: Array<T>, idx: number): Array<T> {
 
 // -- #### replaceAt()
 // -- Returns a new array obtained by replacing an item at
-// -- a specified index. If the provided item is the same
+// -- a specified index. If the provided item is the same as
 // -- (*referentially equal to*) the previous item at that position,
 // -- the original array is returned.
 // --
@@ -277,7 +277,7 @@ export function getIn(
 
 // -- #### set()
 // -- Returns a new object with a modified attribute.
-// -- If the provided value is the same (*referentially equal to*)
+// -- If the provided value is the same as (*referentially equal to*)
 // -- the previous value, the original object is returned.
 // --
 // -- Usage: `set<T>(obj: ?T, key: Key, val: any): T`
@@ -307,7 +307,7 @@ export function set<T>(obj: ?T, key: Key, val: any): T {
 // --
 // -- Notes:
 // --
-// -- * If the provided value is the same (*referentially equal to*)
+// -- * If the provided value is the same as (*referentially equal to*)
 // -- the previous value, the original object is returned.
 // -- * If the path does not exist, it will be created before setting
 // -- the new value.
@@ -364,7 +364,7 @@ export function setIn<T: ArrayOrObject>(obj: T, path: Array<Key>, val: any): T {
 // -- #### update()
 // -- Returns a new object with a modified attribute,
 // -- calculated via a user-provided callback based on the current value.
-// -- If the calculated value is the same (*referentially equal to*)
+// -- If the calculated value is the same as (*referentially equal to*)
 // -- the previous value, the original object is returned.
 // --
 // -- Usage: `update<T: ArrayOrObject>(obj: T, key: Key,
@@ -394,7 +394,7 @@ export function update<T: ArrayOrObject>(
 // -- #### updateIn()
 // -- Returns a new object with a modified **nested** attribute,
 // -- calculated via a user-provided callback based on the current value.
-// -- If the calculated value is the same (*referentially equal to*)
+// -- If the calculated value is the same as (*referentially equal to*)
 // -- the previous value, the original object is returned.
 // --
 // -- Usage: `updateIn<T: ArrayOrObject>(obj: T, path: Array<Key>,
