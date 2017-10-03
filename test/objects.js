@@ -70,12 +70,12 @@ test('set: should return the same object when it hasn\'t changed', (t) => {
 });
 
 test('set: should return a new object when the first parameter is null or undefined and the key is a string', (t) => {
-  t.deepEqual(timm.set(null, 'b', 2), {b: 2});
-  t.deepEqual(timm.set(undefined, 'b', 2), {b: 2});
+  t.deepEqual(timm.set(null, 'b', 2), { b: 2 });
+  t.deepEqual(timm.set(undefined, 'b', 2), { b: 2 });
 });
 
 test('set: should return a new array when the first parameter is null or undefined and the key is a number', (t) => {
-  t.deepEqual(timm.set(null, 5, 2), [,,,,,2]);
+  t.deepEqual(timm.set(null, 5, 2), [,,,,,2]); // eslint-disable-line
   t.deepEqual(timm.set(undefined, 0, 'value'), ['value']);
 });
 
@@ -202,12 +202,12 @@ test('update: should return the same object when it hasn\'t changed', (t) => {
 });
 
 test('update: should return a new object when the first parameter is null or undefined and the key is a string', (t) => {
-  t.deepEqual(timm.update(null, 'b', () => 2), {b: 2});
-  t.deepEqual(timm.update(undefined, 'b', () => 2), {b: 2});
+  t.deepEqual(timm.update(null, 'b', () => 2), { b: 2 });
+  t.deepEqual(timm.update(undefined, 'b', () => 2), { b: 2 });
 });
 
 test('update: should return a new array when the first parameter is null or undefined and the key is a number', (t) => {
-  t.deepEqual(timm.update(null, 5, () => 2), [,,,,,2]);
+  t.deepEqual(timm.update(null, 5, () => 2), [,,,,,2]); // eslint-disable-line
   t.deepEqual(timm.update(undefined, 0, () => 'value'), ['value']);
 });
 
