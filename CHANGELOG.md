@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0 (October 3, 2017)
+
+* Add **update()** [#12, @dentrado]
+
 ## 1.2.5 (April 2, 2017)
 
 * Improve `replaceAt` performance [#9, @gamtiq]
