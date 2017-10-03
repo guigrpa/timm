@@ -172,7 +172,7 @@ removeAt(arr, 4) === arr
 
 #### replaceAt()
 Returns a new array obtained by replacing an item at
-a specified index. If the provided item is the same
+a specified index. If the provided item is the same as
 (*referentially equal to*) the previous item at that position,
 the original array is returned.
 
@@ -215,7 +215,7 @@ getIn(obj, ['e', 1])
 
 #### set()
 Returns a new object with a modified attribute.
-If the provided value is the same (*referentially equal to*)
+If the provided value is the same as (*referentially equal to*)
 the previous value, the original object is returned.
 
 Usage: `set<T>(obj: ?T, key: Key, val: any): T`
@@ -237,7 +237,7 @@ Returns a new object with a modified **nested** attribute.
 
 Notes:
 
-* If the provided value is the same (*referentially equal to*)
+* If the provided value is the same as (*referentially equal to*)
 the previous value, the original object is returned.
 * If the path does not exist, it will be created before setting
 the new value.
@@ -273,7 +273,7 @@ setIn({ a: 3 }, ['unknown', 0, 'path'], 4)
 #### update()
 Returns a new object with a modified attribute,
 calculated via a user-provided callback based on the current value.
-If the calculated value is the same (*referentially equal to*)
+If the calculated value is the same as (*referentially equal to*)
 the previous value, the original object is returned.
 
 Usage: `update<T: ArrayOrObject>(obj: T, key: Key,
@@ -294,7 +294,7 @@ update(obj, 'b', (val) => val) === obj
 #### updateIn()
 Returns a new object with a modified **nested** attribute,
 calculated via a user-provided callback based on the current value.
-If the calculated value is the same (*referentially equal to*)
+If the calculated value is the same as (*referentially equal to*)
 the previous value, the original object is returned.
 
 Usage: `updateIn<T: ArrayOrObject>(obj: T, path: Array<Key>,
