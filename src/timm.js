@@ -386,7 +386,7 @@ export function update<T: ArrayOrObject>(
   key: Key,
   fnUpdate: (prevValue: any) => any
 ): T {
-  const prevVal = obj == null ? undefined : (obj: Object)[key];
+  const prevVal = obj == null ? undefined : (obj: any)[key];
   const nextVal = fnUpdate(prevVal);
   return set(obj, key, nextVal);
 }
