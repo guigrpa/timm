@@ -208,7 +208,7 @@ export function removeAt<T>(array: Array<T>, idx: number): Array<T> {
 
 // -- #### replaceAt()
 // -- Returns a new array obtained by replacing an item at
-// -- a specified index. If the provided item is the same
+// -- a specified index. If the provided item is the same as
 // -- (*referentially equal to*) the previous item at that position,
 // -- the original array is returned.
 // --
@@ -277,7 +277,7 @@ export function getIn(
 
 // -- #### set()
 // -- Returns a new object with a modified attribute.
-// -- If the provided value is the same (*referentially equal to*)
+// -- If the provided value is the same as (*referentially equal to*)
 // -- the previous value, the original object is returned.
 // --
 // -- Usage: `set<T>(obj: ?T, key: Key, val: any): T`
@@ -307,7 +307,7 @@ export function set<T>(obj: ?T, key: Key, val: any): T {
 // --
 // -- Notes:
 // --
-// -- * If the provided value is the same (*referentially equal to*)
+// -- * If the provided value is the same as (*referentially equal to*)
 // -- the previous value, the original object is returned.
 // -- * If the path does not exist, it will be created before setting
 // -- the new value.
@@ -361,10 +361,40 @@ export function setIn<T: ArrayOrObject>(obj: T, path: Array<Key>, val: any): T {
   return doSetIn(obj, path, val, 0);
 }
 
+// -- #### update()
+// -- Returns a new object with a modified attribute,
+// -- calculated via a user-provided callback based on the current value.
+// -- If the calculated value is the same as (*referentially equal to*)
+// -- the previous value, the original object is returned.
+// --
+// -- Usage: `update<T: ArrayOrObject>(obj: T, key: Key,
+// -- fnUpdate: (prevValue: any) => any): T`
+// --
+// -- ```js
+// -- obj = { a: 1, b: 2, c: 3 }
+// -- obj2 = update(obj, 'b', (val) => val + 1)
+// -- // { a: 1, b: 3, c: 3 }
+// -- obj2 === obj
+// -- // false
+// --
+// -- // The same object is returned if there are no changes:
+// -- update(obj, 'b', (val) => val) === obj
+// -- // true
+// -- ```
+export function update<T: ArrayOrObject>(
+  obj: T,
+  key: Key,
+  fnUpdate: (prevValue: any) => any
+): T {
+  const prevVal = obj == null ? undefined : (obj: Object)[key];
+  const nextVal = fnUpdate(prevVal);
+  return set(obj, key, nextVal);
+}
+
 // -- #### updateIn()
 // -- Returns a new object with a modified **nested** attribute,
 // -- calculated via a user-provided callback based on the current value.
-// -- If the calculated value is the same (*referentially equal to*)
+// -- If the calculated value is the same as (*referentially equal to*)
 // -- the previous value, the original object is returned.
 // --
 // -- Usage: `updateIn<T: ArrayOrObject>(obj: T, path: Array<Key>,
