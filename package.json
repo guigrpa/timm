@@ -28,6 +28,7 @@
     "immutable": "3.8.1",
     "lodash": "4.16.4",
     "nyc": "8.3.1",
+    "oao": "^0.10.4",
     "seamless-immutable": "6.1.0",
     "uglifyjs": "2.4.10",
     "xxl": "1.2.0"
