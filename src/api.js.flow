@@ -14,6 +14,7 @@ declare export var replaceAt: typeof(timm.replaceAt);
 declare export var getIn: typeof(timm.getIn);
 declare export var set: typeof(timm.set);
 declare export var setIn: typeof(timm.setIn);
+declare export var update: typeof(timm.update);
 declare export var updateIn: typeof(timm.updateIn);
 declare export var merge: typeof(timm.merge);
 declare export var mergeIn: typeof(timm.mergeIn);
