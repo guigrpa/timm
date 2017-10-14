@@ -1,3 +1,5 @@
+## 1.3.1 (2017-10-14)
+
 * Add **update()** to Flow API [#13, @dentrado]
 
 ## 1.3.0 (October 3, 2017)
