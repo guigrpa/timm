@@ -590,6 +590,7 @@ const timm = {
   // eslint-disable-next-line object-shorthand
   set: set,  // so that flow doesn't complain
   setIn,
+  update,
   updateIn,
   merge,
   mergeIn,
