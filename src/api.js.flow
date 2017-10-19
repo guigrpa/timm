@@ -17,6 +17,7 @@ declare export var setIn: typeof(timm.setIn);
 declare export var update: typeof(timm.update);
 declare export var updateIn: typeof(timm.updateIn);
 declare export var merge: typeof(timm.merge);
+declare export var mergeDeep: typeof(timm.mergeDeep);
 declare export var mergeIn: typeof(timm.mergeIn);
 declare export var omit: typeof(timm.omit);
 declare export var addDefaults: typeof(timm.addDefaults);
