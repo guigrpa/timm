@@ -14,8 +14,8 @@ const INVALID_ARGS = 'INVALID_ARGS';
 // ===============================================
 // ### Helpers
 // ===============================================
-type ArrayOrObject = Array<any>|Object;
-type Key = number|string;
+type ArrayOrObject = Array<any> | Object;
+type Key = number | string;
 
 function throwStr(msg: string) {
   throw new Error(msg);
@@ -34,10 +34,19 @@ export function clone<T: ArrayOrObject>(obj: T): T {
   return out;
 }
 
-function doMerge(fAddDefaults: boolean, fDeep: boolean, first: ArrayOrObject, ...rest: any): any {
+function doMerge(
+  fAddDefaults: boolean,
+  fDeep: boolean,
+  first: ArrayOrObject,
+  ...rest: any
+): any {
   let out = first;
-  !(out != null) && throwStr(process.env.NODE_ENV !== 'production' ?
-    'At least one object should be provided to merge()' : INVALID_ARGS);
+  !(out != null) &&
+    throwStr(
+      process.env.NODE_ENV !== 'production'
+        ? 'At least one object should be provided to merge()'
+        : INVALID_ARGS
+    );
   let fChanged = false;
   for (let idx = 0; idx < rest.length; idx++) {
     const obj = rest[idx];
@@ -64,7 +73,7 @@ function doMerge(fAddDefaults: boolean, fDeep: boolean, first: ArrayOrObject, ..
 
 function isObject(o: any): boolean {
   const type = typeof o;
-  return (o != null) && (type === 'object' || type === 'function');
+  return o != null && (type === 'object' || type === 'function');
 }
 
 // _deepFreeze = (obj) ->
@@ -95,7 +104,7 @@ function isObject(o: any): boolean {
 // -- ```
 // `array.concat(val)` also handles the scalar case,
 // but is apparently very slow
-export function addLast<T>(array: Array<T>, val: Array<T>|T): Array<T> {
+export function addLast<T>(array: Array<T>, val: Array<T> | T): Array<T> {
   if (Array.isArray(val)) return array.concat(val);
   return array.concat([val]);
 }
@@ -114,7 +123,7 @@ export function addLast<T>(array: Array<T>, val: Array<T>|T): Array<T> {
 // -- arr3 = addFirst(arr, ['c', 'd'])
 // -- // ['c', 'd', 'a', 'b']
 // -- ```
-export function addFirst<T>(array: Array<T>, val: Array<T>|T): Array<T> {
+export function addFirst<T>(array: Array<T>, val: Array<T> | T): Array<T> {
   if (Array.isArray(val)) return val.concat(array);
   return [val].concat(array);
 }
@@ -178,7 +187,11 @@ export function removeFirst<T>(array: Array<T>): Array<T> {
 // -- insert(arr, 1, ['d', 'e'])
 // -- // ['a', 'd', 'e', 'b', 'c']
 // -- ```
-export function insert<T>(array: Array<T>, idx: number, val: Array<T>|T): Array<T> {
+export function insert<T>(
+  array: Array<T>,
+  idx: number,
+  val: Array<T> | T
+): Array<T> {
   return array
     .slice(0, idx)
     .concat(Array.isArray(val) ? val : [val])
@@ -204,9 +217,7 @@ export function insert<T>(array: Array<T>, idx: number, val: Array<T>|T): Array<
 // -- ```
 export function removeAt<T>(array: Array<T>, idx: number): Array<T> {
   if (idx >= array.length || idx < 0) return array;
-  return array
-    .slice(0, idx)
-    .concat(array.slice(idx + 1));
+  return array.slice(0, idx).concat(array.slice(idx + 1));
 }
 
 // -- #### replaceAt()
@@ -228,7 +239,11 @@ export function removeAt<T>(array: Array<T>, idx: number): Array<T> {
 // -- replaceAt(arr, 1, 'b') === arr
 // -- // true
 // -- ```
-export function replaceAt<T>(array: Array<T>, idx: number, newItem: T): Array<T> {
+export function replaceAt<T>(
+  array: Array<T>,
+  idx: number,
+  newItem: T
+): Array<T> {
   if (array[idx] === newItem) return array;
   const len = array.length;
   const result = Array(len);
@@ -262,12 +277,13 @@ export function replaceAt<T>(array: Array<T>, idx: number, newItem: T): Array<T>
 // -- getIn(obj, ['e', 1])
 // -- // 'b'
 // -- ```
-export function getIn(
-  obj: ?ArrayOrObject,
-  path: Array<Key>
-): any {
-  !(Array.isArray(path)) && throwStr(process.env.NODE_ENV !== 'production' ?
-    'A path array should be provided when calling getIn()' : INVALID_ARGS);
+export function getIn(obj: ?ArrayOrObject, path: Array<Key>): any {
+  !Array.isArray(path) &&
+    throwStr(
+      process.env.NODE_ENV !== 'production'
+        ? 'A path array should be provided when calling getIn()'
+        : INVALID_ARGS
+    );
   if (obj == null) return undefined;
   let ptr: any = obj;
   for (let i = 0; i < path.length; i++) {
@@ -353,7 +369,9 @@ function doSetIn<T: ArrayOrObject>(
   if (idx === path.length - 1) {
     newValue = val;
   } else {
-    const nestedObj = isObject(obj) ? obj[key] : typeof path[idx + 1] === 'number' ? [] : {};
+    const nestedObj = isObject(obj)
+      ? obj[key]
+      : typeof path[idx + 1] === 'number' ? [] : {};
     newValue = doSetIn(nestedObj, path, val, idx + 1);
   }
   return set(obj, key, newValue);
@@ -459,15 +477,17 @@ export function updateIn<T: ArrayOrObject>(
 // -- ```
 export function merge(
   a: Object,
-  b: ?Object, c: ?Object,
-  d: ?Object, e: ?Object,
-  f: ?Object, ...rest: Array<?Object>
+  b: ?Object,
+  c: ?Object,
+  d: ?Object,
+  e: ?Object,
+  f: ?Object,
+  ...rest: Array<?Object>
 ): Object {
-  return rest.length ?
-    doMerge.call(null, false, false, a, b, c, d, e, f, ...rest) :
-    doMerge(false, false, a, b, c, d, e, f);
+  return rest.length
+    ? doMerge.call(null, false, false, a, b, c, d, e, f, ...rest)
+    : doMerge(false, false, a, b, c, d, e, f);
 }
-
 
 // -- #### mergeDeep()
 // -- Returns a new object built as follows: the overlapping keys from the
@@ -501,13 +521,18 @@ export function merge(
 // -- mergeDeep(obj1, { c: { a: 1 } }) === obj1
 // -- // true
 // -- ```
-export function mergeDeep(a: Object,
-                          b: ?Object, c: ?Object,
-                          d: ?Object, e: ?Object,
-                          f: ?Object, ...rest: Array<?Object>): Object {
-  return rest.length ?
-    doMerge.call(null, false, true, a, b, c, d, e, f, ...rest) :
-    doMerge(false, true, a, b, c, d, e, f);
+export function mergeDeep(
+  a: Object,
+  b: ?Object,
+  c: ?Object,
+  d: ?Object,
+  e: ?Object,
+  f: ?Object,
+  ...rest: Array<?Object>
+): Object {
+  return rest.length
+    ? doMerge.call(null, false, true, a, b, c, d, e, f, ...rest)
+    : doMerge(false, true, a, b, c, d, e, f);
 }
 
 // -- #### mergeIn()
@@ -533,10 +558,14 @@ export function mergeDeep(a: Object,
 // -- // true
 // -- ```
 export function mergeIn<T: ArrayOrObject>(
-  a: T, path: Array<Key>,
-  b: ?Object, c: ?Object,
-  d: ?Object, e: ?Object,
-  f: ?Object, ...rest: Array<?Object>
+  a: T,
+  path: Array<Key>,
+  b: ?Object,
+  c: ?Object,
+  d: ?Object,
+  e: ?Object,
+  f: ?Object,
+  ...rest: Array<?Object>
 ): T {
   let prevVal = getIn(a, path);
   if (prevVal == null) prevVal = {};
@@ -565,7 +594,7 @@ export function mergeIn<T: ArrayOrObject>(
 // -- omit(obj, 'z') === obj1
 // -- // true
 // -- ```
-export function omit(obj: Object, attrs: Array<string>|string): Object {
+export function omit(obj: Object, attrs: Array<string> | string): Object {
   const omitList = Array.isArray(attrs) ? attrs : [attrs];
   let fDoSomething = false;
   for (let i = 0; i < omitList.length; i++) {
@@ -609,13 +638,16 @@ export function omit(obj: Object, attrs: Array<string>|string): Object {
 // -- ```
 export function addDefaults(
   a: Object,
-  b: ?Object, c: ?Object,
-  d: ?Object, e: ?Object,
-  f: ?Object, ...rest: Array<?Object>
+  b: ?Object,
+  c: ?Object,
+  d: ?Object,
+  e: ?Object,
+  f: ?Object,
+  ...rest: Array<?Object>
 ): Object {
-  return rest.length ?
-    doMerge.call(null, true, false, a, b, c, d, e, f, ...rest) :
-    doMerge(true, false, a, b, c, d, e, f);
+  return rest.length
+    ? doMerge.call(null, true, false, a, b, c, d, e, f, ...rest)
+    : doMerge(true, false, a, b, c, d, e, f);
 }
 
 // ===============================================
@@ -633,7 +665,7 @@ const timm = {
 
   getIn,
   // eslint-disable-next-line object-shorthand
-  set: set,  // so that flow doesn't complain
+  set: set, // so that flow doesn't complain
   setIn,
   update,
   updateIn,

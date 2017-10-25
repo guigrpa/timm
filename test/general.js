@@ -9,6 +9,6 @@ if (process.env.TEST_MINIFIED_LIB) {
   timm = require('../lib/timm');
 }
 
-test('sanity', (t) => {
+test('sanity', t => {
   t.truthy(timm.set);
 });

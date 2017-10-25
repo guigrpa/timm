@@ -19,6 +19,7 @@ rules:
     - error
     - allowForLoopAfterthoughts: true
   no-continue: off
+  arrow-parens: off
   key-spacing:
     - warn
     -

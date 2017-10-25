@@ -29,6 +29,7 @@
     "lodash": "4.17.4",
     "nyc": "8.3.1",
     "oao": "^0.10.4",
+    "prettier": "^1.7.4",
     "seamless-immutable": "7.1.2",
     "uglifyjs": "2.4.10",
     "xxl": "1.2.0"

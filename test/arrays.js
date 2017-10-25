@@ -10,19 +10,19 @@ if (process.env.TEST_MINIFIED_LIB) {
 }
 
 const ARR0 = ['a', 'b', 'c'];
-const ARR  = ['a', 'b', 'c'];
+const ARR = ['a', 'b', 'c'];
 
 //------------------------------------------------
 // addLast()
 //------------------------------------------------
-test('addLast: single value', (t) => {
+test('addLast: single value', t => {
   const arr2 = timm.addLast(ARR, 'd');
   t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
   t.deepEqual(arr2, ['a', 'b', 'c', 'd']);
 });
 
-test('addLast: multiple values', (t) => {
+test('addLast: multiple values', t => {
   const arr2 = timm.addLast(ARR, ['d', 'e']);
   t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
@@ -32,14 +32,14 @@ test('addLast: multiple values', (t) => {
 //------------------------------------------------
 // addFirst()
 //------------------------------------------------
-test('addFirst: single value', (t) => {
+test('addFirst: single value', t => {
   const arr2 = timm.addFirst(ARR, 'd');
   t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
   t.deepEqual(arr2, ['d', 'a', 'b', 'c']);
 });
 
-test('addFirst: multiple values', (t) => {
+test('addFirst: multiple values', t => {
   const arr2 = timm.addFirst(ARR, ['d', 'e']);
   t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
@@ -49,14 +49,14 @@ test('addFirst: multiple values', (t) => {
 //------------------------------------------------
 // removeLast()
 //------------------------------------------------
-test('removeLast: changing', (t) => {
+test('removeLast: changing', t => {
   const arr2 = timm.removeLast(ARR);
   t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
   t.deepEqual(arr2, ['a', 'b']);
 });
 
-test('removeLast: should return the same array when it hasn\'t changed', (t) => {
+test("removeLast: should return the same array when it hasn't changed", t => {
   const arr = [];
   const arr2 = timm.removeLast(arr);
   t.deepEqual(arr2, arr);
@@ -65,14 +65,14 @@ test('removeLast: should return the same array when it hasn\'t changed', (t) => 
 //------------------------------------------------
 // removeLast()
 //------------------------------------------------
-test('removeFirst: changing', (t) => {
+test('removeFirst: changing', t => {
   const arr2 = timm.removeFirst(ARR);
   t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
   t.deepEqual(arr2, ['b', 'c']);
 });
 
-test('removeFirst: should return the same array when it hasn\'t changed', (t) => {
+test("removeFirst: should return the same array when it hasn't changed", t => {
   const arr = [];
   const arr2 = timm.removeFirst(arr);
   t.deepEqual(arr2, arr);
@@ -81,14 +81,14 @@ test('removeFirst: should return the same array when it hasn\'t changed', (t) =>
 //------------------------------------------------
 // insert()
 //------------------------------------------------
-test('insert: single value', (t) => {
+test('insert: single value', t => {
   const arr2 = timm.insert(ARR, 1, 'e');
   t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
   t.deepEqual(arr2, ['a', 'e', 'b', 'c']);
 });
 
-test('insert: multiple values', (t) => {
+test('insert: multiple values', t => {
   const arr2 = timm.insert(ARR, 1, ['e', 'f']);
   t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
@@ -98,14 +98,14 @@ test('insert: multiple values', (t) => {
 //------------------------------------------------
 // removeAt()
 //------------------------------------------------
-test('removeAt', (t) => {
+test('removeAt', t => {
   const arr2 = timm.removeAt(ARR, 1);
   t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
   t.deepEqual(arr2, ['a', 'c']);
 });
 
-test('removeAt', (t) => {
+test('removeAt', t => {
   const arr2 = timm.removeAt(ARR, 5);
   t.deepEqual(ARR, ARR0);
   t.is(arr2, ARR);
@@ -114,14 +114,14 @@ test('removeAt', (t) => {
 //------------------------------------------------
 // replaceAt()
 //------------------------------------------------
-test('replaceAt: changing', (t) => {
+test('replaceAt: changing', t => {
   const arr2 = timm.replaceAt(ARR, 1, 'd');
   t.deepEqual(ARR, ARR0);
   t.not(arr2, ARR);
   t.deepEqual(arr2, ['a', 'd', 'c']);
 });
 
-test('replaceAt: should return the same object when it hasn\'t changed', (t) => {
+test("replaceAt: should return the same object when it hasn't changed", t => {
   const arr2 = timm.replaceAt(ARR, 1, 'b');
   t.is(arr2, ARR);
 });
