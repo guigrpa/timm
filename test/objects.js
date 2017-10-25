@@ -328,8 +328,11 @@ test("merge: multiple: should return the same object when it hasn't changed", t 
 // mergeDeep()
 //------------------------------------------------
 test('mergeDeep: should merge deeply', t => {
-  const obj2 = timm.mergeDeep({ a: 1, b: { a: 1, b: 2 } }, { b: { b: 3 } });
-  t.deepEqual(obj2, { a: 1, b: { a: 1, b: 3 } });
+  const obj1 = { a: 1, b: { a: 1, b: 2, obj: { foo: 3 } }, c: { c1: 8 } };
+  const obj2 = timm.mergeDeep(obj1, { b: { b: 3 } });
+  t.deepEqual(obj2, { a: 1, b: { a: 1, b: 3, obj: { foo: 3 } }, c: { c1: 8 } });
+  t.is(obj1.b.obj, obj2.b.obj); // unaltered branch
+  t.is(obj1.c, obj2.c); // unaltered branch
 });
 
 test('mergeDeep: multiple: should merge deeply', t => {
