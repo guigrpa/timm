@@ -1,13 +1,9 @@
 language: node_js
 node_js:
-  - "stable"
-install:
-  - npm -g install yarn
-  - yarn
-cache:
-  directories:
-    - ~/.yarn
-    - ~/.nvm
+  - "8"
+  - "6"
 script: npm run travis
 after_success:
   - 'cat ./coverage/lcov.info | ./node_modules/.bin/coveralls'
+cache:
+  yarn: true
