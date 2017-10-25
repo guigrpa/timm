@@ -346,6 +346,39 @@ merge(obj1, { c: 3 }) === obj1
 // true
 ```
 
+#### mergeDeep()
+Returns a new object built as follows: the overlapping keys from the
+second one overwrite the corresponding entries from the first one.
+If both the first and second entries are objects they are merged recursively.
+Similar to `Object.assign()`, but immutable, and deeply merging.
+
+Usage:
+
+* `mergeDeep(obj1: Object, obj2: ?Object): Object`
+* `mergeDeep(obj1: Object, ...objects: Array<?Object>): Object`
+
+The unmodified `obj1` is returned if `obj2` does not *provide something
+new to* `obj1`, i.e. if either of the following
+conditions are true:
+
+* `obj2` is `null` or `undefined`
+* `obj2` is an object, but it is empty
+* All attributes of `obj2` are referentially equal to the
+  corresponding attributes of `obj`
+
+```js
+obj1 = { a: 1, b: 2, c: { a: 1 } }
+obj2 = { b: 3, c: { b: 2 } }
+obj3 = mergeDeep(obj1, obj2)
+// { a: 1, b: 3, c: { a: 1, b: 2 }  }
+obj3 === obj1
+// false
+
+// The same object is returned if there are no changes:
+mergeDeep(obj1, { c: { a: 1 } }) === obj1
+// true
+```
+
 #### mergeIn()
 Similar to `merge()`, but merging the value at a given nested path.
 Note that the returned type is the same as that of the first argument.

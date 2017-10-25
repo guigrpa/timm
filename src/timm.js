@@ -34,7 +34,7 @@ export function clone<T: ArrayOrObject>(obj: T): T {
   return out;
 }
 
-function doMerge(fAddDefaults: boolean, first: ArrayOrObject, ...rest: any): any {
+function doMerge(fAddDefaults: boolean, fDeep: boolean, first: ArrayOrObject, ...rest: any): any {
   let out = first;
   !(out != null) && throwStr(process.env.NODE_ENV !== 'production' ?
     'At least one object should be provided to merge()' : INVALID_ARGS);
@@ -47,7 +47,10 @@ function doMerge(fAddDefaults: boolean, first: ArrayOrObject, ...rest: any): any
     for (let j = 0; j <= keys.length; j++) {
       const key = keys[j];
       if (fAddDefaults && out[key] !== undefined) continue;
-      const nextVal = obj[key];
+      let nextVal = obj[key];
+      if (fDeep && isObject(out[key]) && isObject(nextVal)) {
+        nextVal = doMerge(fAddDefaults, fDeep, out[key], nextVal);
+      }
       if (nextVal === undefined || nextVal === out[key]) continue;
       if (!fChanged) {
         fChanged = true;
@@ -461,8 +464,50 @@ export function merge(
   f: ?Object, ...rest: Array<?Object>
 ): Object {
   return rest.length ?
-    doMerge.call(null, false, a, b, c, d, e, f, ...rest) :
-    doMerge(false, a, b, c, d, e, f);
+    doMerge.call(null, false, false, a, b, c, d, e, f, ...rest) :
+    doMerge(false, false, a, b, c, d, e, f);
+}
+
+
+// -- #### mergeDeep()
+// -- Returns a new object built as follows: the overlapping keys from the
+// -- second one overwrite the corresponding entries from the first one.
+// -- If both the first and second entries are objects they are merged recursively.
+// -- Similar to `Object.assign()`, but immutable, and deeply merging.
+// --
+// -- Usage:
+// --
+// -- * `mergeDeep(obj1: Object, obj2: ?Object): Object`
+// -- * `mergeDeep(obj1: Object, ...objects: Array<?Object>): Object`
+// --
+// -- The unmodified `obj1` is returned if `obj2` does not *provide something
+// -- new to* `obj1`, i.e. if either of the following
+// -- conditions are true:
+// --
+// -- * `obj2` is `null` or `undefined`
+// -- * `obj2` is an object, but it is empty
+// -- * All attributes of `obj2` are referentially equal to the
+// --   corresponding attributes of `obj`
+// --
+// -- ```js
+// -- obj1 = { a: 1, b: 2, c: { a: 1 } }
+// -- obj2 = { b: 3, c: { b: 2 } }
+// -- obj3 = mergeDeep(obj1, obj2)
+// -- // { a: 1, b: 3, c: { a: 1, b: 2 }  }
+// -- obj3 === obj1
+// -- // false
+// --
+// -- // The same object is returned if there are no changes:
+// -- mergeDeep(obj1, { c: { a: 1 } }) === obj1
+// -- // true
+// -- ```
+export function mergeDeep(a: Object,
+                          b: ?Object, c: ?Object,
+                          d: ?Object, e: ?Object,
+                          f: ?Object, ...rest: Array<?Object>): Object {
+  return rest.length ?
+    doMerge.call(null, false, true, a, b, c, d, e, f, ...rest) :
+    doMerge(false, true, a, b, c, d, e, f);
 }
 
 // -- #### mergeIn()
@@ -497,9 +542,9 @@ export function mergeIn<T: ArrayOrObject>(
   if (prevVal == null) prevVal = {};
   let nextVal;
   if (rest.length) {
-    nextVal = doMerge.call(null, false, prevVal, b, c, d, e, f, ...rest);
+    nextVal = doMerge.call(null, false, false, prevVal, b, c, d, e, f, ...rest);
   } else {
-    nextVal = doMerge(false, prevVal, b, c, d, e, f);
+    nextVal = doMerge(false, false, prevVal, b, c, d, e, f);
   }
   return setIn(a, path, nextVal);
 }
@@ -569,8 +614,8 @@ export function addDefaults(
   f: ?Object, ...rest: Array<?Object>
 ): Object {
   return rest.length ?
-    doMerge.call(null, true, a, b, c, d, e, f, ...rest) :
-    doMerge(true, a, b, c, d, e, f);
+    doMerge.call(null, true, false, a, b, c, d, e, f, ...rest) :
+    doMerge(true, false, a, b, c, d, e, f);
 }
 
 // ===============================================
@@ -593,6 +638,7 @@ const timm = {
   update,
   updateIn,
   merge,
+  mergeDeep,
   mergeIn,
   omit,
   addDefaults,
