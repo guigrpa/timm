@@ -1,3 +1,6 @@
+* Add **mergeDeep()** [#14, @dentrado]
+* Update benchmarks to reflect current versions of *ImmutableJS* and *seamless-immutable*
+
 ## 1.3.1 (2017-10-14)
 
 * Add **update()** to Flow API [#13, @dentrado]
