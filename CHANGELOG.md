@@ -1,3 +1,5 @@
+## 1.4.0 (2017-10-25)
+
 * Add **mergeDeep()** [#14, @dentrado]
 * Update benchmarks to reflect current versions of *ImmutableJS* and *seamless-immutable*
 
