@@ -46,6 +46,7 @@ _solMutable =
   merge: (obj1, obj2) -> 
     for key in Object.keys obj2
       obj1[key] = obj2[key]
+  mergeDeep: (obj1, obj2) -> _.merge(obj1, obj2)
   initArr: -> _.cloneDeep INITIAL_ARRAY
   getAt: (arr, idx) -> arr[idx]
   setAt: (arr, idx, val) -> arr[idx] = val; arr
@@ -61,6 +62,7 @@ _solImmutableTimm =
   getIn: _getIn
   setIn: (obj, path, val) -> timm.setIn obj, path, val
   merge: (obj1, obj2) -> timm.merge obj1, obj2
+  mergeDeep: (obj1, obj2) -> timm.mergeDeep obj1, obj2
   initArr: -> _.cloneDeep INITIAL_ARRAY
   getAt: (arr, idx) -> arr[idx]
   setAt: (arr, idx, val) -> timm.replaceAt arr, idx, val
@@ -74,6 +76,7 @@ _solImmutableJs =
   getIn: (obj, path) -> obj.getIn path
   setIn: (obj, path, val) -> obj.setIn path, val
   merge: (obj1, obj2) -> obj1.merge obj2
+  mergeDeep: (obj1, obj2) -> obj1.mergeDeep obj2
   initArr: -> Immutable.List INITIAL_ARRAY   # shallow
   getAt: (arr, idx) -> arr.get idx
   setAt: (arr, idx, val) -> arr.set idx, val
@@ -87,6 +90,7 @@ _solImmutableSeamless =
   getIn: _getIn
   setIn: (obj, path, val) -> obj.setIn path, val
   merge: (obj1, obj2) -> obj1.merge obj2
+  mergeDeep: (obj1, obj2) -> obj1.merge obj2, {deep: true}
   initArr: -> Seamless INITIAL_ARRAY
   getAt: (arr, idx) -> arr[idx]
   setAt: (arr, idx, val) -> arr.set idx, val
@@ -95,10 +99,10 @@ _toggle = (solution, obj) ->
   return solution.set obj, 'toggle', not(solution.get obj, 'toggle')
 
 _addResult = (results, condition) ->
-  results.push if condition then chalk.green.bold('P') else chalk.green.red('F')
+  results.push if condition then chalk.green.bold('P') else chalk.red('F')
 _verify = (solution) ->
   results = []
-  {init, get, set, setDeep, getIn, setIn, merge, initArr, getAt, setAt} = solution
+  {init, get, set, setDeep, getIn, setIn, merge, mergeDeep, initArr, getAt, setAt} = solution
 
   # Initial conditions
   obj = init()
@@ -163,6 +167,17 @@ _verify = (solution) ->
   _addResult results, (get(obj2, 'f') is null)
   results.push '-'
 
+  # Deep merge
+  obj2 = mergeDeep obj, {c: 5, f: null, d: {d9: {b: {a: 1}}}}
+  changedPath = ['d', 'd9', 'b', 'a']
+  unchangedPath = ['d', 'd9', 'b', 'b']
+  _addResult results, (obj2 isnt obj)
+  _addResult results, (getIn(obj2, changedPath) is 1)
+  _addResult results, (getIn(obj2, unchangedPath) is getIn(obj, unchangedPath))
+  _addResult results, (get(obj2, 'c') is 5)
+  _addResult results, (get(obj2, 'f') is null)
+  results.push '-'
+
   # Array writes
   arr = initArr()
   arr2 = setAt(arr, 1, {b: 3})
@@ -218,6 +233,12 @@ _allTests = (desc, solution) ->
   _test "Object: merge (x#{N})", -> 
     for n in [0...N]
       obj2 = solution.merge(obj, MERGE_OBJ)
+    return
+  obj = solution.init()
+  MERGE_DEEP_OBJ = {c: 5, f: null, d: {d9: {b: {a: 1}}}}
+  _test "Object: mergeDeep (x#{N})", ->
+    for n in [0...N]
+      obj2 = solution.mergeDeep(obj, MERGE_DEEP_OBJ)
     return
   arr = solution.initArr()
   _test "Array: read (x#{N})", -> 
