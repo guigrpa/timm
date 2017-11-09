@@ -37,7 +37,7 @@ All four solutions are first verified for consistency (the mutable solution obvi
 
 Feel free to run them yourself (download the repo and then `npm install && npm run benchmarks`). These are my results on OS X for 200k iterations (Node v8.6.0):
 
-![Benchmarks](https://github.com/guigrpa/timm/blob/master/docs/benchmarks-osx-20171025-node8.6.png?raw=true)
+![Benchmarks](https://github.com/guigrpa/timm/blob/master/docs/benchmarks-osx-20171109-node8.6.png?raw=true)
 
 Some conclusions from these benchmarks:
 

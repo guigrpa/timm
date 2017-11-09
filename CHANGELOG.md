@@ -1,3 +1,5 @@
+* Add `mergeDeep()` benchmarks [#16, @dentrado]
+
 ## 1.4.0 (2017-10-25)
 
 * Add **mergeDeep()** [#14, @dentrado]

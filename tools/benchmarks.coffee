@@ -6,7 +6,7 @@ Seamless            = require 'seamless-immutable/seamless-immutable.production.
 Immutable           = require 'immutable'
 timm                = require '../lib/timm.min'
 
-INITIAL_OBJECT = 
+INITIAL_OBJECT =
   toggle: false
   b: 3
   str: 'foo'
@@ -30,23 +30,36 @@ _getIn = (obj, path) ->
   out = out[key] for key in path
   out
 
-_solMutable = 
+_mergeDeepInPlace = (obj1, obj2) ->
+  for key in Object.keys obj2
+    val = obj2[key]
+    if (not val?)
+      obj1[key] = val
+    else if (typeof val is 'object') and (val.length?)
+      obj1[key] = _mergeDeepInPlace [], val
+    else if (typeof val is 'object')
+      obj1[key] = _mergeDeepInPlace {}, val
+    else
+      obj1[key] = val
+  obj1
+
+_solMutable =
   init: -> _.cloneDeep INITIAL_OBJECT
   get: (obj, key) -> obj[key]
   set: (obj, key, val) -> obj[key] = val; obj
   getDeep: (obj, key1, key2) -> obj[key1][key2]
   setDeep: (obj, key1, key2, val) -> obj[key1][key2] = val; obj
   getIn: _getIn
-  setIn: (obj, path, val) -> 
+  setIn: (obj, path, val) ->
     ptr = obj
     for idx in [0...(path.length - 1)]
       ptr = ptr[path[idx]]
     ptr[path[path.length - 1]] = val
     obj
-  merge: (obj1, obj2) -> 
+  merge: (obj1, obj2) ->
     for key in Object.keys obj2
       obj1[key] = obj2[key]
-  mergeDeep: (obj1, obj2) -> _.merge(obj1, obj2)
+  mergeDeep: (obj1, obj2) -> _mergeDeepInPlace(obj1, obj2)
   initArr: -> _.cloneDeep INITIAL_ARRAY
   getAt: (arr, idx) -> arr[idx]
   setAt: (arr, idx, val) -> arr[idx] = val; arr
@@ -172,6 +185,7 @@ _verify = (solution) ->
   changedPath = ['d', 'd9', 'b', 'a']
   unchangedPath = ['d', 'd9', 'b', 'b']
   _addResult results, (obj2 isnt obj)
+  _addResult results, (get(obj2, 'd') isnt get(obj, 'd'))
   _addResult results, (getIn(obj2, changedPath) is 1)
   _addResult results, (getIn(obj2, unchangedPath) is getIn(obj, unchangedPath))
   _addResult results, (get(obj2, 'c') is 5)
@@ -199,38 +213,38 @@ _allTests = (desc, solution) ->
   console.log chalk.bold desc
   _verify solution
   obj = solution.init()
-  _test "Object: read (x#{N})", -> 
+  _test "Object: read (x#{N})", ->
     for n in [0...N]
       val = solution.get(obj, 'toggle')
     return
   obj = solution.init()
-  _test "Object: write (x#{N})", -> 
+  _test "Object: write (x#{N})", ->
     for n in [0...N]
       obj2 = solution.set(obj, 'b', n)
     return
   obj = solution.init()
-  _test "Object: deep read (x#{N})", -> 
+  _test "Object: deep read (x#{N})", ->
     for n in [0...N]
       val = solution.getDeep(obj, 'd', 'd1')
     return
   obj = solution.init()
-  _test "Object: deep write (x#{N})", -> 
+  _test "Object: deep write (x#{N})", ->
     for n in [0...N]
       obj2 = solution.setDeep(obj, 'd', 'd1', n)
     return
   obj = solution.init()
-  _test "Object: very deep read (x#{N})", -> 
+  _test "Object: very deep read (x#{N})", ->
     for n in [0...N]
       val = solution.getIn(obj, DEEP_PATH)
     return
   obj = solution.init()
-  _test "Object: very deep write (x#{N})", -> 
+  _test "Object: very deep write (x#{N})", ->
     for n in [0...N]
       obj2 = solution.setIn(obj, DEEP_PATH, n)
     return
   obj = solution.init()
   MERGE_OBJ = {c: 5, f: null}
-  _test "Object: merge (x#{N})", -> 
+  _test "Object: merge (x#{N})", ->
     for n in [0...N]
       obj2 = solution.merge(obj, MERGE_OBJ)
     return
@@ -241,12 +255,12 @@ _allTests = (desc, solution) ->
       obj2 = solution.mergeDeep(obj, MERGE_DEEP_OBJ)
     return
   arr = solution.initArr()
-  _test "Array: read (x#{N})", -> 
+  _test "Array: read (x#{N})", ->
     for n in [0...N]
       val = solution.getAt(arr, 1)
     return
   arr = solution.initArr()
-  _test "Array: write (x#{N})", -> 
+  _test "Array: write (x#{N})", ->
     for n in [0...N]
       arr2 = solution.setAt(arr, 1, n)
     return
