@@ -1,3 +1,5 @@
+## 1.4.1 (2018-1-2)
+
 * Add `mergeDeep()` benchmarks [#16, @dentrado]
 * doSetIn: ensure nested value is object [#17, @petermikitsh]
 
