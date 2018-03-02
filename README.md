@@ -328,7 +328,7 @@ The unmodified `obj1` is returned if `obj2` does not *provide something
 new to* `obj1`, i.e. if either of the following
 conditions are true:
 
-* `obj2` is `null` or `undefined`
+* `obj2` is `undefined` (Note: if `obj2` is `null`, `obj1` will be overwritten)
 * `obj2` is an object, but it is empty
 * All attributes of `obj2` are referentially equal to the
   corresponding attributes of `obj`
@@ -361,7 +361,7 @@ The unmodified `obj1` is returned if `obj2` does not *provide something
 new to* `obj1`, i.e. if either of the following
 conditions are true:
 
-* `obj2` is `null` or `undefined`
+* `obj2` is `undefined` (Note: if `obj2` is `null`, `obj1` will be overwritten)
 * `obj2` is an object, but it is empty
 * All attributes of `obj2` are referentially equal to the
   corresponding attributes of `obj`
