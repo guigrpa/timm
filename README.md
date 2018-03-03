@@ -324,8 +324,12 @@ conditions are true:
 
 * `obj2` is `null` or `undefined`
 * `obj2` is an object, but it is empty
+* All attributes of `obj2` are `undefined`
 * All attributes of `obj2` are referentially equal to the
-  corresponding attributes of `obj`
+  corresponding attributes of `obj1`
+
+Note that `undefined` attributes in `obj2` do not modify the
+corresponding attributes in `obj1`.
 
 ```js
 obj1 = { a: 1, b: 2, c: 3 }
@@ -357,8 +361,12 @@ conditions are true:
 
 * `obj2` is `null` or `undefined`
 * `obj2` is an object, but it is empty
+* All attributes of `obj2` are `undefined`
 * All attributes of `obj2` are referentially equal to the
-  corresponding attributes of `obj`
+  corresponding attributes of `obj1`
+
+Note that `undefined` attributes in `obj2` do not modify the
+corresponding attributes in `obj1`.
 
 ```js
 obj1 = { a: 1, b: 2, c: { a: 1 } }

@@ -369,9 +369,10 @@ function doSetIn<T: ArrayOrObject>(
   if (idx === path.length - 1) {
     newValue = val;
   } else {
-    const nestedObj = isObject(obj) && isObject(obj[key])
-      ? obj[key]
-      : typeof path[idx + 1] === 'number' ? [] : {};
+    const nestedObj =
+      isObject(obj) && isObject(obj[key])
+        ? obj[key]
+        : typeof path[idx + 1] === 'number' ? [] : {};
     newValue = doSetIn(nestedObj, path, val, idx + 1);
   }
   return set(obj, key, newValue);
@@ -460,8 +461,12 @@ export function updateIn<T: ArrayOrObject>(
 // --
 // -- * `obj2` is `null` or `undefined`
 // -- * `obj2` is an object, but it is empty
+// -- * All attributes of `obj2` are `undefined`
 // -- * All attributes of `obj2` are referentially equal to the
-// --   corresponding attributes of `obj`
+// --   corresponding attributes of `obj1`
+// --
+// -- Note that `undefined` attributes in `obj2` do not modify the
+// -- corresponding attributes in `obj1`.
 // --
 // -- ```js
 // -- obj1 = { a: 1, b: 2, c: 3 }
@@ -506,8 +511,12 @@ export function merge(
 // --
 // -- * `obj2` is `null` or `undefined`
 // -- * `obj2` is an object, but it is empty
+// -- * All attributes of `obj2` are `undefined`
 // -- * All attributes of `obj2` are referentially equal to the
-// --   corresponding attributes of `obj`
+// --   corresponding attributes of `obj1`
+// --
+// -- Note that `undefined` attributes in `obj2` do not modify the
+// -- corresponding attributes in `obj1`.
 // --
 // -- ```js
 // -- obj1 = { a: 1, b: 2, c: { a: 1 } }
