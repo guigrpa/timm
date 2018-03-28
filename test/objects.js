@@ -9,6 +9,8 @@ if (process.env.TEST_MINIFIED_LIB) {
   timm = require('../lib/timm');
 }
 
+const SYMBOL = Symbol('some symbol');
+
 const ARR = [{ a: 1 }, { a: 2 }, { a: 3, d: { d1: 4, d2: 5, d3: null } }];
 const OBJ = {
   a: 1,
@@ -16,6 +18,7 @@ const OBJ = {
   d: { d1: 3, d2: 4, b: { b: { b: 4 } } },
   e: { e1: 'foo', e2: 'bar' },
   arr: ['c', 'd'],
+  [SYMBOL]: 'hello world',
 };
 
 //------------------------------------------------
@@ -27,6 +30,10 @@ test('getIn: object root: shallow', t => {
 
 test('getIn: object root: deep', t => {
   t.is(timm.getIn(OBJ, ['d', 'b', 'b', 'b']), 4);
+});
+
+test('getIn: object root: with Symbols', t => {
+  t.is(timm.getIn(OBJ, [SYMBOL]), 'hello world');
 });
 
 test('getIn: array root: shallow', t => {
@@ -68,6 +75,11 @@ test('set: changing', t => {
   t.is(OBJ.b, 2);
   t.not(obj2, OBJ);
   t.is(obj2.b, 5);
+});
+
+test('set: should support modifing Symbols', t => {
+  const obj2 = timm.set(OBJ, SYMBOL, 'new value');
+  t.is(obj2[SYMBOL], 'new value');
 });
 
 test("set: should return the same object when it hasn't changed", t => {
@@ -373,6 +385,16 @@ test('mergeDeep: with more than 6 args', t => {
   t.deepEqual(obj2, { a: 1, b: { a: 1, b: 2 }, c: 3, d: 4, e: 5, f: 6 });
 });
 
+test('merge: should preserve unmodified Symbols', t => {
+  const obj2 = timm.merge(OBJ, { foo: 'bar' });
+  t.is(obj2[SYMBOL], OBJ[SYMBOL]);
+});
+
+test('merge: should allow updating Symbol properties', t => {
+  const obj2 = timm.merge(OBJ, { [SYMBOL]: 'bar' });
+  t.is(obj2[SYMBOL], 'bar');
+});
+
 //------------------------------------------------
 // mergeIn()
 //------------------------------------------------
@@ -410,6 +432,7 @@ test('omit: with changes (single attribute)', t => {
   const obj2 = timm.omit(OBJ, 'a');
   t.is(obj2.a, undefined);
   t.is(obj2.b, 2);
+  t.is(obj2[SYMBOL], 'hello world'),
   t.not(obj2, OBJ);
   t.deepEqual(obj2.d, OBJ.d);
 });
@@ -425,6 +448,11 @@ test('omit: with changes (multiple attributes)', t => {
 test("omit: should return the same object when it hasn't changed", t => {
   const obj2 = timm.omit(OBJ, 'z');
   t.deepEqual(obj2, OBJ);
+});
+
+test('omit: should support omitting Symbols', t => {
+  const obj2 = timm.omit(OBJ, SYMBOL);
+  t.is(obj2[SYMBOL], undefined);
 });
 
 //------------------------------------------------
