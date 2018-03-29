@@ -21,11 +21,20 @@ function throwStr(msg: string) {
   throw new Error(msg);
 }
 
+function getKeysAndSymbols(obj: Object): Array {
+  const keys = Object.keys(obj);
+  if (Object.getOwnPropertySymbols) {
+    return keys.concat(Object.getOwnPropertySymbols(obj));
+  }
+
+  return keys;
+}
+
 const hasOwnProperty = {}.hasOwnProperty;
 
 export function clone<T: ArrayOrObject>(obj: T): T {
   if (Array.isArray(obj)) return obj.slice();
-  const keys = Object.keys(obj);
+  const keys = getKeysAndSymbols(obj);
   const out: any = {};
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
@@ -51,7 +60,7 @@ function doMerge(
   for (let idx = 0; idx < rest.length; idx++) {
     const obj = rest[idx];
     if (obj == null) continue;
-    const keys = Object.keys(obj);
+    const keys = getKeysAndSymbols(obj);
     if (!keys.length) continue;
     for (let j = 0; j <= keys.length; j++) {
       const key = keys[j];
@@ -614,7 +623,7 @@ export function omit(obj: Object, attrs: Array<string> | string): Object {
   }
   if (!fDoSomething) return obj;
   const out = {};
-  const keys = Object.keys(obj);
+  const keys = getKeysAndSymbols(obj);
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
     if (omitList.indexOf(key) >= 0) continue;
