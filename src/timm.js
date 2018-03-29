@@ -21,12 +21,11 @@ function throwStr(msg: string) {
   throw new Error(msg);
 }
 
-function getKeysAndSymbols(obj: Object): Array {
+function getKeysAndSymbols(obj: Object): Array<any> {
   const keys = Object.keys(obj);
   if (Object.getOwnPropertySymbols) {
     return keys.concat(Object.getOwnPropertySymbols(obj));
   }
-
   return keys;
 }
 
