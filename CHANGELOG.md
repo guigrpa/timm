@@ -1,3 +1,5 @@
+## 1.4.2 (2018-3-29)
+
 * Support Symbol properties in objects.
 
 ## 1.4.1 (2018-1-2)
