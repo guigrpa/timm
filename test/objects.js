@@ -87,6 +87,11 @@ test("set: should return the same object when it hasn't changed", t => {
   t.is(obj2, OBJ);
 });
 
+test("set: should return the same object when it hasn't changed (symbol)", t => {
+  const obj2 = timm.set(OBJ, SYMBOL, 'hello world');
+  t.is(obj2, OBJ);
+});
+
 test('set: should return a new object when the first parameter is null or undefined and the key is a string', t => {
   t.deepEqual(timm.set(null, 'b', 2), { b: 2 });
   t.deepEqual(timm.set(undefined, 'b', 2), { b: 2 });
@@ -432,8 +437,7 @@ test('omit: with changes (single attribute)', t => {
   const obj2 = timm.omit(OBJ, 'a');
   t.is(obj2.a, undefined);
   t.is(obj2.b, 2);
-  t.is(obj2[SYMBOL], 'hello world'),
-  t.not(obj2, OBJ);
+  t.is(obj2[SYMBOL], 'hello world'), t.not(obj2, OBJ);
   t.deepEqual(obj2.d, OBJ.d);
 });
 
