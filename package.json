@@ -3,6 +3,7 @@
   "version": "1.4.2",
   "description": "Immutability helpers with fast reads and acceptable writes",
   "main": "lib/timm.js",
+  "types": "lib/timm.d.ts",
   "dependencies": {},
   "devDependencies": {
     "ava": "0.16.0",
@@ -48,7 +49,7 @@
     "testCovProd": "cross-env NODE_ENV=production nyc ava && mv .nyc_output/* .nyc_tmp/",
     "testCovMin": "cross-env TEST_MINIFIED_LIB=1 nyc ava && mv .nyc_output/* .nyc_tmp/",
     "testCovReport": "cp .nyc_tmp/* .nyc_output/ && nyc report --reporter=html --reporter=lcov",
-    "compile": "rm -rf ./lib && mkdir lib && babel -o lib/timm.js src/timm.js && cp src/api.js.flow lib/timm.js.flow",
+    "compile": "rm -rf ./lib && mkdir lib && babel -o lib/timm.js src/timm.js && cp src/api.js.flow lib/timm.js.flow && cp src/timm.d.ts lib/timm.d.ts",
     "docs": "extract-docs --template docs/README_TEMPLATE.md --output README.md",
     "uglify": "cross-env NODE_ENV=production envify lib/timm.js | uglifyjs - -o lib/timm.min.js --mangle --compress --comments \"/^!/\"",
     "build": "yarn lint && yarn flow && yarn compile && yarn uglify && yarn testCovFull && yarn docs && yarn xxl",

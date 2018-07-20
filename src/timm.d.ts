@@ -18,8 +18,8 @@ declare module 'timm' {
     idx: number,
     newItem: T
   ): Array<T>
-  export function getIn(obj: ?ArrayOrObject, path: Array<Key>): any
-  export function set<T> (obj: ?T, key: Key, val: any): T
+  export function getIn(obj: ArrayOrObject | undefined, path: Array<Key>): any
+  export function set<T> (obj: T | undefined, key: Key, val: any): T
   export function setIn<T = ArrayOrObject> (obj: T, path: Array<Key>, val: any): T
   export function update<T = ArrayOrObject> (
     obj: T,
@@ -49,7 +49,7 @@ declare module 'timm' {
     f?: Object,
     ...rest: Array<Object>
   ): Object
-  export function mergeIn<T: ArrayOrObject> (
+  export function mergeIn<T = ArrayOrObject> (
     a: T,
     path: Array<Key>,
     b?: Object,
