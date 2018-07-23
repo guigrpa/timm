@@ -1,3 +1,5 @@
+## 1.5.0 (2018-7-23)
+
 * Add TypeScript definitions [#23, @grrowl]
 
 ## 1.4.2 (2018-3-29)
