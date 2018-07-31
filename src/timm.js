@@ -81,7 +81,7 @@ function doMerge(
 
 function isObject(o: any): boolean {
   const type = typeof o;
-  return o != null && (type === 'object' || type === 'function');
+  return o != null && type === 'object';
 }
 
 // _deepFreeze = (obj) ->
