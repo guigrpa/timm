@@ -390,6 +390,14 @@ test('mergeDeep: with more than 6 args', t => {
   t.deepEqual(obj2, { a: 1, b: { a: 1, b: 2 }, c: 3, d: 4, e: 5, f: 6 });
 });
 
+test('mergeDeep: should overwrite functions', t => {
+  const obj = timm.mergeDeep(
+    { fn: () => 'first' },
+    { fn: () => 'second' }
+  );
+  t.is(obj.fn(), 'second');
+});
+
 test('merge: should preserve unmodified Symbols', t => {
   const obj2 = timm.merge(OBJ, { foo: 'bar' });
   t.is(obj2[SYMBOL], OBJ[SYMBOL]);
