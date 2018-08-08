@@ -1,3 +1,5 @@
+## 1.6.1 (2018-8-8)
+
 * Update deps to fix security audit.
 
 ## 1.6.0 (2018-8-8)
