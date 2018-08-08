@@ -391,10 +391,12 @@ test('mergeDeep: with more than 6 args', t => {
 });
 
 test('mergeDeep: should overwrite functions', t => {
-  const obj = timm.mergeDeep(
-    { fn: () => 'first' },
-    { fn: () => 'second' }
-  );
+  const obj = timm.mergeDeep({ fn: () => 'first' }, { fn: () => 'second' });
+  t.is(obj.fn(), 'second');
+});
+
+test('merge: should overwrite functions', t => {
+  const obj = timm.merge({ fn: () => 'first' }, { fn: () => 'second' });
   t.is(obj.fn(), 'second');
 });
 
