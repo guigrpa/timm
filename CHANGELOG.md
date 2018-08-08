@@ -1,3 +1,5 @@
+## 1.6.0 (2018-8-8)
+
 * Replace functions when merging (`merge()` and `mergeDeep()`) [#25, @hipstersmoothie]
 
 ## 1.5.0 (2018-7-23)
