@@ -49,12 +49,13 @@ function doMerge(
   ...rest: any
 ): any {
   let out = first;
-  !(out != null) &&
+  if (!(out != null)) {
     throwStr(
       process.env.NODE_ENV !== 'production'
         ? 'At least one object should be provided to merge()'
         : INVALID_ARGS
     );
+  }
   let fChanged = false;
   for (let idx = 0; idx < rest.length; idx++) {
     const obj = rest[idx];
@@ -286,12 +287,13 @@ export function replaceAt<T>(
 // -- // 'b'
 // -- ```
 export function getIn(obj: ?ArrayOrObject, path: Array<Key>): any {
-  !Array.isArray(path) &&
+  if (!Array.isArray(path)) {
     throwStr(
       process.env.NODE_ENV !== 'production'
         ? 'A path array should be provided when calling getIn()'
         : INVALID_ARGS
     );
+  }
   if (obj == null) return undefined;
   let ptr: any = obj;
   for (let i = 0; i < path.length; i++) {

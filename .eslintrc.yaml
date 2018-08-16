@@ -6,6 +6,9 @@ rules:
   eqeqeq:
     - error
     - allow-null
+  comma-dangle: off
+  prefer-destructuring: off
+  operator-linebreak: off
   no-unused-expressions:
     - error
     - allowShortCircuit: true
