@@ -30,7 +30,7 @@
     "lodash": "^4.17.10",
     "nyc": "8.3.1",
     "oao": "^1.5.1",
-    "prettier": "^1.14.0",
+    "prettier": "^1.14.2",
     "seamless-immutable": "7.1.2",
     "uglifyjs": "^2.4.11",
     "xxl": "1.2.0"
