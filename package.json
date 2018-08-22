@@ -46,6 +46,7 @@
     "eslint-plugin-react": "^7.11.1",
     "extract-docs": "^1.6.1",
     "flow-bin": "^0.78.0",
+    "immutability-helper": "^2.7.1",
     "immutable": "3.8.2",
     "lodash": "^4.17.10",
     "nyc": "^12.0.2",
