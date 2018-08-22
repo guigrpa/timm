@@ -137,14 +137,14 @@ _solImmutableUpdate = {
   get: (obj, key) => obj[key],
   set: (obj, key, val) => {
     const config = {};
-    config[key] = {$set: val};
+    config[key] = { $set: val };
     return update(obj, config);
   },
   getDeep: (obj, key1, key2) => obj[key1][key2],
   setDeep: (obj, key1, key2, val) => {
     const config = {};
     config[key1] = {};
-    config[key1][key2] = {$set: val};
+    config[key1][key2] = { $set: val };
     return update(obj, config);
   },
   getIn: _getIn,
@@ -153,17 +153,17 @@ _solImmutableUpdate = {
     const len = path.length;
     let child = config;
     for (let n = 0; n < len; n++) {
-      child = child[path[n]] = n === len - 1 ? {$set: val} : {};
-    };
+      child = child[path[n]] = n === len - 1 ? { $set: val } : {};
+    }
     return update(obj, config);
   },
-  merge: (obj1, obj2) => update(obj1, {$merge: obj2}),
+  merge: (obj1, obj2) => update(obj1, { $merge: obj2 }),
   mergeDeep: (obj1, obj2) => update(obj1, _nestedConfig(obj2)),
   initArr: () => _.cloneDeep(INITIAL_ARRAY),
   getAt: (arr, idx) => arr[idx],
   setAt: (arr, idx, val) => {
     const config = {};
-    config[idx] = {$set: val};
+    config[idx] = { $set: val };
     return update(arr, config);
   },
 };
@@ -174,7 +174,7 @@ const _nestedConfig = _.memoize(obj => {
     if (typeof val === 'object' && val != null) {
       result[key] = _nestedConfig(val);
     } else {
-      result[key] = {$set: val};
+      result[key] = { $set: val };
     }
     return result;
   }, {});
@@ -349,7 +349,7 @@ const _allTests = (desc, solution) => {
   });
   obj = solution.init();
   MERGE_DEEP_OBJ = { c: 5, f: null, d: { d9: { b: { a: 1 } } } };
-  _test(`Object: mergeDeep (x${N})`, () => {
+  _test(`Object: deep merge (x${N})`, () => {
     for (let n = 0; n < N; n++) {
       const obj2 = solution.mergeDeep(obj, MERGE_DEEP_OBJ);
     }

@@ -32,18 +32,19 @@ I prepared an initial benchmarking tool comparing read/write speeds in four case
 * [ImmutableJS](http://facebook.github.io/immutable-js/)
 * [timm](https://github.com/guigrpa/timm)
 * [seamless-immutable](https://github.com/rtfeldman/seamless-immutable)
+* [immutability-helper](https://github.com/kolodny/immutability-helper)
 
-All four solutions are first verified for consistency (the mutable solution obviously does not pass all tests) and then benchmarked. Benchmarks cover reading and writing object attributes at different nesting levels (root level, 2 levels and 5 levels deep), merging two small objects, and replacing an object in a 1000-long array.
+All five solutions are first verified for consistency (the mutable solution obviously does not pass all tests) and then benchmarked. Benchmarks cover reading and writing object attributes at different nesting levels (root level, 2 levels and 5 levels deep), merging two small objects, and replacing an object in a 1000-long array.
 
 Feel free to run them yourself (download the repo and then `npm install && npm run benchmarks`). These are my results on OS X for 200k iterations (Node v8.6.0):
 
-![Benchmarks](https://github.com/guigrpa/timm/blob/master/docs/benchmarks-osx-20171109-node8.6.png?raw=true)
+![Benchmarks](https://github.com/guigrpa/timm/blob/master/docs/bechmarks-osx-20180822-node9.11.png?raw=true)
 
 Some conclusions from these benchmarks:
 
-* Reads are on par with native objects/arrays and *seamless-immutable*, and faster than *ImmutableJS* (the deeper, the faster, even though *ImmutableJS* has improved read performance substantially in recent versions). In fact, you cannot go faster than native objects for reading!
+* Reads are on par with native objects/arrays, *seamless-immutable* and *immutability-helper*, and faster than *ImmutableJS* (the deeper, the faster, even though *ImmutableJS* has improved read performance substantially in recent versions). In fact, you cannot go faster than native objects for reading!
 
-* Writes are much slower than in-place edits, as expected, but are much faster than *seamless-immutable* (even in production mode), both for objects and arrays. Compared to *ImmutableJS*, object writes and merges are faster (the deeper, the faster), whereas array writes are way slower (not as slow as *seamless-immutable*, though). For *timm* and *seamless-immutable*, write times degrade linearly with array length (and probably object size), but much more slowly for *ImmutableJS* (logarithmically?). This is where *ImmutableJS* really shines.
+* Writes are much slower than in-place edits, as expected, but are much faster than *seamless-immutable* (even in production mode) and *immutability-helper*, both for objects and arrays. Compared to *ImmutableJS*, object writes and merges are faster (the deeper, the faster), whereas array writes are way slower (not as slow as *seamless-immutable* and *immutability-helper*, though). For *timm* and *seamless-immutable*, write times degrade linearly with array length (and probably object size), but much more slowly for *ImmutableJS* (logarithmically?). This is where *ImmutableJS* really shines.
 
 * Hence, what I recommend (from top to bottom):
 
