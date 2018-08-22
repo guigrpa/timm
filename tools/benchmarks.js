@@ -1,9 +1,10 @@
 process.env.NODE_ENV = 'production';
 const _ = require('lodash');
 const chalk = require('chalk');
-// const Seamless            = require('seamless-immutable')
+// const Seamless = require('seamless-immutable')
 const Seamless = require('seamless-immutable/seamless-immutable.production.min');
 const Immutable = require('immutable');
+const update = require('immutability-helper');
 const timm = require('../lib/timm.min');
 
 const INITIAL_OBJECT = {
@@ -130,6 +131,54 @@ _solImmutableSeamless = {
   getAt: (arr, idx) => arr[idx],
   setAt: (arr, idx, val) => arr.set(idx, val),
 };
+
+_solImmutableUpdate = {
+  init: () => _.cloneDeep(INITIAL_OBJECT),
+  get: (obj, key) => obj[key],
+  set: (obj, key, val) => {
+    const config = {};
+    config[key] = {$set: val};
+    return update(obj, config);
+  },
+  getDeep: (obj, key1, key2) => obj[key1][key2],
+  setDeep: (obj, key1, key2, val) => {
+    const config = {};
+    config[key1] = {};
+    config[key1][key2] = {$set: val};
+    return update(obj, config);
+  },
+  getIn: _getIn,
+  setIn: (obj, path, val) => {
+    const config = {};
+    const len = path.length;
+    let child = config;
+    for (let n = 0; n < len; n++) {
+      child = child[path[n]] = n === len - 1 ? {$set: val} : {};
+    };
+    return update(obj, config);
+  },
+  merge: (obj1, obj2) => update(obj1, {$merge: obj2}),
+  mergeDeep: (obj1, obj2) => update(obj1, _nestedConfig(obj2)),
+  initArr: () => _.cloneDeep(INITIAL_ARRAY),
+  getAt: (arr, idx) => arr[idx],
+  setAt: (arr, idx, val) => {
+    const config = {};
+    config[idx] = {$set: val};
+    return update(arr, config);
+  },
+};
+
+const _nestedConfig = _.memoize(obj => {
+  return Object.keys(obj).reduce((result, key) => {
+    const val = obj[key];
+    if (typeof val === 'object' && val != null) {
+      result[key] = _nestedConfig(val);
+    } else {
+      result[key] = {$set: val};
+    }
+    return result;
+  }, {});
+});
 
 const _toggle = (solution, obj) =>
   solution.set(obj, 'toggle', !solution.get(obj, 'toggle'));
@@ -323,3 +372,4 @@ _allTests('Mutable', _solMutable);
 _allTests('Immutable (ImmutableJS)', _solImmutableJs);
 _allTests('Immutable (timm)', _solImmutableTimm);
 _allTests('Immutable (seamless-immutable)', _solImmutableSeamless);
+_allTests('Immutable (immutability-helper)', _solImmutableUpdate);
