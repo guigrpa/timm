@@ -105,7 +105,7 @@ test('removeAt', t => {
   t.deepEqual(arr2, ['a', 'c']);
 });
 
-test('removeAt', t => {
+test('removeAt 2', t => {
   const arr2 = timm.removeAt(ARR, 5);
   t.deepEqual(ARR, ARR0);
   t.is(arr2, ARR);
