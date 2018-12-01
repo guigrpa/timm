@@ -16,8 +16,8 @@
   "scripts": {
     "flow": "flow check || exit 0",
     "lint": "eslint src/timm.js",
-    "jest": "jest --watch --coverage",
-    "test": "jest --coverage",
+    "jest": "yarn test --watch",
+    "test": "jest --coverage src",
     "compile": "rm -rf ./lib && babel src -d lib --copy-files",
     "docs": "extract-docs --template docs/README_TEMPLATE.md --output README.md",
     "build": "yarn lint && yarn flow && yarn compile && yarn test && yarn docs && yarn xxl",
