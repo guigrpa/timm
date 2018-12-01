@@ -13,11 +13,10 @@ node_modules
 
 # Others
 /coverage
-.nyc_output
-.nyc_tmp
 /.extractedApi.md
 *.sublime-project
 *.sublime-workspace
+*.test.js
 
 # NPM extras
 /.babelrc
