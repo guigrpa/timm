@@ -2,24 +2,26 @@
   "name": "timm",
   "version": "1.6.1",
   "description": "Immutability helpers with fast reads and acceptable writes",
+  "author": "Guillermo Grau Panea",
+  "license": "MIT",
+  "keywords": [
+    "immutability"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://guigrpa.github.io/timm/"
+  },
   "main": "lib/timm.js",
   "types": "lib/timm.d.ts",
   "scripts": {
-    "ava": "ava --watch",
     "flow": "flow check || exit 0",
     "lint": "eslint src/timm.js",
-    "test": "yarn testCovFull",
-    "testFast": "ava",
-    "testCovFast": "yarn testCovPrepare && yarn testCovDev && yarn testCovReport",
-    "testCovFull": "yarn testCovPrepare && yarn testCovDev && yarn testCovProd && yarn testCovReport",
-    "testCovPrepare": "rm -rf ./coverage .nyc_output .nyc_tmp && mkdir .nyc_tmp",
-    "testCovDev": "NODE_ENV=development nyc ava && mv .nyc_output/* .nyc_tmp/",
-    "testCovProd": "NODE_ENV=production nyc ava && mv .nyc_output/* .nyc_tmp/",
-    "testCovReport": "cp .nyc_tmp/* .nyc_output/ && nyc report --reporter=html --reporter=lcov",
+    "jest": "jest --watch --coverage",
+    "test": "jest --coverage",
     "compile": "rm -rf ./lib && mkdir lib && babel -o lib/timm.js src/timm.js && cp src/api.js.flow lib/timm.js.flow && cp src/timm.d.ts lib/timm.d.ts",
     "docs": "extract-docs --template docs/README_TEMPLATE.md --output README.md",
-    "build": "yarn lint && yarn flow && yarn compile && yarn testCovFull && yarn docs && yarn xxl",
-    "travis": "yarn compile && yarn testCovFull",
+    "build": "yarn lint && yarn flow && yarn compile && yarn test && yarn docs && yarn xxl",
+    "travis": "yarn compile && yarn test",
     "xxl": "xxl",
     "benchmarks": "node tools/benchmarks"
   },
@@ -29,8 +31,9 @@
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
     "@babel/preset-flow": "^7.0.0",
-    "ava": "^0.25.0",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.6.0",
     "chalk": "1.1.3",
     "coveralls": "^3.0.2",
     "eslint": "^5.9.0",
@@ -43,25 +46,12 @@
     "flow-bin": "^0.87.0",
     "immutability-helper": "^2.8.1",
     "immutable": "3.8.2",
+    "jest": "^23.6.0",
     "lodash": "^4.17.11",
     "nyc": "^13.1.0",
     "oao": "^1.5.1",
     "prettier": "^1.15.3",
     "seamless-immutable": "^7.1.4",
     "xxl": "1.2.0"
-  },
-  "ava": {
-    "files": [
-      "test/*.js"
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "http://guigrpa.github.io/timm/"
-  },
-  "keywords": [
-    "immutability"
-  ],
-  "author": "Guillermo Grau Panea",
-  "license": "MIT"
+  }
 }

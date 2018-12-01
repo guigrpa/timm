@@ -1,5 +1,7 @@
 // @flow
 
+// This file tests that Flow types work correctly
+
 /* eslint-disable */
 
 const timm = require('../../src/timm');
