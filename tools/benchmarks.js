@@ -5,7 +5,7 @@ const chalk = require('chalk');
 const Seamless = require('seamless-immutable/seamless-immutable.production.min');
 const Immutable = require('immutable');
 const update = require('immutability-helper');
-const timm = require('../lib/timm.min');
+const timm = require('../lib/timm');
 
 const INITIAL_OBJECT = {
   toggle: false,
