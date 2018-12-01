@@ -9,7 +9,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://guigrpa.github.io/timm/"
+    "url": "http://github.com/guigrpa/timm"
   },
   "main": "lib/timm.js",
   "types": "lib/timm.d.ts",
