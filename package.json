@@ -7,9 +7,10 @@
   "keywords": [
     "immutability"
   ],
+  "homepage": "http://guigrpa.github.io/timm/",
   "repository": {
     "type": "git",
-    "url": "http://github.com/guigrpa/timm"
+    "url": "https://github.com/guigrpa/timm.git"
   },
   "main": "lib/timm.js",
   "types": "lib/timm.d.ts",
