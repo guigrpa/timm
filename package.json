@@ -24,7 +24,8 @@
     "build": "yarn lint && yarn flow && yarn compile && yarn test && yarn docs && yarn xxl",
     "travis": "yarn test",
     "xxl": "xxl",
-    "benchmarks": "node tools/benchmarks"
+    "benchmarks": "node tools/benchmarks",
+    "prettier": "prettier --single-quote --trailing-comma es5 --write \"src/**/*.js\""
   },
   "dependencies": {},
   "devDependencies": {
@@ -51,8 +52,8 @@
     "jest": "^23.6.0",
     "lodash": "^4.17.11",
     "nyc": "^13.1.0",
-    "oao": "^1.5.1",
-    "prettier": "^1.15.3",
+    "oao": "^1.6.0",
+    "prettier": "^1.18.2",
     "seamless-immutable": "^7.1.4",
     "xxl": "1.2.0"
   }
