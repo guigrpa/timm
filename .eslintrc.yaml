@@ -1,5 +1,7 @@
 parser: babel-eslint
-extends: airbnb
+extends:
+  - airbnb
+  - prettier
 plugins:
   - flowtype
 rules:
@@ -25,8 +27,7 @@ rules:
   arrow-parens: off
   key-spacing:
     - warn
-    -
-      beforeColon: false
+    - beforeColon: false
       afterColon: true
       mode: 'minimum'
   react/sort-comp: off
