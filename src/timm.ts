@@ -9,16 +9,19 @@
 
 const INVALID_ARGS = 'INVALID_ARGS';
 
+type TimmObject = Record<string, unknown>;
+
 // ===============================================
 // ### Helpers
 // ===============================================
-function throwStr(msg) {
+function throwStr(msg: string): never {
   throw new Error(msg);
 }
 
-function getKeysAndSymbols(obj) {
+function getKeysAndSymbols(obj: any): string[] {
   const keys = Object.keys(obj);
   if (Object.getOwnPropertySymbols) {
+    // @ts-ignore
     return keys.concat(Object.getOwnPropertySymbols(obj));
   }
   return keys;
@@ -26,18 +29,25 @@ function getKeysAndSymbols(obj) {
 
 const hasOwnProperty = {}.hasOwnProperty;
 
-export function clone(obj) {
-  if (Array.isArray(obj)) return obj.slice();
+export function clone<T>(obj: T[]): T[];
+export function clone<T extends TimmObject>(obj: T): T;
+export function clone<T>(obj0: T | T[]): T | T[] {
+  // As array
+  if (Array.isArray(obj0)) return obj0.slice();
+
+  // As object
+  const obj = obj0 as TimmObject;
   const keys = getKeysAndSymbols(obj);
-  const out = {};
+  const out = {} as TimmObject;
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
     out[key] = obj[key];
   }
+  // @ts-ignore (see type tests)
   return out;
 }
 
-function doMerge(fAddDefaults, fDeep, first, ...rest) {
+function doMerge(fAddDefaults: boolean, fDeep: boolean, first, ...rest) {
   let out = first;
   if (!(out != null)) {
     throwStr(
@@ -70,9 +80,9 @@ function doMerge(fAddDefaults, fDeep, first, ...rest) {
   return out;
 }
 
-function isObject(o) {
-  const type = typeof o;
-  return o != null && type === 'object';
+// FIXME: check!!
+function isObject(o: any): o is TimmObject {
+  return o != null && typeof o === 'object';
 }
 
 // _deepFreeze = (obj) ->
@@ -90,7 +100,7 @@ function isObject(o) {
 // -- #### addLast()
 // -- Returns a new array with an appended item or items.
 // --
-// -- Usage: `addLast<T>(array: Array<T>, val: Array<T>|T): Array<T>`
+// -- Usage: `addLast<T>(array: T[], val: T[] | T): T[]`
 // --
 // -- ```js
 // -- arr = ['a', 'b']
@@ -103,7 +113,7 @@ function isObject(o) {
 // -- ```
 // `array.concat(val)` also handles the scalar case,
 // but is apparently very slow
-export function addLast(array, val) {
+export function addLast<T>(array: T[], val: T[] | T): T[] {
   if (Array.isArray(val)) return array.concat(val);
   return array.concat([val]);
 }
@@ -111,7 +121,7 @@ export function addLast(array, val) {
 // -- #### addFirst()
 // -- Returns a new array with a prepended item or items.
 // --
-// -- Usage: `addFirst<T>(array: Array<T>, val: Array<T>|T): Array<T>`
+// -- Usage: `addFirst<T>(array: T[], val: T[]|T): T[]`
 // --
 // -- ```js
 // -- arr = ['a', 'b']
@@ -122,7 +132,7 @@ export function addLast(array, val) {
 // -- arr3 = addFirst(arr, ['c', 'd'])
 // -- // ['c', 'd', 'a', 'b']
 // -- ```
-export function addFirst(array, val) {
+export function addFirst<T>(array: T[], val: T[] | T): T[] {
   if (Array.isArray(val)) return val.concat(array);
   return [val].concat(array);
 }
@@ -130,7 +140,7 @@ export function addFirst(array, val) {
 // -- #### removeLast()
 // -- Returns a new array removing the last item.
 // --
-// -- Usage: `removeLast<T>(array: Array<T>): Array<T>`
+// -- Usage: `removeLast<T>(array: T[]): T[]`
 // --
 // -- ```js
 // -- arr = ['a', 'b']
@@ -144,7 +154,7 @@ export function addFirst(array, val) {
 // -- removeLast(arr3) === arr3
 // -- // true
 // -- ```
-export function removeLast(array) {
+export function removeLast<T>(array: T[]): T[] {
   if (!array.length) return array;
   return array.slice(0, array.length - 1);
 }
@@ -152,7 +162,7 @@ export function removeLast(array) {
 // -- #### removeFirst()
 // -- Returns a new array removing the first item.
 // --
-// -- Usage: `removeFirst<T>(array: Array<T>): Array<T>`
+// -- Usage: `removeFirst<T>(array: T[]): T[]`
 // --
 // -- ```js
 // -- arr = ['a', 'b']
@@ -166,7 +176,7 @@ export function removeLast(array) {
 // -- removeFirst(arr3) === arr3
 // -- // true
 // -- ```
-export function removeFirst(array) {
+export function removeFirst<T>(array: T[]): T[] {
   if (!array.length) return array;
   return array.slice(1);
 }
@@ -175,7 +185,7 @@ export function removeFirst(array) {
 // -- Returns a new array obtained by inserting an item or items
 // -- at a specified index.
 // --
-// -- Usage: `insert<T>(array: Array<T>, idx: number, val: Array<T>|T): Array<T>`
+// -- Usage: `insert<T>(array: T[], idx: number, val: T[] | T): T[]`
 // --
 // -- ```js
 // -- arr = ['a', 'b', 'c']
@@ -186,7 +196,7 @@ export function removeFirst(array) {
 // -- insert(arr, 1, ['d', 'e'])
 // -- // ['a', 'd', 'e', 'b', 'c']
 // -- ```
-export function insert(array, idx, val) {
+export function insert<T>(array: T[], idx: number, val: T[] | T): T[] {
   return array
     .slice(0, idx)
     .concat(Array.isArray(val) ? val : [val])
@@ -197,7 +207,7 @@ export function insert(array, idx, val) {
 // -- Returns a new array obtained by removing an item at
 // -- a specified index.
 // --
-// -- Usage: `removeAt<T>(array: Array<T>, idx: number): Array<T>`
+// -- Usage: `removeAt<T>(array: T[], idx: number): T[]`
 // --
 // -- ```js
 // -- arr = ['a', 'b', 'c']
@@ -210,7 +220,7 @@ export function insert(array, idx, val) {
 // -- removeAt(arr, 4) === arr
 // -- // true
 // -- ```
-export function removeAt(array, idx) {
+export function removeAt<T>(array: T[], idx: number): T[] {
   if (idx >= array.length || idx < 0) return array;
   return array.slice(0, idx).concat(array.slice(idx + 1));
 }
@@ -221,7 +231,7 @@ export function removeAt(array, idx) {
 // -- (*referentially equal to*) the previous item at that position,
 // -- the original array is returned.
 // --
-// -- Usage: `replaceAt<T>(array: Array<T>, idx: number, newItem: T): Array<T>`
+// -- Usage: `replaceAt<T>(array: T[], idx: number, newItem: T): T[]`
 // --
 // -- ```js
 // -- arr = ['a', 'b', 'c']
@@ -234,7 +244,7 @@ export function removeAt(array, idx) {
 // -- replaceAt(arr, 1, 'b') === arr
 // -- // true
 // -- ```
-export function replaceAt(array, idx, newItem) {
+export function replaceAt<T>(array: T[], idx: number, newItem: T): T[] {
   if (array[idx] === newItem) return array;
   const len = array.length;
   const result = Array(len);
