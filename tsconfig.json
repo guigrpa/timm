@@ -6,8 +6,7 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "outDir": "lib",
-    "esModuleInterop": true,
-    "resolveJsonModule": true
+    "esModuleInterop": true
   },
   "include": ["src/**/*"]
 }
