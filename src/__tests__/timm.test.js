@@ -320,14 +320,14 @@ it('setIn: should allow unsetting an attribute', () => {
 // update()
 // ------------------------------------------------
 it('update: with changes', () => {
-  const obj2 = timm.update(OBJ, 'b', val => val + 1);
+  const obj2 = timm.update(OBJ, 'b', (val) => val + 1);
   expect(OBJ.b).toBe(2);
   expect(obj2).not.toBe(OBJ);
   expect(obj2.b).toBe(3);
 });
 
 it("update: should return the same object when it hasn't changed", () => {
-  const obj2 = timm.update(OBJ, 'b', val => val);
+  const obj2 = timm.update(OBJ, 'b', (val) => val);
   expect(obj2).toBe(OBJ);
 });
 
@@ -345,7 +345,7 @@ it('update: should return a new array when the first parameter is null or undefi
 // updateIn()
 // ------------------------------------------------
 it('updateIn: with changes', () => {
-  const obj2 = timm.updateIn(OBJ, ['e', 'e1'], val => `${val}x`);
+  const obj2 = timm.updateIn(OBJ, ['e', 'e1'], (val) => `${val}x`);
   expect(OBJ.e.e1).toBe('foo');
   expect(obj2).not.toBe(OBJ);
   expect(obj2.e.e1).toBe('foox');
@@ -353,7 +353,7 @@ it('updateIn: with changes', () => {
 });
 
 it("updateIn: should return the same object when it hasn't changed", () => {
-  const obj2 = timm.updateIn(OBJ, ['e', 'e1'], val => val);
+  const obj2 = timm.updateIn(OBJ, ['e', 'e1'], (val) => val);
   expect(obj2).toBe(OBJ);
 });
 
