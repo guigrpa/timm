@@ -1,3 +1,5 @@
+* Rewritten in TypeScript.
+
 ## 1.6.2 (2019-8-11)
 
 * Update package metadata.
