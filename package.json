@@ -21,7 +21,7 @@
     "test": "jest --coverage src",
     "compile": "yarn compile:clean && yarn compile:main && yarn compile:types",
     "compile:clean": "rm -rf ./lib",
-    "compile:main": "babel src -d lib --extensions \".ts,.js\" --copy-files",
+    "compile:main": "babel src -d lib --extensions '.ts'",
     "compile:types": "yarn typecheck",
     "docs": "extract-docs --template docs/README_TEMPLATE.md --output README.md",
     "build": "yarn lint && yarn compile && yarn test && yarn docs && yarn xxl",

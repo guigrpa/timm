@@ -8,5 +8,6 @@
     "outDir": "lib",
     "esModuleInterop": true
   },
+  "exclude": ["src/typeTests.ts"],
   "include": ["src/**/*"]
 }
