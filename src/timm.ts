@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-types */
+
 /*!
  * Timm
  *
@@ -9,7 +11,6 @@
 
 const INVALID_ARGS = 'INVALID_ARGS';
 
-type TimmObject = Record<string, unknown>;
 type Key = string | number;
 
 // ===============================================
@@ -19,7 +20,7 @@ function throwStr(msg: string): never {
   throw new Error(msg);
 }
 
-function getKeysAndSymbols(obj: any): string[] {
+function getKeysAndSymbols(obj: object): string[] {
   const keys = Object.keys(obj);
   if (Object.getOwnPropertySymbols) {
     // @ts-ignore
@@ -30,16 +31,14 @@ function getKeysAndSymbols(obj: any): string[] {
 
 const hasOwnProperty = {}.hasOwnProperty;
 
-export function clone<T>(obj: T[]): T[];
-export function clone<T extends TimmObject>(obj: T): T;
-export function clone<T>(obj0: T | T[]): T | T[] {
+export function clone<T extends object>(obj0: T): T {
   // As array
-  if (Array.isArray(obj0)) return obj0.slice();
+  if (Array.isArray(obj0)) return obj0.slice() as T;
 
   // As object
-  const obj = obj0 as TimmObject;
+  const obj: any = obj0;
   const keys = getKeysAndSymbols(obj);
-  const out = {} as TimmObject;
+  const out: any = {};
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
     out[key] = obj[key];
@@ -49,7 +48,7 @@ export function clone<T>(obj0: T | T[]): T | T[] {
 }
 
 // Custom guard
-function isObject(o: unknown): o is TimmObject {
+function isObject(o: unknown): any {
   return o != null && typeof o === 'object';
 }
 
@@ -68,7 +67,7 @@ function isObject(o: unknown): o is TimmObject {
 // -- #### addLast()
 // -- Returns a new array with an appended item or items.
 // --
-// -- Usage: `addLast<T>(array: T[], val: T[] | T): T[]`
+// -- Usage: `addLast(array, val)`
 // --
 // -- ```js
 // -- arr = ['a', 'b']
@@ -89,7 +88,7 @@ export function addLast<T>(array: T[], val: T[] | T): T[] {
 // -- #### addFirst()
 // -- Returns a new array with a prepended item or items.
 // --
-// -- Usage: `addFirst<T>(array: T[], val: T[]|T): T[]`
+// -- Usage: `addFirst(array, val)`
 // --
 // -- ```js
 // -- arr = ['a', 'b']
@@ -108,7 +107,7 @@ export function addFirst<T>(array: T[], val: T[] | T): T[] {
 // -- #### removeLast()
 // -- Returns a new array removing the last item.
 // --
-// -- Usage: `removeLast<T>(array: T[]): T[]`
+// -- Usage: `removeLast(array)`
 // --
 // -- ```js
 // -- arr = ['a', 'b']
@@ -130,7 +129,7 @@ export function removeLast<T>(array: T[]): T[] {
 // -- #### removeFirst()
 // -- Returns a new array removing the first item.
 // --
-// -- Usage: `removeFirst<T>(array: T[]): T[]`
+// -- Usage: `removeFirst(array)`
 // --
 // -- ```js
 // -- arr = ['a', 'b']
@@ -153,7 +152,7 @@ export function removeFirst<T>(array: T[]): T[] {
 // -- Returns a new array obtained by inserting an item or items
 // -- at a specified index.
 // --
-// -- Usage: `insert<T>(array: T[], idx: number, val: T[] | T): T[]`
+// -- Usage: `insert(array, idx, val)`
 // --
 // -- ```js
 // -- arr = ['a', 'b', 'c']
@@ -175,7 +174,7 @@ export function insert<T>(array: T[], idx: number, val: T[] | T): T[] {
 // -- Returns a new array obtained by removing an item at
 // -- a specified index.
 // --
-// -- Usage: `removeAt<T>(array: T[], idx: number): T[]`
+// -- Usage: `removeAt(array, idx)`
 // --
 // -- ```js
 // -- arr = ['a', 'b', 'c']
@@ -199,7 +198,7 @@ export function removeAt<T>(array: T[], idx: number): T[] {
 // -- (*referentially equal to*) the previous item at that position,
 // -- the original array is returned.
 // --
-// -- Usage: `replaceAt<T>(array: T[], idx: number, newItem: T): T[]`
+// -- Usage: `replaceAt(array, idx, newItem)`
 // --
 // -- ```js
 // -- arr = ['a', 'b', 'c']
@@ -226,18 +225,12 @@ export function replaceAt<T>(array: T[], idx: number, newItem: T): T[] {
 // ===============================================
 // -- ### Collections (objects and arrays)
 // ===============================================
-// -- The following types are used throughout this section
-// -- ```js
-// -- type TimmObject = Record<string, unknown>;
-// -- type Key = number | string;
-// -- ```
-
 // -- #### getIn()
 // -- Returns a value from an object at a given path. Works with
 // -- nested arrays and objects. If the path does not exist, it returns
 // -- `undefined`.
 // --
-// -- Usage: `getIn(obj: TimmObject, path: Key[]): unknown`
+// -- Usage: `getIn(obj, path)`
 // --
 // -- ```js
 // -- obj = { a: 1, b: 2, d: { d1: 3, d2: 4 }, e: ['a', 'b', 'c'] }
@@ -248,7 +241,7 @@ export function replaceAt<T>(array: T[], idx: number, newItem: T): T[] {
 // -- ```
 export function getIn(obj: undefined, path: Key[]): undefined;
 export function getIn(obj: null, path: Key[]): null;
-export function getIn(obj: any[] | TimmObject, path: Key[]): unknown;
+export function getIn(obj: object, path: Key[]): unknown;
 export function getIn(obj: any, path: Key[]): unknown {
   if (!Array.isArray(path)) {
     throwStr(
@@ -272,8 +265,7 @@ export function getIn(obj: any, path: Key[]): unknown {
 // -- If the provided value is the same as (*referentially equal to*)
 // -- the previous value, the original object is returned.
 // --
-// -- Usage: `set<T>(obj: T, key: string, val: T): T`
-// -- Or with an array: `set<T>(obj: T[], key: number, val: T): T[]`
+// -- Usage: `set(obj, key, val)`
 // --
 // -- ```js
 // -- obj = { a: 1, b: 2, c: 3 }
@@ -295,7 +287,7 @@ export function set<K extends string, V>(
 ): { [P in K]: V };
 export function set<V>(obj: undefined | null, key: number, val: V): [V];
 // Normal operation with an object/array
-export function set<T, K extends string, V>(
+export function set<T extends object, K extends string, V>(
   obj: T,
   key: K,
   val: V
@@ -321,7 +313,7 @@ export function set(obj0: any, key: Key, val: any): any {
 // -- * If the path does not exist, it will be created before setting
 // -- the new value.
 // --
-// -- Usage: `setIn(obj: any, path: Key[], val: any): unknown`
+// -- Usage: `setIn(obj, path, val)`
 // --
 // -- ```js
 // -- obj = { a: 1, b: 2, d: { d1: 3, d2: 4 }, e: { e1: 'foo', e2: 'bar' } }
@@ -348,26 +340,35 @@ export function set(obj0: any, key: Key, val: any): any {
 // -- setIn({ a: 3 }, ['unknown', 0, 'path'], 4)
 // -- // { a: 3, unknown: [{ path: 4 }] }
 // -- ```
-export function setIn(obj: any, path: Key[], val: any): unknown {
+export function setIn(
+  obj: object | null | undefined,
+  path: Key[],
+  val: any
+): unknown {
   if (!path.length) return val;
   return doSetIn(obj, path, val, 0);
 }
 
-function doSetIn(obj: any, path: Key[], val: any, idx: number): unknown {
+function doSetIn(
+  obj: object | null | undefined,
+  path: Key[],
+  val: any,
+  idx: number
+): unknown {
   let newValue;
   const key: any = path[idx];
   if (idx === path.length - 1) {
     newValue = val;
   } else {
     const nestedObj =
-      isObject(obj) && isObject(obj[key])
-        ? obj[key]
+      isObject(obj) && isObject((obj as any)[key])
+        ? (obj as any)[key]
         : typeof path[idx + 1] === 'number'
         ? []
         : {};
     newValue = doSetIn(nestedObj, path, val, idx + 1);
   }
-  return set(obj, key, newValue);
+  return set(obj as any, key, newValue);
 }
 
 // -- #### update()
@@ -376,8 +377,7 @@ function doSetIn(obj: any, path: Key[], val: any, idx: number): unknown {
 // -- If the calculated value is the same as (*referentially equal to*)
 // -- the previous value, the original object is returned.
 // --
-// -- Usage: `update(obj: any, key: Key,
-// -- fnUpdate: (prevValue: any) => any): unknown`
+// -- Usage: `update(obj, key, fnUpdate)`
 // --
 // -- ```js
 // -- obj = { a: 1, b: 2, c: 3 }
@@ -391,13 +391,13 @@ function doSetIn(obj: any, path: Key[], val: any, idx: number): unknown {
 // -- // true
 // -- ```
 export function update(
-  obj: any,
+  obj: object | null | undefined,
   key: Key,
   fnUpdate: (prevValue: any) => any
 ): unknown {
-  const prevVal = obj == null ? undefined : obj[key];
+  const prevVal = obj == null ? undefined : (obj as any)[key];
   const nextVal = fnUpdate(prevVal);
-  return set(obj, key as any, nextVal);
+  return set(obj as any, key as any, nextVal);
 }
 
 // -- #### updateIn()
@@ -423,11 +423,11 @@ export function update(
 // -- // true
 // -- ```
 export function updateIn(
-  obj: any,
+  obj: object | null | undefined,
   path: Key[],
   fnUpdate: (prevValue: any) => any
 ): unknown {
-  const prevVal = getIn(obj, path);
+  const prevVal = getIn(obj as any, path);
   const nextVal = fnUpdate(prevVal);
   return setIn(obj, path, nextVal);
 }
@@ -439,8 +439,8 @@ export function updateIn(
 // --
 // -- Usage:
 // --
-// -- * `merge(obj1: TimmObject, obj2: TimmObject): TimmObject`
-// -- * `merge(obj1: TimmObject, ...objects: TimmObject[]): TimmObject`
+// -- * `merge(obj1, obj2)`
+// -- * `merge(obj1, ...objects)`
 // --
 // -- The unmodified `obj1` is returned if `obj2` does not *provide something
 // -- new to* `obj1`, i.e. if either of the following
@@ -470,43 +470,43 @@ export function updateIn(
 
 // Signatures:
 // - 1 arg
-export function merge<T extends TimmObject>(a: T): T;
+export function merge<T extends object>(a: T): T;
 // - 2 args
-export function merge<T extends TimmObject, U extends TimmObject>(
+export function merge<T extends object, U extends object>(
   a: T,
   b: U
 ): Omit<T, keyof U> & U;
-export function merge<T extends TimmObject>(a: T, b: undefined | null): T;
+export function merge<T extends object>(a: T, b: undefined | null): T;
 // - 3 args
-export function merge<
-  T extends TimmObject,
-  U extends TimmObject,
-  V extends TimmObject
->(a: T, b: U, c: V): Omit<Omit<T, keyof U> & U, keyof V> & V;
-export function merge<T extends TimmObject, V extends TimmObject>(
+export function merge<T extends object, U extends object, V extends object>(
+  a: T,
+  b: U,
+  c: V
+): Omit<Omit<T, keyof U> & U, keyof V> & V;
+export function merge<T extends object, V extends object>(
   a: T,
   b: undefined | null,
   c: V
 ): Omit<T, keyof V> & V;
-export function merge<T extends TimmObject, U extends TimmObject>(
+export function merge<T extends object, U extends object>(
   a: T,
   b: U,
   c: undefined | null
 ): Omit<T, keyof U> & U;
-export function merge<T extends TimmObject>(
+export function merge<T extends object>(
   a: T,
   b: undefined | null,
   c: undefined | null
 ): T;
 // Implementation and catch-all
 export function merge(
-  a: TimmObject,
-  b?: TimmObject | null,
-  c?: TimmObject | null,
-  d?: TimmObject | null,
-  e?: TimmObject | null,
-  f?: TimmObject | null,
-  ...rest: Array<TimmObject | null>
+  a: object,
+  b?: object | null,
+  c?: object | null,
+  d?: object | null,
+  e?: object | null,
+  f?: object | null,
+  ...rest: Array<object | null>
 ): unknown {
   return rest.length
     ? doMerge.call(null, false, false, a, b, c, d, e, f, ...rest)
@@ -521,8 +521,8 @@ export function merge(
 // --
 // -- Usage:
 // --
-// -- * `mergeDeep(obj1: TimmObject, obj2: TimmObject): TimmObject`
-// -- * `mergeDeep(obj1: TimmObject, ...objects: TimmObject[]): TimmObject`
+// -- * `mergeDeep(obj1, obj2)`
+// -- * `mergeDeep(obj1, ...objects)`
 // --
 // -- The unmodified `obj1` is returned if `obj2` does not *provide something
 // -- new to* `obj1`, i.e. if either of the following
@@ -550,14 +550,14 @@ export function merge(
 // -- // true
 // -- ```
 export function mergeDeep(
-  a: TimmObject,
-  b?: TimmObject | null,
-  c?: TimmObject | null,
-  d?: TimmObject | null,
-  e?: TimmObject | null,
-  f?: TimmObject | null,
-  ...rest: Array<TimmObject | null>
-): TimmObject {
+  a: object,
+  b?: object | null,
+  c?: object | null,
+  d?: object | null,
+  e?: object | null,
+  f?: object | null,
+  ...rest: Array<object | null>
+): object {
   return rest.length
     ? doMerge.call(null, false, true, a, b, c, d, e, f, ...rest)
     : doMerge(false, true, a, b, c, d, e, f);
@@ -568,8 +568,8 @@ export function mergeDeep(
 // --
 // -- Usage examples:
 // --
-// -- * `mergeIn(obj1: TimmObject, path: Key[], obj2: TimmObject): TimmObject`
-// -- * `mergeIn(obj1: TimmObject, path: Key[], ...objects: TimmObject[]): TimmObject`
+// -- * `mergeIn(obj1, path, obj2)`
+// -- * `mergeIn(obj1, path, ...objects)`
 // --
 // -- ```js
 // -- obj1 = { a: 1, d: { b: { d1: 3, d2: 4 } } }
@@ -586,12 +586,12 @@ export function mergeDeep(
 export function mergeIn(
   a: any,
   path: Key[],
-  b?: TimmObject,
-  c?: TimmObject,
-  d?: TimmObject,
-  e?: TimmObject,
-  f?: TimmObject,
-  ...rest: TimmObject[]
+  b?: object | null,
+  c?: object | null,
+  d?: object | null,
+  e?: object | null,
+  f?: object | null,
+  ...rest: Array<object | null>
 ): unknown {
   let prevVal: any = getIn(a, path);
   if (prevVal == null) prevVal = {};
@@ -607,7 +607,7 @@ export function mergeIn(
 // -- #### omit()
 // -- Returns an object excluding one or several attributes.
 // --
-// -- Usage: `omit(obj: TimmObject, attrs: string | string[]): TimmObject`
+// -- Usage: `omit(obj, attrs)`
 //
 // -- ```js
 // -- obj = { a: 1, b: 2, c: 3, d: 4 }
@@ -620,11 +620,10 @@ export function mergeIn(
 // -- omit(obj, 'z') === obj1
 // -- // true
 // -- ```
-export function omit<T extends TimmObject, K extends string>(
+export function omit<T extends object, K extends string>(
   obj: T,
-  attr: K | K[]
-): Omit<T, keyof { [P in K]: any }>;
-export function omit(obj: TimmObject, attrs: string | string[]): unknown {
+  attrs: K | K[]
+): Omit<T, keyof { [P in K]: any }> {
   const omitList = Array.isArray(attrs) ? attrs : [attrs];
   let fDoSomething = false;
   for (let i = 0; i < omitList.length; i++) {
@@ -637,9 +636,9 @@ export function omit(obj: TimmObject, attrs: string | string[]): unknown {
   const out: any = {};
   const keys = getKeysAndSymbols(obj);
   for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
+    const key: any = keys[i];
     if (omitList.indexOf(key) >= 0) continue;
-    out[key] = obj[key];
+    out[key] = (obj as any)[key];
   }
   return out;
 }
@@ -651,8 +650,8 @@ export function omit(obj: TimmObject, attrs: string | string[]): unknown {
 // --
 // -- Usage:
 // --
-// -- * `addDefaults(obj: TimmObject, defaults: TimmObject): TimmObject`
-// -- * `addDefaults(obj: TimmObject, ...defaultObjects: TimmObject[]): TimmObject`
+// -- * `addDefaults(obj, defaults)`
+// -- * `addDefaults(obj, ...defaultObjects)`
 // --
 // -- ```js
 // -- obj1 = { a: 1, b: 2, c: 3 }
@@ -668,19 +667,19 @@ export function omit(obj: TimmObject, attrs: string | string[]): unknown {
 // -- ```
 // Signatures:
 // - 2 args
-export function addDefaults<T extends TimmObject, U extends TimmObject>(
+export function addDefaults<T extends object, U extends object>(
   a: T,
   b: U
 ): Omit<U, keyof T> & T;
 // Implementation and catch-all
 export function addDefaults(
-  a: TimmObject,
-  b: TimmObject,
-  c?: TimmObject | null,
-  d?: TimmObject | null,
-  e?: TimmObject | null,
-  f?: TimmObject | null,
-  ...rest: Array<TimmObject | null>
+  a: object,
+  b: object,
+  c?: object | null,
+  d?: object | null,
+  e?: object | null,
+  f?: object | null,
+  ...rest: Array<object | null>
 ): unknown {
   return rest.length
     ? doMerge.call(null, true, false, a, b, c, d, e, f, ...rest)
@@ -690,8 +689,8 @@ export function addDefaults(
 function doMerge(
   fAddDefaults: boolean,
   fDeep: boolean,
-  first: TimmObject,
-  ...rest: Array<TimmObject | null | undefined>
+  first: object,
+  ...rest: Array<object | null | undefined>
 ) {
   let out: any = first;
   if (!(out != null)) {
@@ -710,7 +709,7 @@ function doMerge(
     for (let j = 0; j <= keys.length; j++) {
       const key = keys[j];
       if (fAddDefaults && out[key] !== undefined) continue;
-      let nextVal = obj[key];
+      let nextVal = (obj as any)[key];
       if (fDeep && isObject(out[key]) && isObject(nextVal)) {
         nextVal = doMerge(fAddDefaults, fDeep, out[key], nextVal);
       }

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import timm from '../src/timm';
 
 // https://fettblog.eu/typescript-match-the-exact-object-shape/
@@ -10,10 +12,15 @@ type ValidateShape<T, Shape> = T extends Shape
 const testArrays = () => {
   const arr = ['a', 3];
   const obj = { foo: 'a', bar: { bar1: 4 } };
+  interface Obj2 {
+    foo: string;
+  }
+  const obj2: Obj2 = { foo: 'b' };
 
   // Clone
   const resA: Array<string | number> = timm.clone(arr);
   const resB: { foo: string; bar: { bar1: number } } = timm.clone(obj);
+  const obj2clone: Obj2 = timm.clone(obj2);
 
   // Arrays
   const arr1a: Array<string | number> = timm.addLast(arr, 'a');
@@ -33,6 +40,7 @@ const testArrays = () => {
   const res1a = timm.getIn(undefined, ['x']);
   const res1b = timm.getIn(null, ['x']);
   const res1c: string = timm.getIn(obj, ['foo']) as string;
+  const res1d: string = timm.getIn(obj2, ['foo']) as string;
   // set with undefined/null
   const res2a: [string] = timm.set(undefined, 0, 'a');
   const res2b: [string] = timm.set(null, 0, 'a');
@@ -40,6 +48,8 @@ const testArrays = () => {
   const res2d: [null] = timm.set(null, 0, null);
   const res2e: { foo: number } = timm.set(undefined, 'foo', 3);
   const res2f: { foo: string } = timm.set(null, 'foo', 'x');
+  // @ts-expect-error
+  const res2aInvalid = timm.set(true, 'foo', 'x');
   // set with array
   const res2g: string[] = timm.set(['a', 'b'], 1, 'c');
   const res2h: Array<string | null> = timm.set(['a', 'b'], 1, null);
@@ -69,3 +79,30 @@ const testArrays = () => {
   const res5b = timm.omit({ a: 3, b: 'foo', c: 5 }, ['b', 'c']);
   (function <T>(_val: ValidateShape<T, { a: number }>) {})(res5b);
 };
+
+// type Dict = Record<string, unknown>;
+// type HelloType = {
+//   hello: string;
+// };
+// interface HelloInterface {
+//   hello: string;
+// }
+
+// let y: Dict;
+// const hello1: HelloType = { hello: 'foo' };
+// const hello2: HelloInterface = { hello: 'foo' };
+// y = hello1;
+// y = hello2;
+
+// let z: HelloInterface;
+// z = hello1;
+// z = hello2;
+
+// interface AA {
+//   foo: string;
+// }
+// interface BB extends AA {
+//   bar: number;
+// }
+// let b: BB;
+// const a: AA = b;
