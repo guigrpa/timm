@@ -1,6 +1,6 @@
 {
   "name": "timm",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "Immutability helpers with fast reads and acceptable writes",
   "author": "Guillermo Grau Panea",
   "license": "MIT",
