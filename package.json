@@ -25,7 +25,6 @@
     "compile:types": "yarn typecheck",
     "docs": "extract-docs --template docs/README_TEMPLATE.md --output README.md",
     "build": "yarn lint && yarn compile && yarn test && yarn docs && yarn xxl",
-    "travis": "yarn test",
     "xxl": "xxl",
     "benchmarks": "node tools/benchmarks",
     "prettier": "prettier --single-quote --trailing-comma es5 --write \"src/**/*.[jt]s\""
