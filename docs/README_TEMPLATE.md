@@ -63,7 +63,7 @@ const obj = merge({ a: 2 }, { b: 3 });
 const obj2 = timmSet({ foo: 1}, 'bar', 2);
 ```
 
-[[[./src/timm.js]]]
+[[[./src/timm.ts]]]
 
 
 ## MIT license

@@ -68,7 +68,7 @@ const obj2 = timmSet({ foo: 1}, 'bar', 2);
 #### addLast()
 Returns a new array with an appended item or items.
 
-Usage: `addLast<T>(array: Array<T>, val: Array<T>|T): Array<T>`
+Usage: `addLast(array, val)`
 
 ```js
 arr = ['a', 'b']
@@ -83,7 +83,7 @@ arr3 = addLast(arr, ['c', 'd'])
 #### addFirst()
 Returns a new array with a prepended item or items.
 
-Usage: `addFirst<T>(array: Array<T>, val: Array<T>|T): Array<T>`
+Usage: `addFirst(array, val)`
 
 ```js
 arr = ['a', 'b']
@@ -98,7 +98,7 @@ arr3 = addFirst(arr, ['c', 'd'])
 #### removeLast()
 Returns a new array removing the last item.
 
-Usage: `removeLast<T>(array: Array<T>): Array<T>`
+Usage: `removeLast(array)`
 
 ```js
 arr = ['a', 'b']
@@ -116,7 +116,7 @@ removeLast(arr3) === arr3
 #### removeFirst()
 Returns a new array removing the first item.
 
-Usage: `removeFirst<T>(array: Array<T>): Array<T>`
+Usage: `removeFirst(array)`
 
 ```js
 arr = ['a', 'b']
@@ -135,7 +135,7 @@ removeFirst(arr3) === arr3
 Returns a new array obtained by inserting an item or items
 at a specified index.
 
-Usage: `insert<T>(array: Array<T>, idx: number, val: Array<T>|T): Array<T>`
+Usage: `insert(array, idx, val)`
 
 ```js
 arr = ['a', 'b', 'c']
@@ -151,7 +151,7 @@ insert(arr, 1, ['d', 'e'])
 Returns a new array obtained by removing an item at
 a specified index.
 
-Usage: `removeAt<T>(array: Array<T>, idx: number): Array<T>`
+Usage: `removeAt(array, idx)`
 
 ```js
 arr = ['a', 'b', 'c']
@@ -171,7 +171,7 @@ a specified index. If the provided item is the same as
 (*referentially equal to*) the previous item at that position,
 the original array is returned.
 
-Usage: `replaceAt<T>(array: Array<T>, idx: number, newItem: T): Array<T>`
+Usage: `replaceAt(array, idx, newItem)`
 
 ```js
 arr = ['a', 'b', 'c']
@@ -187,18 +187,12 @@ replaceAt(arr, 1, 'b') === arr
 
 ### Collections (objects and arrays)
 
-The following types are used throughout this section
-```js
-type ArrayOrObject = Array<any>|Object;
-type Key = number|string;
-```
-
 #### getIn()
 Returns a value from an object at a given path. Works with
 nested arrays and objects. If the path does not exist, it returns
 `undefined`.
 
-Usage: `getIn(obj: ?ArrayOrObject, path: Array<Key>): any`
+Usage: `getIn(obj, path)`
 
 ```js
 obj = { a: 1, b: 2, d: { d1: 3, d2: 4 }, e: ['a', 'b', 'c'] }
@@ -213,7 +207,7 @@ Returns a new object with a modified attribute.
 If the provided value is the same as (*referentially equal to*)
 the previous value, the original object is returned.
 
-Usage: `set<T>(obj: ?T, key: Key, val: any): T`
+Usage: `set(obj, key, val)`
 
 ```js
 obj = { a: 1, b: 2, c: 3 }
@@ -237,7 +231,7 @@ the previous value, the original object is returned.
 * If the path does not exist, it will be created before setting
 the new value.
 
-Usage: `setIn<T: ArrayOrObject>(obj: T, path: Array<Key>, val: any): T`
+Usage: `setIn(obj, path, val)`
 
 ```js
 obj = { a: 1, b: 2, d: { d1: 3, d2: 4 }, e: { e1: 'foo', e2: 'bar' } }
@@ -271,8 +265,7 @@ calculated via a user-provided callback based on the current value.
 If the calculated value is the same as (*referentially equal to*)
 the previous value, the original object is returned.
 
-Usage: `update<T: ArrayOrObject>(obj: T, key: Key,
-fnUpdate: (prevValue: any) => any): T`
+Usage: `update(obj, key, fnUpdate)`
 
 ```js
 obj = { a: 1, b: 2, c: 3 }
@@ -316,8 +309,8 @@ Similar to `Object.assign()`, but immutable.
 
 Usage:
 
-* `merge(obj1: Object, obj2: ?Object): Object`
-* `merge(obj1: Object, ...objects: Array<?Object>): Object`
+* `merge(obj1, obj2)`
+* `merge(obj1, ...objects)`
 
 The unmodified `obj1` is returned if `obj2` does not *provide something
 new to* `obj1`, i.e. if either of the following
@@ -353,8 +346,8 @@ Similar to `Object.assign()`, but immutable, and deeply merging.
 
 Usage:
 
-* `mergeDeep(obj1: Object, obj2: ?Object): Object`
-* `mergeDeep(obj1: Object, ...objects: Array<?Object>): Object`
+* `mergeDeep(obj1, obj2)`
+* `mergeDeep(obj1, ...objects)`
 
 The unmodified `obj1` is returned if `obj2` does not *provide something
 new to* `obj1`, i.e. if either of the following
@@ -384,13 +377,11 @@ mergeDeep(obj1, { c: { a: 1 } }) === obj1
 
 #### mergeIn()
 Similar to `merge()`, but merging the value at a given nested path.
-Note that the returned type is the same as that of the first argument.
 
-Usage:
+Usage examples:
 
-* `mergeIn<T: ArrayOrObject>(obj1: T, path: Array<Key>, obj2: ?Object): T`
-* `mergeIn<T: ArrayOrObject>(obj1: T, path: Array<Key>,
-...objects: Array<?Object>): T`
+* `mergeIn(obj1, path, obj2)`
+* `mergeIn(obj1, path, ...objects)`
 
 ```js
 obj1 = { a: 1, d: { b: { d1: 3, d2: 4 } } }
@@ -408,7 +399,7 @@ mergeIn(obj1, ['d', 'b'], { d2: 4 }) === obj1
 #### omit()
 Returns an object excluding one or several attributes.
 
-Usage: `omit(obj: Object, attrs: Array<string>|string): Object`
+Usage: `omit(obj, attrs)`
 
 ```js
 obj = { a: 1, b: 2, c: 3, d: 4 }
@@ -429,8 +420,8 @@ are filled in with the corresponding values from the second one
 
 Usage:
 
-* `addDefaults(obj: Object, defaults: Object): Object`
-* `addDefaults(obj: Object, ...defaultObjects: Array<?Object>): Object`
+* `addDefaults(obj, defaults)`
+* `addDefaults(obj, ...defaultObjects)`
 
 ```js
 obj1 = { a: 1, b: 2, c: 3 }
