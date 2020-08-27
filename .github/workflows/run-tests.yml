@@ -24,6 +24,4 @@ jobs:
       - name: Compile subpackages
         run: yarn compile
       - name: Execute tests
-        run: |
-          yarn test
-          cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
+        run: yarn test
