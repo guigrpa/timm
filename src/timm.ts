@@ -10,6 +10,7 @@
  */
 
 const INVALID_ARGS = 'INVALID_ARGS';
+const IS_DEV = (process as any).env.NODE_ENV !== 'production';
 
 type Key = string | number;
 
@@ -245,7 +246,7 @@ export function getIn(obj: object, path: Key[]): unknown;
 export function getIn(obj: any, path: Key[]): unknown {
   if (!Array.isArray(path)) {
     throwStr(
-      process.env.NODE_ENV !== 'production'
+      IS_DEV
         ? 'A path array should be provided when calling getIn()'
         : INVALID_ARGS
     );
@@ -695,7 +696,7 @@ function doMerge(
   let out: any = first;
   if (!(out != null)) {
     throwStr(
-      process.env.NODE_ENV !== 'production'
+      IS_DEV
         ? 'At least one object should be provided to merge()'
         : INVALID_ARGS
     );
