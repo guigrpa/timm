@@ -1,3 +1,5 @@
+## 1.7.1 (2020-9-16)
+
 * Improve TypeScript signatures (fix overload order + add missing catch-alls).
 
 ## 1.7.0 (2020-8-27)
