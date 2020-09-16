@@ -473,17 +473,12 @@ export function updateIn(
 // - 1 arg
 export function merge<T extends object>(a: T): T;
 // - 2 args
+export function merge<T extends object>(a: T, b: undefined | null): T;
 export function merge<T extends object, U extends object>(
   a: T,
   b: U
 ): Omit<T, keyof U> & U;
-export function merge<T extends object>(a: T, b: undefined | null): T;
 // - 3 args
-export function merge<T extends object, U extends object, V extends object>(
-  a: T,
-  b: U,
-  c: V
-): Omit<Omit<T, keyof U> & U, keyof V> & V;
 export function merge<T extends object, V extends object>(
   a: T,
   b: undefined | null,
@@ -499,7 +494,15 @@ export function merge<T extends object>(
   b: undefined | null,
   c: undefined | null
 ): T;
-// Implementation and catch-all
+export function merge<T extends object, U extends object, V extends object>(
+  a: T,
+  b: U,
+  c: V
+): Omit<Omit<T, keyof U> & U, keyof V> & V;
+// - X args
+export function merge(a: object, ...rest: Array<object | null>): object;
+
+// Implementation
 export function merge(
   a: object,
   b?: object | null,
@@ -508,7 +511,7 @@ export function merge(
   e?: object | null,
   f?: object | null,
   ...rest: Array<object | null>
-): unknown {
+): object {
   return rest.length
     ? doMerge.call(null, false, false, a, b, c, d, e, f, ...rest)
     : doMerge(false, false, a, b, c, d, e, f);
@@ -672,6 +675,13 @@ export function addDefaults<T extends object, U extends object>(
   a: T,
   b: U
 ): Omit<U, keyof T> & T;
+// - X args
+export function addDefaults(
+  a: object,
+  b: object,
+  ...rest: Array<object | null>
+): object;
+
 // Implementation and catch-all
 export function addDefaults(
   a: object,
@@ -681,7 +691,7 @@ export function addDefaults(
   e?: object | null,
   f?: object | null,
   ...rest: Array<object | null>
-): unknown {
+): object {
   return rest.length
     ? doMerge.call(null, true, false, a, b, c, d, e, f, ...rest)
     : doMerge(true, false, a, b, c, d, e, f);

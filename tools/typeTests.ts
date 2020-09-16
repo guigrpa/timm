@@ -73,6 +73,17 @@ const testArrays = () => {
     { bar: 'b' },
     { bar: 4 }
   );
+  const res4c2: { foo: number; bar: number } = timm.merge(
+    { foo: 3, bar: 'a' },
+    null,
+    { bar: 4 }
+  );
+  const res4d: { foo: number; bar: boolean } = timm.merge(
+    { foo: 3, bar: 'a' },
+    { bar: 'b' },
+    { bar: 4 },
+    { bar: true }
+  ) as { foo: number; bar: boolean };
   // omit
   const res5a = timm.omit({ a: 3, b: 'foo' }, 'b');
   (function <T>(_val: ValidateShape<T, { a: number }>) {})(res5a);
