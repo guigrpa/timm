@@ -6,7 +6,8 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "outDir": "lib",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "target": "ES5"
   },
   "exclude": ["src/typeTests.ts"],
   "include": ["src/**/*"]
