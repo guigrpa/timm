@@ -51,5 +51,9 @@
     "prettier": "^2.1.2",
     "seamless-immutable": "^7.1.4",
     "xxl": "^1.3.0"
+  },
+  "volta": {
+    "node": "16.13.1",
+    "yarn": "1.22.17"
   }
 }
